@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>CityOfNewOrleans.GovDeliveryApiService</id>
+    <version>0.0.1</version>
+    <title>GovDelivery Api Service</title>
+    <authors>Steve Price</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</licenseUrl>
+    <!--<projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A .NET Lbrary for interacting with GovDelivery's Communications Cloud API v1.1</description>
+    <releaseNotes>Initial pre-alpha release.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>govdelivery rest http</tags>
+  </metadata>
+</package>
