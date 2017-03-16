@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+﻿using CityBusiness.Data;
+using CsvHelper;
 using GovDelivery.Library.Data.Csv.Mapping;
 using GovDelivery.Library.Interfaces;
 using GovDelivery.Library.Models.Csv;
@@ -43,6 +44,12 @@ namespace GovDelivery.Data.Csv
             }
         }
         
+        public void SaveSubscribers(IEnumerable<IImportSubscriberModel> subscribers)
+        {
+            using (var ctx = new GovDeliveryContext())
+            {
 
+            }
+        }
     }
 }
