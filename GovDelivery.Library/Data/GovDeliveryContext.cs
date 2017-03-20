@@ -11,6 +11,10 @@ namespace CityBusiness.Data
 
         public DbSet<Topic> Topics { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Page> Pages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

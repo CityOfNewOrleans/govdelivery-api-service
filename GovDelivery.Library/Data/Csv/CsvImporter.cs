@@ -1,8 +1,10 @@
 ﻿using CityBusiness.Data;
 using CsvHelper;
+using GovDelivery.Data.Entities;
 using GovDelivery.Library.Data.Csv.Mapping;
 using GovDelivery.Library.Interfaces;
 using GovDelivery.Library.Models.Csv;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -48,7 +50,15 @@ namespace GovDelivery.Data.Csv
         {
             using (var ctx = new GovDeliveryContext())
             {
+                var entities = subscribers.Select(s => new EmailSubscriber
+                {
+                    Id = Guid.NewGuid(),
+                    Email = s.Type == SubscriberType.Email ? s.Contact : null,
+                    Phone = s.Type == SubscriberType.Phone ? s.Contact : null,
+                    
+                });
 
+                ctx.AddRange(entities);
             }
         }
     }

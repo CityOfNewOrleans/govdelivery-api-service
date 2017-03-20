@@ -1,11 +1,10 @@
-﻿using System;
+﻿using GovDelivery.Library.Utils;
+using System;
 using System.Globalization;
 using System.Linq;
 using Xunit;
 
-using Utils = GovDelivery.Library.Utils.GovDeliveryUtils;
-
-namespace GovDelivery.Tests
+namespace GovDelivery.Library.Tests
 {
     public class UtilsTests
     {
@@ -17,14 +16,14 @@ namespace GovDelivery.Tests
         [InlineData("10/22/2015 03:49 PM CDT")]
         public void TimeZoneBecomesUtcOffset(string data)
         {
-            Assert.Equal(Utils.ReplaceTimeZoneWithUtcOffset(data), "10/22/2015 03:49 PM -5");
+            Assert.Equal(GovDeliveryUtils.ReplaceTimeZoneWithUtcOffset(data), "10/22/2015 03:49 PM -5");
         }
 
         [Theory(DisplayName = "Fixed date string becomes DateTime With Expected Values")]
         [InlineData("10/22/2015 03:49 PM CDT")]
         public void FixedDateStringParsesToDateTime(string date)
         {
-            var dateParts = Utils.ReplaceTimeZoneWithUtcOffset(date).Split(' ').ToList();
+            var dateParts = GovDeliveryUtils.ReplaceTimeZoneWithUtcOffset(date).Split(' ').ToList();
             var dateDay = dateParts.ElementAt(0);
             var dateTime = dateParts
                 .GetRange(1, dateParts.Count - 1)
@@ -33,16 +32,16 @@ namespace GovDelivery.Tests
             Assert.Equal("10/22/2015", dateDay);
             Assert.Equal("03:49 PM -5", dateTime);
 
-            var parsedDay = DateTime.ParseExact(dateDay, Utils.DATE_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
+            var parsedDay = DateTime.ParseExact(dateDay, GovDeliveryUtils.DATE_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
             Assert.Equal(parsedDay.Year, 2015);
             Assert.Equal(parsedDay.Month, 10);
             Assert.Equal(parsedDay.Day, 22);
 
-            var parsedTime = DateTime.ParseExact(dateTime, Utils.TIME_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
+            var parsedTime = DateTime.ParseExact(dateTime, GovDeliveryUtils.TIME_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
             Assert.Equal(20, parsedTime.Hour);
             Assert.Equal(49, parsedTime.Minute);
 
-            var parsedDate = Utils.DateStringToDateTimeUtc(date);
+            var parsedDate = GovDeliveryUtils.DateStringToDateTimeUtc(date);
             Assert.True(parsedDate.GetType() == typeof(DateTime));
         }
     }
