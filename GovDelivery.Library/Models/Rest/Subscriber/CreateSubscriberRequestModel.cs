@@ -8,8 +8,8 @@ using System.Xml.Serialization;
 
 namespace GovDelivery.Models.Rest.Subscriber
 {
-    [XmlRoot]
-    public class CreateSubscriberModel
+    [XmlRoot(ElementName = "subscriber")]
+    public class CreateSubscriberRequestModel
     {
         [XmlElement(ElementName = "email")]
         public string Email { get; set; }

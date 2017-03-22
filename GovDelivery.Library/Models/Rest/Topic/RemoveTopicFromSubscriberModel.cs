@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Models.Rest.Subscriber
+namespace GovDelivery.Library.Models.Rest.Topic
 {
-    public class DeleteSubscriberRequestModel
+    public class RemoveTopicFromSubscriberRequestModel
     {
         
     }
 
-    public class DeleteSubscriberResponseModel
+    public class RemoveTopicFromSubscriberResponseModel
     {
 
     }

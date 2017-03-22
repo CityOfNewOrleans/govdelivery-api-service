@@ -9,13 +9,18 @@ using System.Xml.Serialization;
 namespace GovDelivery.Models.Rest.Topic
 {
     [XmlRoot(ElementName = "subscriber")]
-    public class AddTopicToSubscriberModel
+    public class AddTopicToSubscriberRequestModel
     {
         [XmlIgnore()]
-        public ReadSubscriberModel Subscriber { get; set; }
+        public ReadSubscriberResponseModel Subscriber { get; set; }
 
         [XmlElement(DataType = "array", ElementName = "topics")]
         public IEnumerable<TopicModel> Topics { get; set; }
+    }
+
+    public class AddTopicToSubscriberResponseModel
+    {
+
     }
 
     [XmlRoot(ElementName = "topic")]

@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace GovDelivery.Models.Rest.Topic
 {
-    public class DeleteTopicModel
+    public class DeleteTopicRequestModel
     {
         
+    }
+
+    public class DeleteTopicResponseModel
+    {
+
     }
 }

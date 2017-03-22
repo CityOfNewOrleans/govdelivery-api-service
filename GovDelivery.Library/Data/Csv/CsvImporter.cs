@@ -4,6 +4,7 @@ using GovDelivery.Data.Entities;
 using GovDelivery.Library.Data.Csv.Mapping;
 using GovDelivery.Library.Interfaces;
 using GovDelivery.Library.Models.Csv;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,8 +15,13 @@ namespace GovDelivery.Data.Csv
 {
     public class CsvImporter : ICsvImporter
     {
-        public CsvImporter()
+        private DbContextOptionsBuilder dbOptions { get; set; }
+
+        public CsvImporter() : this(new DbContextOptionsBuilder()) { }
+
+        public CsvImporter(DbContextOptionsBuilder dbOptions)
         {
+            this.dbOptions = dbOptions != null ? dbOptions : new DbContextOptionsBuilder();
         }
 
         public async Task<string> GetCsvFileContentsAsync(string filePath)
@@ -48,7 +54,7 @@ namespace GovDelivery.Data.Csv
         
         public void SaveSubscribers(IEnumerable<IImportSubscriberModel> subscribers)
         {
-            using (var ctx = new GovDeliveryContext())
+            using (var ctx = new GovDeliveryContext(dbOptions.Options))
             {
                 var entities = subscribers.Select(s => new EmailSubscriber
                 {

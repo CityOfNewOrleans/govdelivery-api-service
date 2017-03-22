@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace GovDelivery.Library.Utils
 {
@@ -23,6 +28,26 @@ namespace GovDelivery.Library.Utils
             var correctedDateString = ReplaceTimeZoneWithUtcOffset(dateString);
             var localTime = DateTime.ParseExact(correctedDateString, $"{DATE_FORMAT} {TIME_FORMAT}", CultureInfo.CurrentCulture);
             return localTime.ToUniversalTime();
+        }
+
+        public static string Base64Encode(string plainText) =>
+            Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+
+        public static string Base64Decode(string encodedText) =>
+            Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
+
+        public static StringContent ModelToStringContent<T>(T m, XmlSerializer serializer)
+        {
+
+            using (var sw = new StringWriter())
+            {
+                using (var xw = XmlWriter.Create(sw))
+                {
+                    serializer.Serialize(xw, m);
+
+                    return new StringContent(xw.ToString(), Encoding.UTF8, "text/xml");
+                }
+            }
         }
     }
 }

@@ -9,111 +9,126 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using GovDelivery.Library.Models.Rest.Topic;
+using GovDelivery.Models.Rest.Category;
+using GovDelivery.Library.Utils;
 
 namespace GovDelivery.Http
 {
-    public class GovDeliveryApiService
+    public class GovDeliveryApiService : IGovDeliveryApiService
     {
         public const string STAGING_URI = "https://stage-api.govdelivery.com";
 
         public const string MAIN_URI = "https://api.govdelivery.com";
 
-        private XmlSerializer subscriberSerializer = new XmlSerializer(typeof(ReadSubscriberModel));
-        private XmlSerializer topicSubscriptionSerializer = new XmlSerializer(typeof(AddTopicToSubscriberModel));
+        private XmlSerializer subscriberSerializer = new XmlSerializer(typeof(ReadSubscriberResponseModel));
+        private XmlSerializer topicSubscriptionSerializer = new XmlSerializer(typeof(AddTopicToSubscriberRequestModel));
 
         private HttpClient client;
 
+        // Subscriber
         public GovDeliveryApiService (string baseUri, string accountCode)
         {
             client = new HttpClient();
             client.BaseAddress = new Uri($"{baseUri}/api/account/{accountCode}");
         }
 
-        public async Task<GovDeliveryResponseModel<UpdateSubscriberModel>> UpdateSubscriberAsync(UpdateSubscriberModel model)
+        public async Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel model)
         {
-            var res = await client.PostAsync("subscriptions.xml", toStringContent(model, subscriberSerializer));
+            var res = await client.PostAsync("subscriptions.xml", GovDeliveryUtils.ModelToStringContent(model, subscriberSerializer));
 
-            return new GovDeliveryResponseModel<UpdateSubscriberModel>
+            return new GovDeliveryResponseModel<UpdateSubscriberResponseModel>
             {
                 HttpResponse = res,
-                Data = model,
+                Data = null,
             };
         }
 
-        public async Task<GovDeliveryResponseModel<CreateSubscriberModel>> CreateSubscriberAsync(CreateSubscriberModel model)
+        public async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel model)
         {
-            var res = await client.PutAsync("subscriptions.xml", toStringContent(model, subscriberSerializer));
-            return new GovDeliveryResponseModel<CreateSubscriberModel>
+            var res = await client.PutAsync("subscriptions.xml", GovDeliveryUtils.ModelToStringContent(model, subscriberSerializer));
+            return new GovDeliveryResponseModel<CreateSubscriberResponseModel>
             {
                 HttpResponse = res,
-                Data = model,
+                Data = null,
             };
         }
 
-        public async Task<GovDeliveryResponseModel<ReadSubscriberModel>> ReadSubscriber(string email)
+        public async Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email)
         {
 
             var res = await client.GetAsync("subscriptions.xml");
 
-            var model = new ReadSubscriberModel();
+            var model = new ReadSubscriberResponseModel();
 
-            return new GovDeliveryResponseModel<ReadSubscriberModel>
+            return new GovDeliveryResponseModel<ReadSubscriberResponseModel>
             {
                 HttpResponse = res,
                 Data = model,
             };
         }
 
-        public async Task<Models.GovDeliveryResponseModel<DeleteSubscriberModel>> DeleteSubscriberAsync(DeleteSubscriberModel model)
+        public async Task<Models.GovDeliveryResponseModel<DeleteSubscriberResponseModel>> DeleteSubscriberAsync(DeleteSubscriberRequestModel model)
         {
             var res = await client.DeleteAsync("subscriptions.xml");
 
-            return new GovDeliveryResponseModel<DeleteSubscriberModel> {
-                Data = new DeleteSubscriberModel()
+            return new GovDeliveryResponseModel<DeleteSubscriberResponseModel> {
+                HttpResponse = res,
+                Data = new DeleteSubscriberResponseModel()
             };
         }
 
-        // Topics
-
-        public async Task<GovDeliveryResponseModel<AddTopicToSubscriberModel>> AddTopicToSubscriber (ReadSubscriberModel subscriber, IEnumerable<TopicModel> topics)
+        // Topic
+        public async Task<GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>> AddTopicToSubscriberAsync (AddTopicToSubscriberRequestModel model)
         {
-            var model = new AddTopicToSubscriberModel
+            var res = await client.PostAsync("subscriptions.xml", GovDeliveryUtils.ModelToStringContent(model, topicSubscriptionSerializer));
+
+            var responseModel = new AddTopicToSubscriberResponseModel
             {
-                
+
             };
 
-            var res = await client.PostAsync("subscriptions.xml", toStringContent(model, topicSubscriptionSerializer));
-
-            return new GovDeliveryResponseModel<AddTopicToSubscriberModel>();
+            return new GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>();
         }
 
-        // TODO - SP: RemoveSubscriberFromTopic
-        // TODO - SP: CreateTopic
-        // TODO - SP: GetTopic
-        // TODO - SP: GetAllTopics
-        // TODO - SP: UpdateTopic
-        // TODO - SP: DeleteTopic
-        // TODO - SP: GetTopicCategories
-        // TODO - SP: UpdateTopicCategories
-
-        private StringContent toStringContent<T>(T m, XmlSerializer serializer) {
-
-            using (var sw = new StringWriter())
-            {
-                using (var xw = XmlWriter.Create(sw))
-                {
-                    serializer.Serialize(xw, m);
-
-                    return new StringContent(xw.ToString(), Encoding.UTF8, "text/xml");
-                }
-            }
+        public Task<GovDeliveryResponseModel<RemoveTopicFromSubscriberResponseModel>> RemoveTopicFromSubscriberAsync(RemoveTopicFromSubscriberRequestModel model)
+        {
+            throw new NotImplementedException();
         }
 
+        public Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel model)
+        {
+            throw new NotImplementedException();
+        }
 
-        private string base64Encode(string plainText) =>
-            Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+        public Task<GovDeliveryResponseModel<ReadTopicResponseModel>> ReadTopicAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
 
-        private string base64Decode(string encodedText) =>
-            Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
+        public Task<GovDeliveryResponseModel<ReadAllTopicsResponseModel>> ReadAllTopicsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GovDeliveryResponseModel<UpdateTopicResponseModel>> UpdateTopicAsync(UpdateTopicRequestModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GovDeliveryResponseModel<DeleteTopicResponseModel>> DeleteTopicAsync(DeleteTopicRequestModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryModel>>> ReadTopicCategoriesAsync(int topicId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GovDeliveryResponseModel<AddTopicToCategoryModel>> UpdateTopicCategoriesAsync(AddTopicToCategoryModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

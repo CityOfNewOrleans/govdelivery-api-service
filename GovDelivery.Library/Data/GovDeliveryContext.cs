@@ -7,6 +7,8 @@ namespace CityBusiness.Data
     {
         public GovDeliveryContext():base() { }
 
+        public GovDeliveryContext(DbContextOptions dbOptions):base(dbOptions) { }
+
         public DbSet<EmailSubscriber> Subscribers { get; set; }
 
         public DbSet<Topic> Topics { get; set; }
@@ -17,7 +19,6 @@ namespace CityBusiness.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
         }
 

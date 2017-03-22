@@ -2,7 +2,7 @@
 
 namespace GovDelivery.Models.Rest.Subscriber
 {
-    public class ReadSubscriberModel
+    public class ReadSubscriberResponseModel
     {
         [XmlElement(ElementName = "email")]
         public string Email { get; set; }

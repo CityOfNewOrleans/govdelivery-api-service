@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Models.Rest.Topic
+namespace GovDelivery.Library.Models.Rest.Topic
 {
-    public class ReadTopicResponseModel
+    public class ReadAllTopicsResponseModel
     {
         
     }

@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace GovDelivery.Models.Rest.Topic
 {
-    public class CreateTopicModel
+    public class CreateTopicRequestModel
     {
         
+    }
+
+    public class CreateTopicResponseModel
+    {
+
     }
 }

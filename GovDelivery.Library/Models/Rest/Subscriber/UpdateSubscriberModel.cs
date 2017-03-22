@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace GovDelivery.Models.Rest.Subscriber
 {
-    public class UpdateSubscriberModel
+    public class UpdateSubscriberRequestModel
     {
         
     }
+
+    public class UpdateSubscriberResponseModel
+    {
+
+    }
+
 }

@@ -1,5 +1,7 @@
-﻿using Fclp;
+﻿using CityBusiness.Data;
+using Fclp;
 using GovDelivery.Data.Csv;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,10 @@ namespace GovDelivery.Example
             p.Setup<string>('i', "import")
                 .Callback(path => {
                     var importer = new CsvImporter();
+
+                    var dbOptionsBuilder = new DbContextOptionsBuilder<GovDeliveryContext>()
+                    .UseInMemoryDatabase();
+                    
                 });
 
             
