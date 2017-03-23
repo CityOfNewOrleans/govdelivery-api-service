@@ -36,17 +36,16 @@ namespace GovDelivery.Library.Utils
         public static string Base64Decode(string encodedText) =>
             Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
 
-        public static StringContent ModelToStringContent<T>(T m, XmlSerializer serializer)
+        public static StringContent ModelToStringContent<T>(T m, XmlSerializer serializer = null)
         {
+            if (serializer == null) serializer = new XmlSerializer(typeof(T));
 
             using (var sw = new StringWriter())
+            using (var xw = XmlWriter.Create(sw))
             {
-                using (var xw = XmlWriter.Create(sw))
-                {
-                    serializer.Serialize(xw, m);
+                serializer.Serialize(xw, m);
 
-                    return new StringContent(xw.ToString(), Encoding.UTF8, "text/xml");
-                }
+                return new StringContent(xw.ToString(), Encoding.UTF8, "text/xml");
             }
         }
     }

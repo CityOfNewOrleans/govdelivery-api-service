@@ -15,6 +15,8 @@ namespace GovDelivery.Library.Tests
     public class GovDeliveryServiceTests
     {
 
+        private const string ACCOUNT_CODE = "XXXXX";
+
         private IGovDeliveryApiService service { get; set; }
 
         public GovDeliveryServiceTests()
@@ -40,11 +42,16 @@ namespace GovDelivery.Library.Tests
         #endregion MemberData
 
         [Theory, MemberData("CreateSubscriberAsyncData")]
-        public async void CreateSubscriberAsync_ValidModel_SuccessfullyCreateRemoteSubscriber(CreateSubscriberRequestModel model)
+        public async void CreateSubscriberAsync_ValidModel_SuccessfullyCreateRemoteSubscriber(CreateSubscriberRequestModel requestModel)
         {
-            var createResponse = await service.CreateSubscriberAsync(model);
+            var responseModel = await service.CreateSubscriberAsync(requestModel);
 
-            Assert.Equal(HttpStatusCode.OK, createResponse.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.HttpResponse);
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.IsType(typeof(int), responseModel.Data.SubscriberId);
+            Assert.NotNull(responseModel.Data);
+            var expectedLink = $"/api/account/{ACCOUNT_CODE}/subscribers/{responseModel.Data.SubscriberId}";
+            Assert.Equal(expectedLink, responseModel.Data.SubscriberInfoLink);
         }
 
     }
