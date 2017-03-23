@@ -9,6 +9,7 @@ using GovDelivery.Models;
 using GovDelivery.Models.Rest.Category;
 using GovDelivery.Models.Rest.Subscriber;
 using GovDelivery.Models.Rest.Topic;
+using System.Net.Http;
 
 namespace GovDelivery.Library.Tests.Mocks
 {
@@ -32,6 +33,14 @@ namespace GovDelivery.Library.Tests.Mocks
   <to-param>{subscriberId}</to-param>
   <link rel=""self"" href=""/api/account/{accountCode}/subscribers/{subscriberId}"" />
 </subscriber>";
+
+            return new GovDeliveryResponseModel<CreateSubscriberResponseModel>
+            {
+                HttpResponse = new HttpResponseMessage
+                {
+
+                },
+            };
         }
 
         public override async Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email)

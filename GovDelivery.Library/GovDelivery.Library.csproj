@@ -204,6 +204,7 @@
     <Compile Include="Data\Entities\Topic.cs" />
     <Compile Include="Data\GovDeliveryContext.cs" />
     <Compile Include="Data\Csv\Mapping\ImportSubcriberModelMap.cs" />
+    <Compile Include="Http\BaseGovDeliveryService.cs" />
     <Compile Include="Http\IGovDeliveryApiService.cs" />
     <Compile Include="Interfaces\ICsvImporter.cs" />
     <Compile Include="Interfaces\IImportSubscriberModel.cs" />

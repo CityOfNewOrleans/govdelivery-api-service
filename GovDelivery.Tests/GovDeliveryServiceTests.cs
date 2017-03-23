@@ -1,5 +1,5 @@
 ﻿using GovDelivery.Data.Entities;
-using GovDelivery.Http;
+using GovDelivery.Library.Http;
 using GovDelivery.Library.Tests.Mocks;
 using GovDelivery.Models.Rest.Subscriber;
 using System;
@@ -21,7 +21,7 @@ namespace GovDelivery.Library.Tests
 
         public GovDeliveryServiceTests()
         {
-            service = new MockGovDeliveryApiService();
+            service = new MockGovDeliveryApiService("foo.com", ACCOUNT_CODE);
         }
 
         #region MemberData

@@ -1,15 +1,28 @@
-function Test-Project () {
-    Write-Host "Building project..."
+function Test-BuiltProject {
+    param([Parameter(Mandatory)][Scriptblock]$callback)
+    
+    Write-Host " Building project...`r`n"
     & MSBuild /verbosity:quiet
 
     if ($LastExitCode -eq 0) {
-        Write-Host "Project build successful. Running tests now.."
-        & .\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe .\GovDelivery.Tests\bin\Debug\GovDelivery.Tests.dll -verbose
+        Write-Host "`r`n Project build successful. Running tests now.. `r`n"
+        & $callback
     }
     else {
-        Write-Host "Build Failed. Aborting test." -ForegroundColor Red
+        Write-Host "`r`n Build Failed. Aborting test. `r`n" -ForegroundColor Red
     }
-
 }
 
-Export-ModuleMember -Function Test-Project
+function Test-Library {
+    Test-BuiltProject {
+        & .\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe .\GovDelivery.Tests\bin\Debug\GovDelivery.Library.Tests.dll -verbose
+    };
+}
+
+function Test-ConsoleApp {
+    Test-BuiltProject {
+        & .\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe .\GovDelivery.Tests\bin\Debug\GovDelivery.Example.Tests.dll -verbose
+    };
+}
+
+Export-ModuleMember -Function Test-Library, Test-ConsoleApp;

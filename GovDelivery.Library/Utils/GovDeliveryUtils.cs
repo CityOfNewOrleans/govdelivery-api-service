@@ -48,5 +48,12 @@ namespace GovDelivery.Library.Utils
                 return new StringContent(xw.ToString(), Encoding.UTF8, "text/xml");
             }
         }
+
+        public static T StreamToModel<T> (Stream sc, XmlSerializer serializer = null)
+        {
+            if (serializer == null) serializer = new XmlSerializer(typeof(T));
+
+            return (T)serializer.Deserialize(sc);
+        }
     }
 }
