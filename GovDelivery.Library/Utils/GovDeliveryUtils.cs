@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -49,11 +50,14 @@ namespace GovDelivery.Library.Utils
             }
         }
 
-        public static T StreamToModel<T> (Stream sc, XmlSerializer serializer = null)
+        public static async Task<T> ResponseContentToModel<T> (HttpContent hc, XmlSerializer serializer = null)
         {
             if (serializer == null) serializer = new XmlSerializer(typeof(T));
 
-            return (T)serializer.Deserialize(sc);
+            var stream = new MemoryStream();
+            await hc.CopyToAsync(stream);
+
+            return (T)serializer.Deserialize(stream);
         }
     }
 }

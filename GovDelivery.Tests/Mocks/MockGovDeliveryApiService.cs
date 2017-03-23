@@ -10,6 +10,9 @@ using GovDelivery.Models.Rest.Category;
 using GovDelivery.Models.Rest.Subscriber;
 using GovDelivery.Models.Rest.Topic;
 using System.Net.Http;
+using GovDelivery.Library.Utils;
+using System.Net;
+using System.IO;
 
 namespace GovDelivery.Library.Tests.Mocks
 {
@@ -34,12 +37,16 @@ namespace GovDelivery.Library.Tests.Mocks
   <link rel=""self"" href=""/api/account/{accountCode}/subscribers/{subscriberId}"" />
 </subscriber>";
 
+            var response = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseBody)
+            };
+
             return new GovDeliveryResponseModel<CreateSubscriberResponseModel>
             {
-                HttpResponse = new HttpResponseMessage
-                {
-
-                },
+                HttpResponse = response,
+                Data = await GovDeliveryUtils.ResponseContentToModel<CreateSubscriberResponseModel>(response.Content)
             };
         }
 
