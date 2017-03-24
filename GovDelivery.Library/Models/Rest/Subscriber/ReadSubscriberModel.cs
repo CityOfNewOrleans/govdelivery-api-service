@@ -2,6 +2,7 @@
 
 namespace GovDelivery.Models.Rest.Subscriber
 {
+    [XmlRoot(ElementName = "subscriber")]
     public class ReadSubscriberResponseModel
     {
         [XmlElement(ElementName = "email")]
@@ -19,8 +20,32 @@ namespace GovDelivery.Models.Rest.Subscriber
         [XmlElement(ElementName = "id", DataType = "integer")]
         public int Id { get; set; }
 
-        [XmlElement(ElementName = "phone")]
-        public string Link { get; set; }
+        [XmlElement(ElementName = "to-param")]
+        public string ToParam { get; set; }
+
+        [XmlElement(ElementName = "link")]
+        public Link SelfLink { get; set; }
+
+        [XmlElement(ElementName = "link")]
+        public Link CategoryLink { get; set; }
+
+        [XmlElement(ElementName = "link")]
+        public Link TopicsLink { get; set; }
+
+        [XmlElement(ElementName = "link")]
+        public Link QuestionsLink { get; set; }
+
+        [XmlElement(ElementName = "link")]
+        public Link QuestionResponsesLink { get; set; }
+
+        public class Link
+        {
+            [XmlAttribute(AttributeName = "rel")]
+            public string Rel { get; set; }
+
+            [XmlAttribute(AttributeName = "href")]
+            public string Href { get; set; }
+        }
 
     }
 

@@ -26,33 +26,48 @@ namespace GovDelivery.Library.Tests.Mocks
         }
 
         // Subscriber
-        public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel requestModel)
+        public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> 
+            CreateSubscriberAsync(CreateSubscriberRequestModel requestModel)
         {
 
             var subscriberId = 555;
 
-            var responseBody = $@"<?xml version='1.0' encoding='UTF-8'?>
-<subscriber>
-  <to-param>{subscriberId}</to-param>
-  <link rel=""self"" href=""/api/account/{accountCode}/subscribers/{subscriberId}"" />
-</subscriber>";
+            var responseModel = new CreateSubscriberResponseModel
+            {
+                SubscriberId = subscriberId,
+                SubscriberInfoLink = $"/api/account/{accountCode}/subscribers/{subscriberId}"
+            };
 
-            var response = new HttpResponseMessage
+            var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(responseBody)
+                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<CreateSubscriberResponseModel>
             {
-                HttpResponse = response,
-                Data = await GovDeliveryUtils.ResponseContentToModel<CreateSubscriberResponseModel>(response.Content)
+                HttpResponse = httpResponse,
+                Data = await GovDeliveryUtils.ResponseContentToModel<CreateSubscriberResponseModel>(httpResponse.Content)
             };
         }
 
         public override async Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email)
         {
-            throw new NotImplementedException();
+            var encodedEmail = GovDeliveryUtils.Base64Encode(email);
+
+            var responseModel = new ReadSubscriberResponseModel
+            {
+                DigestFor = SendBulletins.Immediately,
+                Id = 555,
+                Email = email,
+                
+            };
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = GovDeliveryUtils.ModelToStringContent(responseModel),
+            };
         }
 
         public override async Task<GovDeliveryResponseModel<DeleteSubscriberResponseModel>> DeleteSubscriberAsync(DeleteSubscriberRequestModel requestModel)
