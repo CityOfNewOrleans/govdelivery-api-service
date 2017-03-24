@@ -134,7 +134,7 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-        public override async Task<GovDeliveryResponseModel<DeleteSubscriberResponseModel>> DeleteSubscriberAsync(DeleteSubscriberRequestModel requestModel)
+        public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email)
         {
             throw new NotImplementedException();
         }

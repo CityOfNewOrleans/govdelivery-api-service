@@ -5,6 +5,7 @@ using GovDelivery.Models.Rest.Subscriber;
 using GovDelivery.Models.Rest.Topic;
 using GovDelivery.Models.Rest.Category;
 using GovDelivery.Library.Models.Rest.Topic;
+using System.Net.Http;
 
 namespace GovDelivery.Library.Http
 {
@@ -12,9 +13,9 @@ namespace GovDelivery.Library.Http
     {
         // Subscriber
         Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel requestModel);
-        Task<GovDeliveryResponseModel<DeleteSubscriberResponseModel>> DeleteSubscriberAsync(DeleteSubscriberRequestModel requestModel);
         Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email);
         Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel requestModel);
+        Task<HttpResponseMessage> DeleteSubscriberAsync(string email);
         Task<GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>> AddTopicToSubscriberAsync(AddTopicToSubscriberRequestModel requestModel);
         Task<GovDeliveryResponseModel<RemoveTopicFromSubscriberResponseModel>> RemoveTopicFromSubscriberAsync(RemoveTopicFromSubscriberRequestModel requestModel);
         
