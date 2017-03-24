@@ -13,6 +13,7 @@ using System.Net.Http;
 using GovDelivery.Library.Utils;
 using System.Net;
 using System.IO;
+using GovDelivery.Library.Models.Rest.Misc;
 
 namespace GovDelivery.Library.Tests.Mocks
 {
@@ -35,7 +36,11 @@ namespace GovDelivery.Library.Tests.Mocks
             var responseModel = new CreateSubscriberResponseModel
             {
                 SubscriberId = subscriberId,
-                SubscriberInfoLink = $"/api/account/{accountCode}/subscribers/{subscriberId}"
+                SubscriberInfoLink = new LinkModel
+                {
+                    Rel = "self",
+                    Href = $"/api/account/{accountCode}/subscribers/{subscriberId}"
+                }
             };
 
             var httpResponse = new HttpResponseMessage
@@ -60,13 +65,72 @@ namespace GovDelivery.Library.Tests.Mocks
                 DigestFor = SendBulletins.Immediately,
                 Id = 555,
                 Email = email,
-                
+                LockVersion = 0,
+                ToParam = encodedEmail,
+                SelfLink = new LinkModel
+                {
+                    Rel = "self",
+                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}"
+                },
+                CategoriesLink = new LinkModel
+                {
+                    Rel = "categories",
+                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/categories"
+                },
+                TopicsLink = new LinkModel
+                {
+                    Rel = "topics",
+                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/topics"
+                },
+                QuestionsLink = new LinkModel
+                {
+                    Rel = "questions",
+                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/questions"
+                },
+                QuestionResponsesLink = new LinkModel
+                {
+                    Rel = "responses",
+                    Href = "/api/account/{accountCode}/subscribers/{encodedEmail}/responses"
+                }
             };
 
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = GovDeliveryUtils.ModelToStringContent(responseModel),
+            };
+
+            return new GovDeliveryResponseModel<ReadSubscriberResponseModel>
+            {
+                HttpResponse = httpResponse,
+                Data = await GovDeliveryUtils.ResponseContentToModel<ReadSubscriberResponseModel>(httpResponse.Content)
+            };
+        }
+
+        public override async Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel requestModel)
+        {
+            var encodedEmail = GovDeliveryUtils.Base64Encode(requestModel.Email);
+
+            var responseModel = new UpdateSubscriberResponseModel
+            {
+                ToParam = encodedEmail,
+                SubscriberInfoLink = new LinkModel
+                {
+                    Rel = "self",
+                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}"
+                }
+            };
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+            };
+
+            return new GovDeliveryResponseModel<UpdateSubscriberResponseModel>
+            {
+                HttpResponse = httpResponse,
+                Data = await GovDeliveryUtils.ResponseContentToModel<UpdateSubscriberResponseModel>(httpResponse.Content)
             };
         }
 
@@ -112,10 +176,7 @@ namespace GovDelivery.Library.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public override async Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel requestModel)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public override async Task<GovDeliveryResponseModel<UpdateTopicResponseModel>> UpdateTopicAsync(UpdateTopicRequestModel requestModel)
         {

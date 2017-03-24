@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using GovDelivery.Library.Models.Rest.Misc;
+using System.Xml.Serialization;
 
 namespace GovDelivery.Models.Rest.Subscriber
 {
@@ -23,29 +24,24 @@ namespace GovDelivery.Models.Rest.Subscriber
         [XmlElement(ElementName = "to-param")]
         public string ToParam { get; set; }
 
-        [XmlElement(ElementName = "link")]
-        public Link SelfLink { get; set; }
+        [XmlElement(ElementName = "lock-version", DataType ="integer")]
+        public int LockVersion { get; set; }
 
         [XmlElement(ElementName = "link")]
-        public Link CategoryLink { get; set; }
+        public LinkModel SelfLink { get; set; }
 
         [XmlElement(ElementName = "link")]
-        public Link TopicsLink { get; set; }
+        public LinkModel CategoriesLink { get; set; }
 
         [XmlElement(ElementName = "link")]
-        public Link QuestionsLink { get; set; }
+        public LinkModel TopicsLink { get; set; }
 
         [XmlElement(ElementName = "link")]
-        public Link QuestionResponsesLink { get; set; }
+        public LinkModel QuestionsLink { get; set; }
 
-        public class Link
-        {
-            [XmlAttribute(AttributeName = "rel")]
-            public string Rel { get; set; }
+        [XmlElement(ElementName = "link")]
+        public LinkModel QuestionResponsesLink { get; set; }
 
-            [XmlAttribute(AttributeName = "href")]
-            public string Href { get; set; }
-        }
 
     }
 

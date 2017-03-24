@@ -33,7 +33,7 @@ namespace GovDelivery.Library.Tests
                 return new CreateSubscriberRequestModel
                 {
                     Email = "example@nola.gov",
-                    BulletinFrequency = BulletinFrequency.Daily,
+                    SendBulletins = SendBulletins.Daily,
                     SendSubscriberUpdateNotifications = true,
                 };
             }
@@ -51,7 +51,7 @@ namespace GovDelivery.Library.Tests
             Assert.IsType(typeof(int), responseModel.Data.SubscriberId);
             Assert.NotNull(responseModel.Data);
             var expectedLink = $"/api/account/{ACCOUNT_CODE}/subscribers/{responseModel.Data.SubscriberId}";
-            Assert.Equal(expectedLink, responseModel.Data.SubscriberInfoLink);
+            Assert.Equal(expectedLink, responseModel.Data.SubscriberInfoLink.Href);
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using GovDelivery.Data.Entities;
+using GovDelivery.Library.Models.Rest.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace GovDelivery.Models.Rest.Subscriber
         public bool SendSubscriberUpdateNotifications { get; set; }
 
         [XmlElement(DataType = "integer", ElementName = "digest-for")]
-        public BulletinFrequency BulletinFrequency { get; set; }
+        public SendBulletins SendBulletins { get; set; }
 
     }
 
@@ -35,6 +36,6 @@ namespace GovDelivery.Models.Rest.Subscriber
         public int SubscriberId { get; set; }
 
         [XmlElement(ElementName = "link")]
-        public string SubscriberInfoLink { get; set; }
+        public LinkModel SubscriberInfoLink { get; set; }
     }
 }
