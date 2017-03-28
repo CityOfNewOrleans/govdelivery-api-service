@@ -15,7 +15,7 @@ namespace GovDelivery.Library.Http
         Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel requestModel);
         Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email);
         Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel requestModel);
-        Task<HttpResponseMessage> DeleteSubscriberAsync(string email);
+        Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotification);
         Task<GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>> AddTopicToSubscriberAsync(AddTopicToSubscriberRequestModel requestModel);
         Task<GovDeliveryResponseModel<RemoveTopicFromSubscriberResponseModel>> RemoveTopicFromSubscriberAsync(RemoveTopicFromSubscriberRequestModel requestModel);
         
@@ -24,7 +24,7 @@ namespace GovDelivery.Library.Http
         Task<GovDeliveryResponseModel<ReadTopicResponseModel>> ReadTopicAsync(int id);
         Task<GovDeliveryResponseModel<ReadAllTopicsResponseModel>> ReadAllTopicsAsync();
         Task<GovDeliveryResponseModel<UpdateTopicResponseModel>> UpdateTopicAsync(UpdateTopicRequestModel requestModel);
-        Task<GovDeliveryResponseModel<DeleteTopicResponseModel>> DeleteTopicAsync(DeleteTopicRequestModel requestModel);
+        Task<GovDeliveryResponseModel<DeleteTopicResponseModel>> DeleteTopicAsync(string topicCode);
         
         // Category
         Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryModel>>> ReadTopicCategoriesAsync(int topicId);

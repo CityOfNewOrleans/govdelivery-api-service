@@ -134,20 +134,60 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-        public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email)
+        public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifiation)
         {
-            throw new NotImplementedException();
+            var encodedEmail = GovDeliveryUtils.Base64Encode(email);
+
+            var responseModel = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+            };
+
+            return responseModel;
         }
 
         // Topic
         public override async Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel requestModel)
         {
-            throw new NotImplementedException();
+            var topicCode = !string.IsNullOrEmpty(requestModel.Code) ? requestModel.Code : "XXXXX";
+
+            var responseModel = new CreateTopicResponseModel
+            {
+                ToParam = topicCode,
+                TopicUri = $"/api/account/{accountCode}/topics/{topicCode}.xml"
+            };
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+            };
+
+            return new GovDeliveryResponseModel<CreateTopicResponseModel>
+            {
+                HttpResponse = httpResponse,
+                Data = await GovDeliveryUtils.ResponseContentToModel<CreateTopicResponseModel>(httpResponse.Content)
+            };
         }
 
         public override async Task<GovDeliveryResponseModel<ReadAllTopicsResponseModel>> ReadAllTopicsAsync()
         {
-            throw new NotImplementedException();
+            var responseModel = new ReadAllTopicsResponseModel
+            {
+                
+            };
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = GovDeliveryUtils.ModelToStringContent(responseModel),
+            };
+
+            return new GovDeliveryResponseModel<ReadAllTopicsResponseModel>
+            {
+                HttpResponse = httpResponse,
+                Data = await GovDeliveryUtils.ResponseContentToModel<ReadAllTopicsResponseModel>(httpResponse.Content)
+            };
         }
 
         public override async Task<GovDeliveryResponseModel<ReadTopicResponseModel>> ReadTopicAsync(int id)

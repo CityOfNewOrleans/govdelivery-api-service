@@ -22,8 +22,8 @@ namespace GovDelivery.Library.Http
         public abstract Task<GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>> AddTopicToSubscriberAsync(AddTopicToSubscriberRequestModel requestModel);
         public abstract Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel requestModel);
         public abstract Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel requestModel);
-        public abstract Task<HttpResponseMessage> DeleteSubscriberAsync(string email);
-        public abstract Task<GovDeliveryResponseModel<DeleteTopicResponseModel>> DeleteTopicAsync(DeleteTopicRequestModel requestModel);
+        public abstract Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifications);
+        public abstract Task<GovDeliveryResponseModel<DeleteTopicResponseModel>> DeleteTopicAsync(string topicCode);
         public abstract Task<GovDeliveryResponseModel<ReadAllTopicsResponseModel>> ReadAllTopicsAsync();
         public abstract Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email);
         public abstract Task<GovDeliveryResponseModel<ReadTopicResponseModel>> ReadTopicAsync(int id);
