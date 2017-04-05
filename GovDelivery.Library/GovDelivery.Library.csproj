@@ -219,7 +219,6 @@
     <Compile Include="Models\Rest\Category\UpdateCategoryResponseModel.cs" />
     <Compile Include="Models\Rest\Misc\LinkModel.cs" />
     <Compile Include="Models\Rest\Subscriber\CreateSubscriberRequestModel.cs" />
-    <Compile Include="Models\Rest\Subscriber\DeleteSubscriberModel.cs" />
     <Compile Include="Models\Csv\ImportSubscriberModel.cs" />
     <Compile Include="Models\Rest\Subscriber\ReadSubscriberModel.cs" />
     <Compile Include="Models\Rest\Subscriber\UpdateSubscriberModel.cs" />
