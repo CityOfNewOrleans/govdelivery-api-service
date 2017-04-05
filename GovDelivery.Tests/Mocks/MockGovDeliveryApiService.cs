@@ -130,13 +130,9 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-        public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifiation)
-        {
-            return new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-            };
-        }
+        public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifiation) =>
+            new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+
 
         // Topic
         public override async Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel requestModel)
@@ -209,10 +205,8 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-        public override async Task<HttpResponseMessage> DeleteTopicAsync(string topicCode)
-        {
-            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
-        }
+        public override async Task<HttpResponseMessage> DeleteTopicAsync(string topicCode) =>
+            new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
 
         public override async Task<GovDeliveryResponseModel<ListTopicsResponseModel>> ListTopicsAsync()
         {
@@ -323,20 +317,41 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-        public override async Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode)
-        {
-            return new HttpResponseMessage {
-                StatusCode = HttpStatusCode.OK,
+        public override async Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode) => 
+            new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
 
+       
+        public override async Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync(int topicId)
+        {
+            var responseModel = new ListCategoriesResponseModel
+            {
+                new ReadCategoryResponseModel
+                {
+                    Code = "12345",
+                    AllowSubscriptions = true,
+                    Name = "Example Category 1",
+                    ShortName = "Example 1",
+                    Description = "I'm a category!",
+                    QuickSubscribePage = new QuickSubscribePage { PageCode = "A" },
+                    Link = new LinkModel { Rel = "Self", Href = $"/api/account/{accountCode}/categories/12345" },
+                },
             };
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+            };
+
+            return new GovDeliveryResponseModel<ListCategoriesResponseModel>
+            {
+                HttpResponse = httpResponse,
+                Data = await GovDeliveryUtils.ResponseContentToModel<ListCategoriesResponseModel>(httpResponse.Content)
+            };
+
         }
 
         public override async Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ReadTopicCategoriesAsync(int topicId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ListCategoriesAsync(int topicId)
         {
             throw new NotImplementedException();
         }

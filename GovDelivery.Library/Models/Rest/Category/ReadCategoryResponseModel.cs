@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GovDelivery.Library.Models.Rest.Misc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,9 @@ namespace GovDelivery.Library.Models.Rest.Category
 
         [XmlElement(ElementName = "qs_page")]
         public QuickSubscribePage QuickSubscribePage { get; set; }
+
+        [XmlElement(ElementName = "link")]
+        public LinkModel Link { get; set; }
 
     }
 }
