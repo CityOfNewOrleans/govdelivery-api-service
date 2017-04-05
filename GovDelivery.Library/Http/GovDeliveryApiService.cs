@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using GovDelivery.Library.Models.Rest.Topic;
 using GovDelivery.Models.Rest.Category;
 using GovDelivery.Library.Utils;
+using GovDelivery.Library.Models.Rest.Category;
 
 namespace GovDelivery.Library.Http
 {
@@ -65,14 +66,10 @@ namespace GovDelivery.Library.Http
             };
         }
 
-        public override async Task<GovDeliveryResponseModel<DeleteSubscriberResponseModel>> DeleteSubscriberAsync(DeleteSubscriberRequestModel model)
+        // TODO - SP: FIX THIS
+        public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotification)
         {
-            var res = await client.DeleteAsync("subscriptions.xml");
-
-            return new GovDeliveryResponseModel<DeleteSubscriberResponseModel> {
-                HttpResponse = res,
-                Data = new DeleteSubscriberResponseModel()
-            };
+            return await client.DeleteAsync("subscriptions.xml");
         }
 
         // Topic
@@ -103,7 +100,7 @@ namespace GovDelivery.Library.Http
             throw new NotImplementedException();
         }
 
-        public override async Task<GovDeliveryResponseModel<ReadAllTopicsResponseModel>> ReadAllTopicsAsync()
+        public override async Task<GovDeliveryResponseModel<ListTopicsResponseModel>> ListTopicsAsync()
         {
             throw new NotImplementedException();
         }
@@ -113,17 +110,42 @@ namespace GovDelivery.Library.Http
             throw new NotImplementedException();
         }
 
-        public override async Task<GovDeliveryResponseModel<DeleteTopicResponseModel>> DeleteTopicAsync(DeleteTopicRequestModel model)
+        public override async Task<HttpResponseMessage> DeleteTopicAsync(string topicCode)
         {
             throw new NotImplementedException();
         }
 
-        public override async Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryModel>>> ReadTopicCategoriesAsync(int topicId)
+        public override async Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ReadTopicCategoriesAsync(int topicId)
         {
             throw new NotImplementedException();
         }
 
         public override async Task<GovDeliveryResponseModel<AddTopicToCategoryModel>> UpdateTopicCategoriesAsync(AddTopicToCategoryModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<GovDeliveryResponseModel<CreateCategoryResponseModel>> CreateCategoryAsync(CreateCategoryRequestModel resquestModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<GovDeliveryResponseModel<ReadCategoryResponseModel>> ReadCategoryAsync(string categoryCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<GovDeliveryResponseModel<UpdateCategoryResponseModel>> UpdateCategoryAsync(UpdateCategoryRequestModel requestModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ListCategoriesAsync(int topicId)
         {
             throw new NotImplementedException();
         }

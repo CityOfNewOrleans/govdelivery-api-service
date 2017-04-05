@@ -209,12 +209,14 @@
     <Compile Include="Interfaces\ICsvImporter.cs" />
     <Compile Include="Interfaces\IImportSubscriberModel.cs" />
     <Compile Include="Models\Rest\Category\AddTopicToCategoryModel.cs" />
-    <Compile Include="Models\Rest\Category\CreateCategoryModel.cs" />
-    <Compile Include="Models\Rest\Category\DeleteCategoryModel.cs" />
-    <Compile Include="Models\Rest\Category\ReadCategoryModel.cs" />
-    <Compile Include="Models\Rest\Category\UpdateCategoryModel.cs" />
+    <Compile Include="Models\Rest\Category\CreateCategoryRequestModel.cs" />
+    <Compile Include="Models\Rest\Category\CreateCategoryResponseModel.cs" />
+    <Compile Include="Models\Rest\Category\ListCategoriesResponseModel.cs" />
+    <Compile Include="Models\Rest\Category\ReadCategoryResponseModel.cs" />
+    <Compile Include="Models\Rest\Category\UpdateCategoryRequestModel.cs" />
     <Compile Include="Http\GovDeliveryApiService.cs" />
     <Compile Include="Models\GovDeliveryResponseModel.cs" />
+    <Compile Include="Models\Rest\Category\UpdateCategoryResponseModel.cs" />
     <Compile Include="Models\Rest\Misc\LinkModel.cs" />
     <Compile Include="Models\Rest\Subscriber\CreateSubscriberRequestModel.cs" />
     <Compile Include="Models\Rest\Subscriber\DeleteSubscriberModel.cs" />
@@ -222,12 +224,13 @@
     <Compile Include="Models\Rest\Subscriber\ReadSubscriberModel.cs" />
     <Compile Include="Models\Rest\Subscriber\UpdateSubscriberModel.cs" />
     <Compile Include="Models\Rest\Topic\AddTopicToSubscriberModel.cs" />
-    <Compile Include="Models\Rest\Topic\CreateTopicModel.cs" />
-    <Compile Include="Models\Rest\Topic\DeleteTopicModel.cs" />
-    <Compile Include="Models\Rest\Topic\ReadAllTopicsModel.cs" />
-    <Compile Include="Models\Rest\Topic\ReadTopicModel.cs" />
+    <Compile Include="Models\Rest\Topic\CreateTopicRequestModel.cs" />
+    <Compile Include="Models\Rest\Topic\CreateTopicResponseModel.cs" />
+    <Compile Include="Models\Rest\Topic\ListTopicsResponseModel.cs" />
+    <Compile Include="Models\Rest\Topic\ReadTopicResponseModel.cs" />
     <Compile Include="Models\Rest\Topic\RemoveTopicFromSubscriberModel.cs" />
-    <Compile Include="Models\Rest\Topic\UpdateTopicModel.cs" />
+    <Compile Include="Models\Rest\Topic\UpdateTopicRequestModel.cs" />
+    <Compile Include="Models\Rest\Topic\UpdateTopicResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\GovDeliveryUtils.cs" />
   </ItemGroup>

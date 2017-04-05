@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace GovDelivery.Models.Rest.Category
+namespace GovDelivery.Library.Models.Rest.Category
 {
     [XmlRoot(ElementName = "category")]
-    public class CreateCategoryModel
+    public class CreateCategoryRequestModel
     {
-        [XmlIgnore]
-        public Guid Id { get; set; }
-
         [XmlElement(ElementName = "code")]
         public string AccountCode { get; set; }
 

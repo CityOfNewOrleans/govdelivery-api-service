@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace GovDelivery.Models.Rest.Category
+namespace GovDelivery.Library.Models.Rest.Category
 {
-    [XmlRoot]
-    public class ReadCategoryModel
+    [XmlRoot(ElementName = "category")]
+    public class UpdateCategoryRequestModel
     {
-        [XmlElement(ElementName = "code")]
-        public string CategoryCode { get; set; }
+        [XmlIgnore]
+        public Guid Id { get; set; }
 
         [XmlElement(ElementName = "allow-subscriptions")]
         public bool AllowUserInitiatedSubscriptions { get; set; }

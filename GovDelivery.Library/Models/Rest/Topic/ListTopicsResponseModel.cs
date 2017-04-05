@@ -1,4 +1,5 @@
 ﻿using GovDelivery.Library.Models.Rest.Misc;
+using GovDelivery.Models.Rest.Topic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Xml.Serialization;
 namespace GovDelivery.Library.Models.Rest.Topic
 {
     [XmlRoot(ElementName = "topics", DataType = "array")]
-    public class ReadAllTopicsResponseModel : List<ReadAllTopicsResponseModel.Topic>, IEnumerable<ReadAllTopicsResponseModel.Topic>
+    public class ListTopicsResponseModel : List<ListTopicsResponseModel.Topic>, IEnumerable<ListTopicsResponseModel.Topic>
     {
 
         [XmlRoot(ElementName = "topic")]
@@ -31,7 +32,7 @@ namespace GovDelivery.Library.Models.Rest.Topic
             public bool WirelessEnabled { get; set; }
 
             [XmlElement(ElementName = "visibility")]
-            public string Visibility { get; set; }
+            public TopicVisibility Visibility { get; set; }
 
             [XmlElement(ElementName = "link")]
             public LinkModel Link { get; set; }

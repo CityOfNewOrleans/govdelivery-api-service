@@ -4,15 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Models.Rest.Topic
+namespace GovDelivery.Library.Models.Rest.Category
 {
-    public class DeleteTopicRequestModel
+    public class UpdateCategoryResponseModel
     {
         
-    }
-
-    public class DeleteTopicResponseModel
-    {
-
     }
 }

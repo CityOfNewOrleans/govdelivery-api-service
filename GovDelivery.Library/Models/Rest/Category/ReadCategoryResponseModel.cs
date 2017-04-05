@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace GovDelivery.Models.Rest.Category
+namespace GovDelivery.Library.Models.Rest.Category
 {
-    [XmlRoot(ElementName = "category")]
-    public class UpdateCategoryModel
+    [XmlRoot("category")]
+    public class ReadCategoryResponseModel
     {
-        [XmlIgnore]
-        public Guid Id { get; set; }
+        [XmlElement(ElementName = "code")]
+        public string Code { get; set; }
 
-        [XmlElement(ElementName = "allow-subscriptions")]
-        public bool AllowUserInitiatedSubscriptions { get; set; }
+        [XmlElement(ElementName = "allow-subscriptions", DataType = "boolean")]
+        public bool AllowSubscriptions { get; set; }
 
-        [XmlElement(ElementName = "default-open")]
+        [XmlElement(ElementName = "default-open", DataType = "boolean")]
         public bool DefaultOpen { get; set; }
 
         [XmlElement(ElementName = "description")]

@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace GovDelivery.Models.Rest.Topic
 {
     [XmlRoot(ElementName = "topic")]
-    public class UpdateTopicRequestModel
+    public class CreateTopicRequestModel
     {
         [XmlElement(ElementName = "code")]
         public string Code { get; set; }
@@ -77,15 +77,24 @@ namespace GovDelivery.Models.Rest.Topic
             [XmlElement(ElementName = "code")]
             public string Code { get; set; }
         }
+
     }
 
-    [XmlRoot]
-    public class UpdateTopicResponseModel
+    [Serializable]
+    public enum TopicVisibility
     {
-        [XmlElement(ElementName = "to-param")]
-        public string ToParam { get; set; }
+        [XmlEnum(Name = "Listed")]
+        Listed,
+        [XmlEnum(Name = "Unlisted")]
+        Unlisted,
+        [XmlEnum(Name = "Restricted")]
+        Restricted
+    }
 
-        [XmlElement(ElementName = "topic-uri")]
-        public string TopicUri { get; set; }
+    public enum PagewatchType
+    {
+        HtmlPage = 1,
+        RssAtomFeed = 2,
+        File = 3,
     }
 }
