@@ -15,6 +15,7 @@ using System.Net;
 using System.IO;
 using GovDelivery.Library.Models.Rest.Misc;
 using GovDelivery.Library.Models.Rest.Category;
+using GovDelivery.Library.Models.Rest.Subscription;
 
 namespace GovDelivery.Library.Tests.Mocks
 {
@@ -133,6 +134,34 @@ namespace GovDelivery.Library.Tests.Mocks
         public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifiation) =>
             new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
 
+
+        // Subscription
+        public override async Task<HttpResponseMessage> AddSubscriptionsAsync(AddSubscriptionsRequestModel requestModel) =>
+            new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+
+        public override async Task<GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>> RemoveSubscriptionsAsync(RemoveSubscriptionsRequestModel requestModel)
+        {
+            var encodedEmail = GovDeliveryUtils.Base64Encode(requestModel.Email);
+
+            var responseModel = new RemoveSubscriptionsResponseModel
+            {
+                ToParam = encodedEmail,
+                Link = new LinkModel { Rel = "self", Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}"},
+                SubscriberUri = $"/api/account/{accountCode}/subscribers/{encodedEmail}",
+            };
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+            };
+
+            return new GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>
+            {
+                HttpResponse = httpResponse,
+                Data = await GovDeliveryUtils.ResponseContentToModel<RemoveSubscriptionsResponseModel>(httpResponse.Content)
+            };
+        }
 
         // Topic
         public override async Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel requestModel)
@@ -356,15 +385,7 @@ namespace GovDelivery.Library.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public override async Task<GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>> AddTopicToSubscriberAsync(AddTopicToSubscriberRequestModel requestModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override async Task<GovDeliveryResponseModel<RemoveTopicFromSubscriberResponseModel>> RemoveTopicFromSubscriberAsync(RemoveTopicFromSubscriberRequestModel requestModel)
-        {
-            throw new NotImplementedException();
-        }
+        
         
         public override async Task<GovDeliveryResponseModel<AddTopicToCategoryModel>> UpdateTopicCategoriesAsync(AddTopicToCategoryModel requestModel)
         {

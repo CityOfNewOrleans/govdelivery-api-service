@@ -222,12 +222,14 @@
     <Compile Include="Models\Csv\ImportSubscriberModel.cs" />
     <Compile Include="Models\Rest\Subscriber\ReadSubscriberModel.cs" />
     <Compile Include="Models\Rest\Subscriber\UpdateSubscriberModel.cs" />
-    <Compile Include="Models\Rest\Topic\AddTopicToSubscriberModel.cs" />
+    <Compile Include="Models\Rest\Subscription\RemoveSubscriptionsRequestModel.cs" />
+    <Compile Include="Models\Rest\Subscription\AddSubscriptionsRequestModel.cs" />
+    <Compile Include="Models\Rest\Subscription\TopicModel.cs" />
     <Compile Include="Models\Rest\Topic\CreateTopicRequestModel.cs" />
     <Compile Include="Models\Rest\Topic\CreateTopicResponseModel.cs" />
     <Compile Include="Models\Rest\Topic\ListTopicsResponseModel.cs" />
     <Compile Include="Models\Rest\Topic\ReadTopicResponseModel.cs" />
-    <Compile Include="Models\Rest\Topic\RemoveTopicFromSubscriberModel.cs" />
+    <Compile Include="Models\Rest\Subscription\RemoveSubscriptionsResponseModel.cs" />
     <Compile Include="Models\Rest\Topic\UpdateTopicRequestModel.cs" />
     <Compile Include="Models\Rest\Topic\UpdateTopicResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

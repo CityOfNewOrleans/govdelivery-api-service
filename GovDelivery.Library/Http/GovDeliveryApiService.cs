@@ -13,6 +13,7 @@ using GovDelivery.Library.Models.Rest.Topic;
 using GovDelivery.Models.Rest.Category;
 using GovDelivery.Library.Utils;
 using GovDelivery.Library.Models.Rest.Category;
+using GovDelivery.Library.Models.Rest.Subscription;
 
 namespace GovDelivery.Library.Http
 {
@@ -73,19 +74,12 @@ namespace GovDelivery.Library.Http
         }
 
         // Topic
-        public override async Task<GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>> AddTopicToSubscriberAsync (AddTopicToSubscriberRequestModel model)
+        public override async Task<HttpResponseMessage> AddSubscriptionsAsync (AddSubscriptionsRequestModel requestModel)
         {
-            var res = await client.PostAsync("subscriptions.xml", GovDeliveryUtils.ModelToStringContent(model));
-
-            var responseModel = new AddTopicToSubscriberResponseModel
-            {
-
-            };
-
-            return new GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>();
+            return await client.PostAsync("subscriptions.xml", GovDeliveryUtils.ModelToStringContent(requestModel));
         }
 
-        public override async Task<GovDeliveryResponseModel<RemoveTopicFromSubscriberResponseModel>> RemoveTopicFromSubscriberAsync(RemoveTopicFromSubscriberRequestModel model)
+        public override async Task<GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>> RemoveSubscriptionsAsync(RemoveSubscriptionsRequestModel requestModel)
         {
             throw new NotImplementedException();
         }
@@ -95,7 +89,7 @@ namespace GovDelivery.Library.Http
             throw new NotImplementedException();
         }
 
-        public override async Task<GovDeliveryResponseModel<ReadTopicResponseModel>> ReadTopicAsync(int id)
+        public override async Task<GovDeliveryResponseModel<ReadTopicResponseModel>> ReadTopicAsync(string topicCode)
         {
             throw new NotImplementedException();
         }
@@ -145,7 +139,7 @@ namespace GovDelivery.Library.Http
             throw new NotImplementedException();
         }
 
-        public override Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ListCategoriesAsync(int topicId)
+        public override Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync(int topicId)
         {
             throw new NotImplementedException();
         }

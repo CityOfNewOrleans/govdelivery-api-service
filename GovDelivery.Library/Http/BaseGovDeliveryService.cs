@@ -10,6 +10,7 @@ using GovDelivery.Models.Rest.Subscriber;
 using GovDelivery.Models.Rest.Topic;
 using System.Net.Http;
 using GovDelivery.Library.Models.Rest.Category;
+using GovDelivery.Library.Models.Rest.Subscription;
 
 namespace GovDelivery.Library.Http
 {
@@ -30,6 +31,9 @@ namespace GovDelivery.Library.Http
         public abstract Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel requestModel);
         public abstract Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifications);
 
+        // Subscriptions
+        public abstract Task<HttpResponseMessage> AddSubscriptionsAsync(AddSubscriptionsRequestModel requestModel);
+        public abstract Task<GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>> RemoveSubscriptionsAsync(RemoveSubscriptionsRequestModel requestModel);
 
         // Topic
         public abstract Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel requestModel);
@@ -49,8 +53,6 @@ namespace GovDelivery.Library.Http
         public abstract Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ReadTopicCategoriesAsync(int topicId);
 
 
-        public abstract Task<GovDeliveryResponseModel<AddTopicToSubscriberResponseModel>> AddTopicToSubscriberAsync(AddTopicToSubscriberRequestModel requestModel);
-        public abstract Task<GovDeliveryResponseModel<RemoveTopicFromSubscriberResponseModel>> RemoveTopicFromSubscriberAsync(RemoveTopicFromSubscriberRequestModel requestModel);
-
+        
     }
 }
