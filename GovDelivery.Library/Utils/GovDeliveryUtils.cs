@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace GovDelivery.Library.Utils
@@ -39,14 +41,17 @@ namespace GovDelivery.Library.Utils
 
         public static StringContent ModelToStringContent<T>(T m, XmlSerializer serializer = null)
         {
-            if (serializer == null) serializer = new XmlSerializer(typeof(T));
+            if (serializer == null) serializer = new XmlSerializer(m.GetType());
 
-            using (var sw = new StringWriter())
-            using (var xw = XmlWriter.Create(sw))
+            using (var sw = new Utf8StringWriter())
             {
-                serializer.Serialize(xw, m);
+                serializer.Serialize(sw, m);
 
-                return new StringContent(xw.ToString(), Encoding.UTF8, "text/xml");
+                var serializedString = sw.ToString();
+
+                serializedString = $"<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n{RemoveAllNamespaces(serializedString)}";
+
+                return new StringContent(serializedString, Encoding.UTF8, "application/xml");
             }
         }
 
@@ -54,10 +59,57 @@ namespace GovDelivery.Library.Utils
         {
             if (serializer == null) serializer = new XmlSerializer(typeof(T));
 
-            var stream = new MemoryStream();
-            await hc.CopyToAsync(stream);
+            using (var stream = new MemoryStream())
+            {
+                var contentString = await hc.ReadAsStringAsync();
 
-            return (T)serializer.Deserialize(stream);
+                await hc.CopyToAsync(stream);
+
+                return (T)serializer.Deserialize(stream);
+            }
+        }
+
+        public static string RemoveAllNamespaces(string xmlString)
+        {
+            var xmlDocSansNamespaces = RemoveAllNamespaces(XElement.Parse(xmlString));
+
+            return xmlDocSansNamespaces.ToString();
+        }
+
+        private static XElement RemoveAllNamespaces(XElement xmlDoc)
+        {
+            if (xmlDoc.HasElements)
+                return new XElement(xmlDoc.Name.LocalName, xmlDoc.Elements().Select(el => RemoveAllNamespaces(el)));
+
+            var elCopy = new XElement(xmlDoc.Name.LocalName);
+            elCopy.Value = xmlDoc.Value;
+
+            foreach (var attr in xmlDoc.Attributes()) elCopy.Add(attr);
+
+            return elCopy;
+        }
+
+    }
+
+    
+
+    public class Utf8StringWriter : StringWriter
+    {
+        public override Encoding Encoding => Encoding.UTF8;
+    }
+
+    public static class StringExtensions
+    {
+
+        public static Stream ToStream(this string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
     }
 }

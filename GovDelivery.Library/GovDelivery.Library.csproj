@@ -208,6 +208,7 @@
     <Compile Include="Http\IGovDeliveryApiService.cs" />
     <Compile Include="Interfaces\ICsvImporter.cs" />
     <Compile Include="Interfaces\IImportSubscriberModel.cs" />
+    <Compile Include="Interfaces\IXDocConvertible.cs" />
     <Compile Include="Models\Rest\Category\AddTopicToCategoryModel.cs" />
     <Compile Include="Models\Rest\Category\CreateCategoryRequestModel.cs" />
     <Compile Include="Models\Rest\Category\CreateCategoryResponseModel.cs" />

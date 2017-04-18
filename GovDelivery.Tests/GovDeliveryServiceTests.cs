@@ -9,7 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-
+    
 namespace GovDelivery.Library.Tests
 {
     public class GovDeliveryServiceTests
@@ -26,22 +26,23 @@ namespace GovDelivery.Library.Tests
 
         #region MemberData
 
-        public static CreateSubscriberRequestModel CreateSubscriberAsyncData
+        public static IEnumerable<object> CreateSubscriberAsyncData()
         {
-            get
+            yield return new object[] 
             {
-                return new CreateSubscriberRequestModel
+                new CreateSubscriberRequestModel
                 {
                     Email = "example@nola.gov",
                     SendBulletins = SendBulletins.Daily,
                     SendSubscriberUpdateNotifications = true,
-                };
-            }
+                }
+            };
         }
 
         #endregion MemberData
 
-        [Theory, MemberData("CreateSubscriberAsyncData")]
+        [Theory(DisplayName = "CreateSubscriberAsync method performs as expected.")]
+        [MemberData(nameof(CreateSubscriberAsyncData))]
         public async void CreateSubscriberAsync_ValidModel_SuccessfullyCreateRemoteSubscriber(CreateSubscriberRequestModel requestModel)
         {
             var responseModel = await service.CreateSubscriberAsync(requestModel);

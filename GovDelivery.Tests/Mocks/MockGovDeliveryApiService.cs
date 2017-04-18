@@ -24,8 +24,7 @@ namespace GovDelivery.Library.Tests.Mocks
         public MockGovDeliveryApiService(string baseUri, string accountCode) : base(baseUri, accountCode) {}
 
         // Subscriber
-        public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> 
-            CreateSubscriberAsync(CreateSubscriberRequestModel requestModel)
+        public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel requestModel)
         {
 
             var subscriberId = 555;
@@ -46,10 +45,12 @@ namespace GovDelivery.Library.Tests.Mocks
                 Content = GovDeliveryUtils.ModelToStringContent(responseModel)
             };
 
+            var responseData = await GovDeliveryUtils.ResponseContentToModel<CreateSubscriberResponseModel>(httpResponse.Content);
+
             return new GovDeliveryResponseModel<CreateSubscriberResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<CreateSubscriberResponseModel>(httpResponse.Content)
+                Data = responseData
             };
         }
 
@@ -131,12 +132,16 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifiation) =>
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
 
 
         // Subscription
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<HttpResponseMessage> AddSubscriptionsAsync(AddSubscriptionsRequestModel requestModel) =>
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
 
         public override async Task<GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>> RemoveSubscriptionsAsync(RemoveSubscriptionsRequestModel requestModel)
@@ -234,7 +239,9 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<HttpResponseMessage> DeleteTopicAsync(string topicCode) =>
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
 
         public override async Task<GovDeliveryResponseModel<ListTopicsResponseModel>> ListTopicsAsync()
@@ -346,7 +353,9 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode) => 
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
 
        
@@ -380,14 +389,18 @@ namespace GovDelivery.Library.Tests.Mocks
 
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ReadTopicCategoriesAsync(int topicId)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             throw new NotImplementedException();
         }
 
         
         
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<GovDeliveryResponseModel<AddTopicToCategoryModel>> UpdateTopicCategoriesAsync(AddTopicToCategoryModel requestModel)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             throw new NotImplementedException();
         }
