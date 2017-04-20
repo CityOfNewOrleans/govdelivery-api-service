@@ -27,7 +27,7 @@ namespace GovDelivery.Library.Tests.Mocks
         public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel requestModel)
         {
 
-            var subscriberId = 555;
+            var subscriberId = "555";
 
             var responseModel = new CreateSubscriberResponseModel
             {

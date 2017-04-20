@@ -65,6 +65,7 @@ namespace GovDelivery.Library.Utils
                 var contentString = await hc.ReadAsStringAsync();
 
                 await hc.CopyToAsync(stream);
+                stream.Position = 0; // set stream to beginning
 
                 return (T)serializer.Deserialize(stream);
             }

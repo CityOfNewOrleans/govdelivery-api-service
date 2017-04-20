@@ -9,33 +9,33 @@ using System.Xml.Serialization;
 
 namespace GovDelivery.Models.Rest.Subscriber
 {
-    [XmlRoot(ElementName = "subscriber")]
+    [XmlRoot("subscriber")]
     public class CreateSubscriberRequestModel
     {
-        [XmlElement(ElementName = "email")]
+        [XmlElement("email")]
         public string Email { get; set; }
 
-        [XmlElement(ElementName = "country-code")]
+        [XmlElement("country-code")]
         public string CountryCode { get; set; }
 
-        [XmlElement(ElementName = "phone")]
+        [XmlElement("phone")]
         public string Phone { get; set; }
 
-        [XmlElement(ElementName = "send-notifications")]
-        public bool SendSubscriberUpdateNotifications { get; set; }
+        [XmlElement("send-notifications")]
+        public SerializableBool SendSubscriberUpdateNotifications { get; set; }
 
-        [XmlElement(DataType = "integer", ElementName = "digest-for")]
+        [XmlElement("digest-for")]
         public SendBulletins SendBulletins { get; set; }
 
     }
 
-    [XmlRoot(ElementName = "subscriber")]
+    [XmlRoot("subscriber")]
     public class CreateSubscriberResponseModel
     {
-        [XmlElement(ElementName = "to-param")]
-        public int SubscriberId { get; set; }
+        [XmlElement("to-param")]
+        public string SubscriberId { get; set; }
 
-        [XmlElement(ElementName = "link")]
+        [XmlElement("link")]
         public LinkModel SubscriberInfoLink { get; set; }
     }
 }

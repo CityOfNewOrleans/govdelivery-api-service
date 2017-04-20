@@ -1,5 +1,6 @@
 ﻿using GovDelivery.Data.Entities;
 using GovDelivery.Library.Http;
+using GovDelivery.Library.Models.Rest.Misc;
 using GovDelivery.Library.Tests.Mocks;
 using GovDelivery.Models.Rest.Subscriber;
 using System;
@@ -9,7 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-    
+
 namespace GovDelivery.Library.Tests
 {
     public class GovDeliveryServiceTests
@@ -34,7 +35,7 @@ namespace GovDelivery.Library.Tests
                 {
                     Email = "example@nola.gov",
                     SendBulletins = SendBulletins.Daily,
-                    SendSubscriberUpdateNotifications = true,
+                    SendSubscriberUpdateNotifications = new SerializableBool { Value = true },
                 }
             };
         }
@@ -43,7 +44,7 @@ namespace GovDelivery.Library.Tests
 
         [Theory(DisplayName = "CreateSubscriberAsync method performs as expected.")]
         [MemberData(nameof(CreateSubscriberAsyncData))]
-        public async void CreateSubscriberAsync_ValidModel_SuccessfullyCreateRemoteSubscriber(CreateSubscriberRequestModel requestModel)
+        public async void TestCreateSubscriberAsync(CreateSubscriberRequestModel requestModel)
         {
             var responseModel = await service.CreateSubscriberAsync(requestModel);
 
