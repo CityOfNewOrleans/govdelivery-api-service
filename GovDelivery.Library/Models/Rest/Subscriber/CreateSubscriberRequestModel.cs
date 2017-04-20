@@ -33,7 +33,7 @@ namespace GovDelivery.Models.Rest.Subscriber
     public class CreateSubscriberResponseModel
     {
         [XmlElement("to-param")]
-        public string SubscriberId { get; set; }
+        public int SubscriberId { get; set; }
 
         [XmlElement("link")]
         public LinkModel SubscriberInfoLink { get; set; }
