@@ -41,22 +41,32 @@ namespace GovDelivery.Library.Utils
         public static string Base64Decode(string encodedText) =>
             Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
 
-        public static StringContent ModelToStringContent<T> (T m) where T : IXDocumentModelConverter
+        public static StringContent ModelToStringContent<T> (T model, XmlSerializer serializer = null)
         {
-                return new StringContent(m.ToXDocument().ToString(), Encoding.UTF8, "application/xml");
+            if (serializer == null) serializer = new XmlSerializer(typeof(T));
+
+            using (var sw = new Utf8StringWriter())
+            {
+                serializer.Serialize(sw, model);
+
+                var serializedString = sw.ToString();
+
+                return new StringContent(serializedString, Encoding.UTF8, "application/xml");
+            }
+
         }
 
-        public static async Task<T> ResponseContentToModel<T>(HttpContent hc, Type modelType) 
+        public static async Task<T> ResponseContentToModel<T>(HttpContent hc, XmlSerializer serializer = null) 
         {
+            if (serializer == null) serializer = new XmlSerializer(typeof(T));
+
             using (var stream = new MemoryStream())
             {
                 var contentString = await hc.ReadAsStringAsync();
 
                 await hc.CopyToAsync(stream);
 
-                var xDoc = XDocument.Load(stream);
-
-                return xDoc;
+                return (T)serializer.Deserialize(stream);
             }
         }
 

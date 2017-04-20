@@ -10,6 +10,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Xunit;
 using System.Xml.Linq;
+using static GovDelivery.Library.Tests.TestModel;
 
 namespace GovDelivery.Library.Tests
 {
@@ -73,13 +74,13 @@ namespace GovDelivery.Library.Tests
             {
                 var deserializedModel = (TestModel)serializer.Deserialize(xmlStream);
 
-                Assert.Equal(testModel.TestArray.Count(), deserializedModel.TestArray.Count());
-                Assert.Equal(testModel.TestArray.ElementAt(0).TestValue, deserializedModel.TestArray.ElementAt(0).TestValue);
-                Assert.Equal(testModel.TestArray.ElementAt(1).TestValue, deserializedModel.TestArray.ElementAt(1).TestValue);
-                Assert.Equal(testModel.TestArray.ElementAt(2).TestValue, deserializedModel.TestArray.ElementAt(2).TestValue);
+                Assert.Equal(testModel.TestArray.Items.Count(), deserializedModel.TestArray.Items.Count());
+                Assert.Equal(testModel.TestArray.Items.ElementAt(0).TestValue, deserializedModel.TestArray.Items.ElementAt(0).TestValue);
+                Assert.Equal(testModel.TestArray.Items.ElementAt(1).TestValue, deserializedModel.TestArray.Items.ElementAt(1).TestValue);
+                Assert.Equal(testModel.TestArray.Items.ElementAt(2).TestValue, deserializedModel.TestArray.Items.ElementAt(2).TestValue);
 
-                Assert.Equal(testModel.TestBool, deserializedModel.TestBool);
-                Assert.Equal(testModel.TestInt, deserializedModel.TestInt);
+                Assert.Equal(testModel.TestBool.Value, deserializedModel.TestBool.Value);
+                Assert.Equal(testModel.TestInt.Value, deserializedModel.TestInt.Value);
                 Assert.Equal(testModel.TestString, deserializedModel.TestString);
             }
 
@@ -88,9 +89,9 @@ namespace GovDelivery.Library.Tests
         public static IEnumerable<object> SerializeTestArgs()
         {
             yield return new object[] {
-                
+
 @"<?xml version=""1.0"" encoding=""utf-8""?>
-<test-model>
+<test-model xmlns:xsd=""http://www.w3.org/2001/XMLSch"">
   <test-array type=""array"">
     <test-item>
       <test-value>foo</test-value>
@@ -109,62 +110,53 @@ namespace GovDelivery.Library.Tests
 
                 new TestModel
                 {
-                    TestArray = new List<TestModel.TestItem>
+                    TestArray = new SerializableTestItemArray
                     {
-                        new TestModel.TestItem { TestValue = "foo" },
-                        new TestModel.TestItem { TestValue = "bar" },
-                        new TestModel.TestItem { TestValue = "baz" },
+                        Items = new List<TestItem>
+                        {
+                            new TestItem { TestValue = "foo" },
+                            new TestItem { TestValue = "bar" },
+                            new TestItem { TestValue = "baz" },
+                        }
                     },
                     TestString = "Hello, world!",
-                    TestInt = 42,
-                    TestBool = true,
+                    TestInt = new SerializableInt { Value = 42 },
+                    TestBool = new SerializableBool { Value = true },
                 },
             };
         }
     }
 
+    
+    [XmlRoot("test-model")]
     public class TestModel
     {
-        public List<TestItem> TestArray { get; set; }
+        [XmlElement("test-array")]
+        public SerializableTestItemArray TestArray { get; set; }
 
+        [XmlElement("test-string")]
         public string TestString { get; set; }
 
-        public int TestInt { get; set; }
+        [XmlElement("test-int")]
+        public SerializableInt TestInt { get; set; }
 
-        public bool TestBool { get; set; }
+        [XmlElement("test-bool")]
+        public SerializableBool TestBool { get; set; }
+
 
         public class TestItem
         {
+            [XmlElement("test-value")]
             public string TestValue { get; set; }
         }
 
-        public class TestModelXDocumentConverter : IConvertXDocumentToModel<TestModel>, IConvertModelToXDocument<TestModel>
+        public class SerializableTestItemArray : BaseSerializableArray<TestItem>
         {
-            public TestModel ToModel(XDocument xDoc)
-            {
-                return new TestModel
-                {
-                    TestBool = bool.Parse(xDoc.Elements().First(e => e.Name.LocalName == "test-bool").Value)
-                };
-            }
+            [XmlElement("test-item")]
+            public override List<TestItem> Items { get; set; }
 
-            public XDocument ToXDocument(TestModel model)
-            {
-                return new XDocument(
-                    new XElement("test-model",
-                        model.TestArray.ToXElement("test-array", ti => new XElement("test-item", new XElement("test-value", ti.TestValue))),
-                        model.TestBool.ToXElement("test-bool"),
-                        model.TestInt.ToXElement("test-int"),
-                        model.TestString.ToXElement("test-string")
-                    )
-                );
-            }
         }
     }
-
-
-    
-
 
 
 }
