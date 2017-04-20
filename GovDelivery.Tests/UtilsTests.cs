@@ -91,7 +91,7 @@ namespace GovDelivery.Library.Tests
             yield return new object[] {
 
 @"<?xml version=""1.0"" encoding=""utf-8""?>
-<test-model xmlns:xsd=""http://www.w3.org/2001/XMLSch"">
+<test-model xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <test-array type=""array"">
     <test-item>
       <test-value>foo</test-value>
