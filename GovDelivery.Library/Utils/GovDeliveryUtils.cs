@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GovDelivery.Library.Interfaces;
+using GovDelivery.Library.Models;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -39,33 +41,22 @@ namespace GovDelivery.Library.Utils
         public static string Base64Decode(string encodedText) =>
             Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
 
-        public static StringContent ModelToStringContent<T>(T m, XmlSerializer serializer = null)
+        public static StringContent ModelToStringContent<T> (T m) where T : IXDocumentModelConverter
         {
-            if (serializer == null) serializer = new XmlSerializer(m.GetType());
-
-            using (var sw = new Utf8StringWriter())
-            {
-                serializer.Serialize(sw, m);
-
-                var serializedString = sw.ToString();
-
-                serializedString = $"<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n{RemoveAllNamespaces(serializedString)}";
-
-                return new StringContent(serializedString, Encoding.UTF8, "application/xml");
-            }
+                return new StringContent(m.ToXDocument().ToString(), Encoding.UTF8, "application/xml");
         }
 
-        public static async Task<T> ResponseContentToModel<T> (HttpContent hc, XmlSerializer serializer = null)
+        public static async Task<T> ResponseContentToModel<T>(HttpContent hc, Type modelType) 
         {
-            if (serializer == null) serializer = new XmlSerializer(typeof(T));
-
             using (var stream = new MemoryStream())
             {
                 var contentString = await hc.ReadAsStringAsync();
 
                 await hc.CopyToAsync(stream);
 
-                return (T)serializer.Deserialize(stream);
+                var xDoc = XDocument.Load(stream);
+
+                return xDoc;
             }
         }
 
@@ -89,10 +80,11 @@ namespace GovDelivery.Library.Utils
             return elCopy;
         }
 
+        
+
     }
 
     
-
     public class Utf8StringWriter : StringWriter
     {
         public override Encoding Encoding => Encoding.UTF8;

@@ -7,10 +7,14 @@ using System.Xml.Linq;
 
 namespace GovDelivery.Library.Interfaces
 {
-    public interface IXDocConvertible<T>
+    public interface IConvertXDocumentToModel<T>
     {
-        XDocument ToXDoc(T model);
+        T ToModel(XDocument xDoc);
+    }
 
-        T FromXDoc(XDocument xDoc);
+    public interface IConvertModelToXDocument<T>
+    {
+        XDocument ToXDocument(T model);
+
     }
 }

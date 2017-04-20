@@ -73,10 +73,10 @@ namespace GovDelivery.Library.Tests
             {
                 var deserializedModel = (TestModel)serializer.Deserialize(xmlStream);
 
-                Assert.Equal(testModel.TestArray.Items.Count(), deserializedModel.TestArray.Items.Count());
-                Assert.Equal(testModel.TestArray.Items.ElementAt(0).TestValue, deserializedModel.TestArray.Items.ElementAt(0).TestValue);
-                Assert.Equal(testModel.TestArray.Items.ElementAt(1).TestValue, deserializedModel.TestArray.Items.ElementAt(1).TestValue);
-                Assert.Equal(testModel.TestArray.Items.ElementAt(2).TestValue, deserializedModel.TestArray.Items.ElementAt(2).TestValue);
+                Assert.Equal(testModel.TestArray.Count(), deserializedModel.TestArray.Count());
+                Assert.Equal(testModel.TestArray.ElementAt(0).TestValue, deserializedModel.TestArray.ElementAt(0).TestValue);
+                Assert.Equal(testModel.TestArray.ElementAt(1).TestValue, deserializedModel.TestArray.ElementAt(1).TestValue);
+                Assert.Equal(testModel.TestArray.ElementAt(2).TestValue, deserializedModel.TestArray.ElementAt(2).TestValue);
 
                 Assert.Equal(testModel.TestBool, deserializedModel.TestBool);
                 Assert.Equal(testModel.TestInt, deserializedModel.TestInt);
@@ -109,13 +109,11 @@ namespace GovDelivery.Library.Tests
 
                 new TestModel
                 {
-                    TestArray = new TestArrayModel
+                    TestArray = new List<TestModel.TestItem>
                     {
-                        Items = new TestItem[] {
-                            new TestItem { TestValue = "foo" },
-                            new TestItem { TestValue = "bar" },
-                            new TestItem { TestValue = "baz" },
-                        }
+                        new TestModel.TestItem { TestValue = "foo" },
+                        new TestModel.TestItem { TestValue = "bar" },
+                        new TestModel.TestItem { TestValue = "baz" },
                     },
                     TestString = "Hello, world!",
                     TestInt = 42,
@@ -125,7 +123,7 @@ namespace GovDelivery.Library.Tests
         }
     }
 
-    public class TestModel : IXDocConvertible<TestModel>
+    public class TestModel
     {
         public List<TestItem> TestArray { get; set; }
 
@@ -135,25 +133,37 @@ namespace GovDelivery.Library.Tests
 
         public bool TestBool { get; set; }
 
-        public XDocument ToXDoc(TestModel model)
+        public class TestItem
         {
-            var xDoc = new XDocument("test-model");
-
- 
-            return xDoc;
+            public string TestValue { get; set; }
         }
 
-        public TestModel FromXDoc(XDocument xDoc)
+        public class TestModelXDocumentConverter : IConvertXDocumentToModel<TestModel>, IConvertModelToXDocument<TestModel>
         {
-            throw new NotImplementedException();
+            public TestModel ToModel(XDocument xDoc)
+            {
+                return new TestModel
+                {
+                    TestBool = bool.Parse(xDoc.Elements().First(e => e.Name.LocalName == "test-bool").Value)
+                };
+            }
+
+            public XDocument ToXDocument(TestModel model)
+            {
+                return new XDocument(
+                    new XElement("test-model",
+                        model.TestArray.ToXElement("test-array", ti => new XElement("test-item", new XElement("test-value", ti.TestValue))),
+                        model.TestBool.ToXElement("test-bool"),
+                        model.TestInt.ToXElement("test-int"),
+                        model.TestString.ToXElement("test-string")
+                    )
+                );
+            }
         }
     }
 
 
-    public class TestItem
-    {
-        public string TestValue { get; set; }
-    }
+    
 
 
 
