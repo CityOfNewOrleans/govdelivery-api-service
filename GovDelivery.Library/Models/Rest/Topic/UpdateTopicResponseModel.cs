@@ -7,13 +7,13 @@ using System.Xml.Serialization;
 
 namespace GovDelivery.Library.Models.Rest.Topic
 {
-    [XmlRoot(ElementName = "topic")]
+    [XmlRoot("topic")]
     public class UpdateTopicResponseModel
     {
-        [XmlElement(ElementName = "to-param")]
+        [XmlElement("to-param")]
         public string ToParam { get; set; }
 
-        [XmlElement(ElementName = "topic-uri")]
+        [XmlElement("topic-uri")]
         public string TopicUri { get; set; }
     }
 }

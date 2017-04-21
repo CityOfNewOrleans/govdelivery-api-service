@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GovDelivery.Library.Models.Rest.Misc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,74 +8,87 @@ using System.Xml.Serialization;
 
 namespace GovDelivery.Models.Rest.Topic
 {
-    [XmlRoot(ElementName = "topic")]
+    [XmlRoot("topic")]
     public class UpdateTopicRequestModel
     {
-        [XmlElement(ElementName = "code")]
+        [XmlElement("code")]
         public string Code { get; set; }
 
-        [XmlElement(ElementName = "name")]
+        [XmlElement("name")]
         public string Name { get; set; }
 
-        [XmlElement(ElementName = "short-name")]
+        [XmlElement("short-name")]
         public string ShortName { get; set; }
 
-        [XmlElement(ElementName = "description", IsNullable = true)]
-        public string Description { get; set; }
+        [XmlElement("description")]
+        public NillableSerializableString Description { get; set; }
 
-        [XmlElement(ElementName = "send-by-email-enabled", DataType = "boolean")]
-        public bool SendByEmailEnabled { get; set; }
+        [XmlElement("send-by-email-enabled")]
+        public SerializableBool SendByEmailEnabled { get; set; }
 
-        [XmlElement(ElementName = "wireless-enabled", DataType = "boolean")]
-        public bool SmsEnabled { get; set; }
+        [XmlElement("wireless-enabled")]
+        public SerializableBool SmsEnabled { get; set; }
 
-        [XmlElement(ElementName = "rss-feed-url", IsNullable = true)]
-        public string RssFeedUrl { get; set; }
+        [XmlElement("rss-feed-url")]
+        public NillableSerializableString RssFeedUrl { get; set; }
 
-        [XmlElement(ElementName = "rss-feed-name", IsNullable = true)]
-        public string RssFeedTitle { get; set; }
+        [XmlElement("rss-feed-name")]
+        public NillableSerializableString RssFeedTitle { get; set; }
 
-        [XmlElement(ElementName = "rss-feed-description", IsNullable = true)]
-        public string RssFeedDescription { get; set; }
+        [XmlElement("rss-feed-description")]
+        public NillableSerializableString RssFeedDescription { get; set; }
 
-        [XmlElement(ElementName = "pagewatch-enabled", DataType = "boolean")]
-        public bool PagewatchEnabled { get; set; }
+        [XmlElement("pagewatch-enabled")]
+        public SerializableBool PagewatchEnabled { get; set; }
 
-        [XmlElement(ElementName = "pagewatch-suspended", DataType = "boolean")]
-        public bool PagewatchSuspended { get; set; }
+        [XmlElement("pagewatch-suspended")]
+        public SerializableBool PagewatchSuspended { get; set; }
 
-        [XmlElement(ElementName = "default-pagewatch-results", DataType = "integer", IsNullable = true)]
-        public int DefaultPagewatchResults { get; set; }
+        [XmlElement("default-pagewatch-results")]
+        public NillableSerializableInt DefaultPagewatchResults { get; set; }
 
-        [XmlElement(ElementName = "pagewatch-autosend", DataType = "boolean")]
-        public bool PagewatchAutosend { get; set; }
+        [XmlElement("pagewatch-autosend")]
+        public SerializableBool PagewatchAutosend { get; set; }
 
-        [XmlElement(ElementName = "pagewatch-type", DataType = "integer")]
-        public PagewatchType PagewatchType { get; set; }
+        /// <summary>
+        /// Use PagewatchType enum for acceptable values.
+        /// </summary>
+        [XmlElement("pagewatch-type")]
+        public SerializableInt PagewatchType { get; set; }
 
-        [XmlElement(ElementName = "watch-tagged-content", DataType = "boolean")]
-        public bool WatchTaggedContent { get; set; }
+        [XmlElement("watch-tagged-content")]
+        public SerializableBool WatchTaggedContent { get; set; }
 
-        [XmlElement(ElementName = "pages", DataType = "array")]
-        public IEnumerable<Page> Pages { get; set; }
+        [XmlElement("pages")]
+        public SerializablePagesArray Pages { get; set; }
 
-        [XmlElement(ElementName = "categories", DataType = "array")]
-        public IEnumerable<Category> Categories { get; set; }
+        [XmlElement("categories")]
+        public SerializableCategoriesArray Categories { get; set; }
 
-        [XmlElement(ElementName = "visibility")]
+        [XmlElement("visibility")]
         public TopicVisibility Visibility { get; set; }
 
-        [XmlRoot(ElementName = "page")]
+        public class SerializablePagesArray : BaseSerializableArray<Page>
+        {
+            [XmlElement("page")]
+            public override List<Page> Items { get; set; }
+        }
+
         public class Page
         {
             [XmlElement(ElementName = "url")]
             public string Url { get; set; }
         }
 
-        [XmlRoot(ElementName = "category")]
+        public class SerializableCategoriesArray : BaseSerializableArray<Category>
+        {
+            [XmlElement("category")]
+            public override List<Category> Items { get; set; }
+        }
+
         public class Category
         {
-            [XmlElement(ElementName = "code")]
+            [XmlElement("code")]
             public string Code { get; set; }
         }
     }

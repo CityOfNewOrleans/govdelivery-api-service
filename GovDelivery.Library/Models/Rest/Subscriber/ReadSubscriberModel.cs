@@ -1,48 +1,54 @@
 ﻿using GovDelivery.Library.Models.Rest.Misc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace GovDelivery.Models.Rest.Subscriber
 {
-    [XmlRoot(ElementName = "subscriber")]
+    [XmlRoot("subscriber")]
     public class ReadSubscriberResponseModel
     {
-        [XmlElement(ElementName = "email")]
+        [XmlElement("email")]
         public string Email { get; set; }
 
-        [XmlElement(ElementName = "send-notifications")]
-        public bool SendSubscriberUpdateNotifications { get; set; }
+        [XmlElement("send-notifications")]
+        public SerializableBool SendSubscriberUpdateNotifications { get; set; }
 
-        [XmlElement(ElementName = "phone")]
+        [XmlElement("phone")]
         public string Phone { get; set; }
 
-        [XmlElement(ElementName = "digest-for", DataType = "integer")]
-        public SendBulletins DigestFor { get; set; }
+        /// <summary>
+        /// Use SendBulletins enum to set acceptable values.
+        /// </summary>
+        [XmlElement("digest-for")]
+        public SerializableInt DigestFor { get; set; }
 
-        [XmlElement(ElementName = "id", DataType = "integer")]
-        public int Id { get; set; }
+        [XmlElement("id")]
+        public SerializableInt Id { get; set; }
 
-        [XmlElement(ElementName = "to-param")]
+        [XmlElement("to-param")]
         public string ToParam { get; set; }
 
-        [XmlElement(ElementName = "lock-version", DataType ="integer")]
-        public int LockVersion { get; set; }
+        [XmlElement("lock-version")]
+        public SerializableInt LockVersion { get; set; }
 
-        [XmlElement(ElementName = "link")]
-        public LinkModel SelfLink { get; set; }
+        [XmlElement("link")]
+        public List<LinkModel> Links { get; set; }
 
-        [XmlElement(ElementName = "link")]
-        public LinkModel CategoriesLink { get; set; }
+        [XmlIgnore]
+        public LinkModel SelfLink { get { return Links.FirstOrDefault(l => l.Rel == "self"); } }
 
-        [XmlElement(ElementName = "link")]
-        public LinkModel TopicsLink { get; set; }
+        [XmlIgnore]
+        public LinkModel CategoriesLink { get { return Links.FirstOrDefault(l => l.Rel == "categories"); } }
 
-        [XmlElement(ElementName = "link")]
-        public LinkModel QuestionsLink { get; set; }
+        [XmlIgnore]
+        public LinkModel TopicsLink { get { return Links.FirstOrDefault(l => l.Rel == "topics"); } }
 
-        [XmlElement(ElementName = "link")]
-        public LinkModel QuestionResponsesLink { get; set; }
+        [XmlIgnore]
+        public LinkModel QuestionsLink { get { return Links.FirstOrDefault(l => l.Rel == "questions"); } }
 
-
+        [XmlIgnore]
+        public LinkModel QuestionResponsesLink { get { return Links.FirstOrDefault(l => l.Rel == "responses"); } }
     }
 
     public enum SendBulletins

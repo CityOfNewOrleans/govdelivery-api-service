@@ -1,43 +1,47 @@
-﻿using System;
+﻿using GovDelivery.Library.Models.Rest.Misc;
+using System;
 using System.Xml.Serialization;
 
 namespace GovDelivery.Library.Models.Rest.Category
 {
-    [XmlRoot(ElementName = "category")]
+    [XmlRoot("category")]
     public class CreateCategoryRequestModel
     {
-        [XmlElement(ElementName = "code")]
+        [XmlElement("code")]
         public string AccountCode { get; set; }
 
-        [XmlElement(ElementName = "allow-subscriptions")]
-        public bool AllowUserInitiatedSubscriptions { get; set; }
+        [XmlElement("allow-subscriptions")]
+        public SerializableBool AllowUserInitiatedSubscriptions { get; set; }
 
-        [XmlElement(ElementName = "description")]
+        [XmlElement("default-open")]
+        public SerializableBool DefaultOpen { get; set; }
+
+        [XmlElement("description")]
         public string Description { get; set; }
 
-        [XmlElement(ElementName = "name")]
+        [XmlElement("name")]
         public string Name { get; set; }
 
-        [XmlElement(ElementName = "short-name")]
+        [XmlElement("short-name")]
         public string ShortName { get; set; }
 
-        [XmlElement(ElementName = "parent")]
+        [XmlElement("parent")]
         public Parent Parent { get; set; }
 
-        [XmlElement(ElementName = "qs_page")]
+        [XmlElement("qs_page")]
         public QuickSubscribePage QuickSubscribePage { get; set; }
         
     }
 
     public class Parent
     {
-        [XmlElement(ElementName = "code")]
+        [XmlElement("code")]
         public string CategoryCode { get; set; }
     }
 
     public class QuickSubscribePage
     {
-        [XmlElement(ElementName = "code")]
+        [XmlElement("code")]
         public string PageCode { get; set; }
     }
 

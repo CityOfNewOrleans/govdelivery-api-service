@@ -9,32 +9,33 @@ using System.Xml.Serialization;
 
 namespace GovDelivery.Library.Models.Rest.Topic
 {
-    [XmlRoot(ElementName = "topics", DataType = "array")]
-    public class ListTopicsResponseModel : List<ListTopicsResponseModel.Topic>, IEnumerable<ListTopicsResponseModel.Topic>
+    [XmlRoot("topics")]
+    public class ListTopicsResponseModel : BaseSerializableArray<ListTopicsResponseModel.Topic>
     {
+        [XmlElement("topic")]
+        public override List<Topic> Items { get; set; }
 
-        [XmlRoot(ElementName = "topic")]
         public class Topic
         {
-            [XmlElement(ElementName = "code")]
+            [XmlElement("code")]
             public string Code { get; set; }
 
-            [XmlElement(ElementName = "description", IsNullable = true)]
-            public string Description { get; set; }
+            [XmlElement("description")]
+            public NillableSerializableString Description { get; set; }
 
-            [XmlElement(ElementName = "name")]
+            [XmlElement("name")]
             public string Name { get; set; }
 
-            [XmlElement(ElementName = "short-name")]
+            [XmlElement("short-name")]
             public string ShortName { get; set; }
 
-            [XmlElement(ElementName = "wireless-enabled", DataType = "boolean")]
-            public bool WirelessEnabled { get; set; }
+            [XmlElement("wireless-enabled")]
+            public SerializableBool WirelessEnabled { get; set; }
 
-            [XmlElement(ElementName = "visibility")]
+            [XmlElement("visibility")]
             public TopicVisibility Visibility { get; set; }
 
-            [XmlElement(ElementName = "link")]
+            [XmlElement("link")]
             public LinkModel Link { get; set; }
         }
 

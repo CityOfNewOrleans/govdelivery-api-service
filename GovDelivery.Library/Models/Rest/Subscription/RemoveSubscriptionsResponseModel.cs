@@ -8,16 +8,16 @@ using System.Xml.Serialization;
 
 namespace GovDelivery.Library.Models.Rest.Subscription
 {
-    [XmlRoot(ElementName = "subscriber")]
+    [XmlRoot("subscriber")]
     public class RemoveSubscriptionsResponseModel
     {
-        [XmlElement(ElementName = "to-param")]
+        [XmlElement("to-param")]
         public string ToParam { get; set; }
 
-        [XmlElement(ElementName = "link")]
+        [XmlElement("link")]
         public LinkModel Link { get; set; }
 
-        [XmlElement(ElementName = "subscriber-uri")]
+        [XmlElement("subscriber-uri")]
         public string SubscriberUri { get; set; }
     }
 }

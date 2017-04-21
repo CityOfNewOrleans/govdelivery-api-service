@@ -8,26 +8,26 @@ using System.Xml.Serialization;
 
 namespace GovDelivery.Models.Rest.Subscriber
 {
-    [XmlRoot(ElementName = "subscriber")]
+    [XmlRoot("subscriber")]
     public class UpdateSubscriberRequestModel
     {
-        [XmlElement(ElementName = "email")]
+        [XmlElement("email")]
         public string Email { get; set; }
 
-        [XmlElement(ElementName = "send-notifications", DataType = "boolean")]
-        public bool SendNotifications { get; set; }
+        [XmlElement("send-notifications")]
+        public SerializableBool SendNotifications { get; set; }
 
-        [XmlElement(ElementName = "digest-for")]
+        [XmlElement("digest-for")]
         public SendBulletins SendBulletins { get; set; }
     }
 
-    [XmlRoot(ElementName = "subscriber")]
+    [XmlRoot("subscriber")]
     public class UpdateSubscriberResponseModel
     {
-        [XmlElement(ElementName = "to-param")]
+        [XmlElement("to-param")]
         public string ToParam { get; set; }
 
-        [XmlElement(ElementName = "link")]
+        [XmlElement("link")]
         public LinkModel SubscriberInfoLink { get; set; } 
     }
 

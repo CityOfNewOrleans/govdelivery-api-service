@@ -1,4 +1,5 @@
-﻿using GovDelivery.Models.Rest.Subscriber;
+﻿using GovDelivery.Library.Models.Rest.Misc;
+using GovDelivery.Models.Rest.Subscriber;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,23 @@ using System.Xml.Serialization;
 
 namespace GovDelivery.Library.Models.Rest.Subscription
 {
-    [XmlRoot(ElementName = "subscriber")]
+    [XmlRoot("subscriber")]
     public class AddSubscriptionsRequestModel
     {
-        [XmlElement(ElementName = "email")]
+        [XmlElement("email")]
         public string Email { get; set; }
 
-        [XmlElement(DataType = "boolean", ElementName = "send-notifications ")]
-        public bool SendNotifications { get; set; }
+        [XmlElement("send-notifications ")]
+        public SerializableBool SendNotifications { get; set; }
 
-        [XmlElement(DataType = "array", ElementName = "topics")]
-        public IEnumerable<TopicModel> Topics { get; set; }
+        [XmlElement("topics")]
+        public SerializableTopicsArray Topics { get; set; }
+
+        public class SerializableTopicsArray : BaseSerializableArray<TopicModel>
+        {
+            [XmlElement("topic")]
+            public override List<TopicModel> Items { get; set; }
+        }
     }
     
 }

@@ -60,35 +60,38 @@ namespace GovDelivery.Library.Tests.Mocks
 
             var responseModel = new ReadSubscriberResponseModel
             {
-                DigestFor = SendBulletins.Immediately,
-                Id = 555,
+                DigestFor = new SerializableInt { Value = (int)SendBulletins.Immediately },
+                Id = new SerializableInt { Value = 555 },
                 Email = email,
-                LockVersion = 0,
+                LockVersion = new SerializableInt { Value = 0 },
                 ToParam = encodedEmail,
-                SelfLink = new LinkModel
+                Links = new List<LinkModel>
                 {
-                    Rel = "self",
-                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}"
-                },
-                CategoriesLink = new LinkModel
-                {
-                    Rel = "categories",
-                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/categories"
-                },
-                TopicsLink = new LinkModel
-                {
-                    Rel = "topics",
-                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/topics"
-                },
-                QuestionsLink = new LinkModel
-                {
-                    Rel = "questions",
-                    Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/questions"
-                },
-                QuestionResponsesLink = new LinkModel
-                {
-                    Rel = "responses",
-                    Href = "/api/account/{accountCode}/subscribers/{encodedEmail}/responses"
+                    new LinkModel
+                    {
+                        Rel = "self",
+                        Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}"
+                    },
+                    new LinkModel
+                    {
+                        Rel = "categories",
+                        Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/categories"
+                    },
+                    new LinkModel
+                    {
+                        Rel = "topics",
+                        Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/topics"
+                    },
+                    new LinkModel
+                    {
+                        Rel = "questions",
+                        Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/questions"
+                    },
+                    new LinkModel
+                    {
+                        Rel = "responses",
+                        Href = "/api/account/{accountCode}/subscribers/{encodedEmail}/responses"
+                    }
                 }
             };
 
@@ -199,10 +202,10 @@ namespace GovDelivery.Library.Tests.Mocks
                 Code = topicCode,
                 Name = "Example Topic",
                 ShortName = "Example",
-                PagewatchAutosend = false,
-                PagewatchEnabled = true,
-                PagewatchSuspended = false,
-                WatchTaggedContent = false,
+                PagewatchAutosend = new SerializableBool { Value = false },
+                PagewatchEnabled = new SerializableBool { Value = true },
+                PagewatchSuspended = new SerializableBool { Value = false } ,
+                WatchTaggedContent = new SerializableBool { Value = false },
             };
 
             var httpResponse = new HttpResponseMessage
@@ -248,32 +251,34 @@ namespace GovDelivery.Library.Tests.Mocks
         {
             var responseModel = new ListTopicsResponseModel
             {
-                new ListTopicsResponseModel.Topic
-                {
-                    Code = "123456",
-                    Description = "I'm a topic!",
-                    Name = "Example Topic 1",
-                    ShortName = "Example 1",
-                    WirelessEnabled = false,
-                    Visibility = TopicVisibility.Listed,
-                    Link = new LinkModel
+                Items = new List<ListTopicsResponseModel.Topic> {
+                    new ListTopicsResponseModel.Topic
                     {
-                        Rel = "self",
-                        Href = $"/api/account/{accountCode}/topics/123456"
-                    }
-                },
-                new ListTopicsResponseModel.Topic
-                {
-                    Code = "678910",
-                    Description = "I'm another topic!",
-                    Name = "Example Topic 2",
-                    ShortName = "Example 2",
-                    WirelessEnabled = true,
-                    Visibility = TopicVisibility.Unlisted,
-                    Link = new LinkModel
+                        Code = "123456",
+                        Description = new NillableSerializableString { Value = "I'm a topic!" },
+                        Name = "Example Topic 1",
+                        ShortName = "Example 1",
+                        WirelessEnabled = new SerializableBool { Value = false },
+                        Visibility = TopicVisibility.Listed,
+                        Link = new LinkModel
+                        {
+                            Rel = "self",
+                            Href = $"/api/account/{accountCode}/topics/123456"
+                        }
+                    },
+                    new ListTopicsResponseModel.Topic
                     {
-                        Rel = "self",
-                        Href = $"/api/account/{accountCode}/topics/678910"
+                        Code = "678910",
+                        Description = new NillableSerializableString { Value = "I'm another topic!" },
+                        Name = "Example Topic 2",
+                        ShortName = "Example 2",
+                        WirelessEnabled = new SerializableBool { Value  = true },
+                        Visibility = TopicVisibility.Unlisted,
+                        Link = new LinkModel
+                        {
+                            Rel = "self",
+                            Href = $"/api/account/{accountCode}/topics/678910"
+                        }
                     }
                 }
             };
@@ -366,7 +371,8 @@ namespace GovDelivery.Library.Tests.Mocks
                 new ReadCategoryResponseModel
                 {
                     Code = "12345",
-                    AllowSubscriptions = true,
+                    AllowSubscriptions = new SerializableBool { Value = true },
+                    DefaultOpen = new SerializableBool { Value = false },
                     Name = "Example Category 1",
                     ShortName = "Example 1",
                     Description = "I'm a category!",

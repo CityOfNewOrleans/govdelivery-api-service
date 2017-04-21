@@ -11,31 +11,31 @@ namespace GovDelivery.Library.Models.Rest.Category
     [XmlRoot("category")]
     public class ReadCategoryResponseModel
     {
-        [XmlElement(ElementName = "code")]
+        [XmlElement("code")]
         public string Code { get; set; }
 
-        [XmlElement(ElementName = "allow-subscriptions", DataType = "boolean")]
-        public bool AllowSubscriptions { get; set; }
+        [XmlElement("allow-subscriptions")]
+        public SerializableBool AllowSubscriptions { get; set; }
 
-        [XmlElement(ElementName = "default-open", DataType = "boolean")]
-        public bool DefaultOpen { get; set; }
+        [XmlElement("default-open")]
+        public SerializableBool DefaultOpen { get; set; }
 
-        [XmlElement(ElementName = "description")]
+        [XmlElement("description")]
         public string Description { get; set; }
 
-        [XmlElement(ElementName = "name")]
+        [XmlElement("name")]
         public string Name { get; set; }
 
-        [XmlElement(ElementName = "short-name")]
+        [XmlElement("short-name")]
         public string ShortName { get; set; }
 
-        [XmlElement(ElementName = "parent")]
+        [XmlElement("parent")]
         public Parent Parent { get; set; }
 
-        [XmlElement(ElementName = "qs_page")]
+        [XmlElement("qs_page")]
         public QuickSubscribePage QuickSubscribePage { get; set; }
 
-        [XmlElement(ElementName = "link")]
+        [XmlElement("link")]
         public LinkModel Link { get; set; }
 
     }
