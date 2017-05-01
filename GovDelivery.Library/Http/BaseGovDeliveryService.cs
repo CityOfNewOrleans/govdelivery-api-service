@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GovDelivery.Library.Models.Rest.Topic;
-using GovDelivery.Models;
-using GovDelivery.Models.Rest.Category;
-using GovDelivery.Models.Rest.Subscriber;
-using GovDelivery.Models.Rest.Topic;
 using System.Net.Http;
 using GovDelivery.Library.Models.Rest.Category;
 using GovDelivery.Library.Models.Rest.Subscription;
+using GovDelivery.Library.Models.Rest.Subscriber;
+using GovDelivery.Library.Models;
 
 namespace GovDelivery.Library.Http
 {
@@ -31,9 +29,9 @@ namespace GovDelivery.Library.Http
         public abstract Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel requestModel);
         public abstract Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifications);
 
-        // Subscriptions
-        public abstract Task<HttpResponseMessage> AddSubscriptionsAsync(AddSubscriptionsRequestModel requestModel);
-        public abstract Task<GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>> RemoveSubscriptionsAsync(RemoveSubscriptionsRequestModel requestModel);
+        // Topic Subscriptions
+        public abstract Task<HttpResponseMessage> AddTopicSubscriptionsAsync(AddTopicSubscriptionsRequestModel requestModel);
+        public abstract Task<GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>> RemoveTopicSubscriptionsAsync(RemoveTopicSubscriptionsRequestModel requestModel);
 
         // Topic
         public abstract Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel requestModel);
@@ -42,17 +40,17 @@ namespace GovDelivery.Library.Http
         public abstract Task<HttpResponseMessage> DeleteTopicAsync(string topicCode);
         public abstract Task<GovDeliveryResponseModel<ListTopicsResponseModel>> ListTopicsAsync();
 
+        // Topic Categories:
+        public abstract Task<GovDeliveryResponseModel<ListTopicCategoriesResponseModel>> ListTopicCategoriesAsync(string topicCode);
+        public abstract Task<HttpResponseMessage> UpdateTopicCategoriesAsync(string topicCode, UpdateTopicCategoriesRequestModel requestModel);
+
 
         // Category
         public abstract Task<GovDeliveryResponseModel<CreateCategoryResponseModel>> CreateCategoryAsync(CreateCategoryRequestModel resquestModel);
         public abstract Task<GovDeliveryResponseModel<ReadCategoryResponseModel>> ReadCategoryAsync(string categoryCode);
         public abstract Task<GovDeliveryResponseModel<UpdateCategoryResponseModel>> UpdateCategoryAsync(UpdateCategoryRequestModel requestModel);
-        public abstract Task<GovDeliveryResponseModel<AddTopicToCategoryModel>> UpdateTopicCategoriesAsync(AddTopicToCategoryModel requestModel);
         public abstract Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode);
         public abstract Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync(int topicId);
-        public abstract Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ReadTopicCategoriesAsync(int topicId);
 
-
-        
     }
 }

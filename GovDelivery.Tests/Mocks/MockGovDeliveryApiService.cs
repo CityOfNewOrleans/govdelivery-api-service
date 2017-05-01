@@ -5,10 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using GovDelivery.Library.Http;
 using GovDelivery.Library.Models.Rest.Topic;
-using GovDelivery.Models;
-using GovDelivery.Models.Rest.Category;
-using GovDelivery.Models.Rest.Subscriber;
-using GovDelivery.Models.Rest.Topic;
 using System.Net.Http;
 using GovDelivery.Library.Utils;
 using System.Net;
@@ -16,6 +12,8 @@ using System.IO;
 using GovDelivery.Library.Models.Rest.Misc;
 using GovDelivery.Library.Models.Rest.Category;
 using GovDelivery.Library.Models.Rest.Subscription;
+using GovDelivery.Library.Models;
+using GovDelivery.Library.Models.Rest.Subscriber;
 
 namespace GovDelivery.Library.Tests.Mocks
 {
@@ -90,7 +88,7 @@ namespace GovDelivery.Library.Tests.Mocks
                     new LinkModel
                     {
                         Rel = "responses",
-                        Href = "/api/account/{accountCode}/subscribers/{encodedEmail}/responses"
+                        Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}/responses"
                     }
                 }
             };
@@ -135,23 +133,19 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotifiation) =>
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-            new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+            await Task.Run(() => new HttpResponseMessage { StatusCode = HttpStatusCode.OK });
 
 
         // Subscription
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public override async Task<HttpResponseMessage> AddSubscriptionsAsync(AddSubscriptionsRequestModel requestModel) =>
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-            new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        public override async Task<HttpResponseMessage> AddTopicSubscriptionsAsync(AddTopicSubscriptionsRequestModel requestModel) =>
+            await Task.Run(() => new HttpResponseMessage { StatusCode = HttpStatusCode.OK });
 
-        public override async Task<GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>> RemoveSubscriptionsAsync(RemoveSubscriptionsRequestModel requestModel)
+        public override async Task<GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>> RemoveTopicSubscriptionsAsync(RemoveTopicSubscriptionsRequestModel requestModel)
         {
             var encodedEmail = GovDeliveryUtils.Base64Encode(requestModel.Email);
 
-            var responseModel = new RemoveSubscriptionsResponseModel
+            var responseModel = new RemoveTopicSubscriptionsResponseModel
             {
                 ToParam = encodedEmail,
                 Link = new LinkModel { Rel = "self", Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}"},
@@ -164,10 +158,10 @@ namespace GovDelivery.Library.Tests.Mocks
                 Content = GovDeliveryUtils.ModelToStringContent(responseModel)
             };
 
-            return new GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>
+            return new GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<RemoveSubscriptionsResponseModel>(httpResponse.Content)
+                Data = await GovDeliveryUtils.ResponseContentToModel<RemoveTopicSubscriptionsResponseModel>(httpResponse.Content)
             };
         }
 
@@ -242,10 +236,8 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<HttpResponseMessage> DeleteTopicAsync(string topicCode) =>
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-            new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+            await Task.Run(() => new HttpResponseMessage { StatusCode = HttpStatusCode.OK });
 
         public override async Task<GovDeliveryResponseModel<ListTopicsResponseModel>> ListTopicsAsync()
         {
@@ -295,6 +287,39 @@ namespace GovDelivery.Library.Tests.Mocks
                 Data = await GovDeliveryUtils.ResponseContentToModel<ListTopicsResponseModel>(httpResponse.Content)
             };
         }
+
+        // Topic Categories:
+        public override async Task<GovDeliveryResponseModel<ListTopicCategoriesResponseModel>> ListTopicCategoriesAsync(string topicCode)
+        {
+            var categoryCodes = new List<string> { "01234", "56789" };
+ 
+            var responseModel = new ListTopicCategoriesResponseModel
+            {
+                Items = categoryCodes
+                .Select(c => new TopicCategoryModel
+                {
+                    ToParam = c,
+                    CategoryUri = $"categories/{c}.xml"
+                })
+                .ToList()
+            };
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+            };
+
+            return new GovDeliveryResponseModel<ListTopicCategoriesResponseModel>
+            {
+                HttpResponse = httpResponse,
+                Data = await GovDeliveryUtils.ResponseContentToModel<ListTopicCategoriesResponseModel>(httpResponse.Content)
+            };
+        }
+
+        public override async Task<HttpResponseMessage> UpdateTopicCategoriesAsync(string topicCode, UpdateTopicCategoriesRequestModel requestModel) =>
+            await Task.Run(() => new HttpResponseMessage { StatusCode = HttpStatusCode.OK });
+
 
         // Category
         public override async Task<GovDeliveryResponseModel<CreateCategoryResponseModel>> CreateCategoryAsync(CreateCategoryRequestModel requestModel)
@@ -358,10 +383,8 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode) => 
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-            new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+            await Task.Run(() => new HttpResponseMessage { StatusCode = HttpStatusCode.OK });
 
        
         public override async Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync(int topicId)
@@ -395,21 +418,6 @@ namespace GovDelivery.Library.Tests.Mocks
 
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public override async Task<GovDeliveryResponseModel<IEnumerable<ReadCategoryResponseModel>>> ReadTopicCategoriesAsync(int topicId)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-        {
-            throw new NotImplementedException();
-        }
-
-        
-        
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public override async Task<GovDeliveryResponseModel<AddTopicToCategoryModel>> UpdateTopicCategoriesAsync(AddTopicToCategoryModel requestModel)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-        {
-            throw new NotImplementedException();
-        }
         
     }
 }

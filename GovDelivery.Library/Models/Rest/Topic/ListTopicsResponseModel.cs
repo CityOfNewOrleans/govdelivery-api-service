@@ -1,5 +1,4 @@
 ﻿using GovDelivery.Library.Models.Rest.Misc;
-using GovDelivery.Models.Rest.Topic;
 using System;
 using System.Collections.Generic;
 using System.Linq;

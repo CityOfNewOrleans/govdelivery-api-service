@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace GovDelivery.Models.Rest.Subscriber
+namespace GovDelivery.Library.Models.Rest.Subscriber
 {
     [XmlRoot("subscriber")]
     public class ReadSubscriberResponseModel

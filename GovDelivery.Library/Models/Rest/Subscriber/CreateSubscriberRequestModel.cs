@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace GovDelivery.Models.Rest.Subscriber
+namespace GovDelivery.Library.Models.Rest.Subscriber
 {
     [XmlRoot("subscriber")]
     public class CreateSubscriberRequestModel

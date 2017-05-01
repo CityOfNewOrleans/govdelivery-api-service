@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Models
+namespace GovDelivery.Library.Models
 {
     public class GovDeliveryResponseModel<T>
     {

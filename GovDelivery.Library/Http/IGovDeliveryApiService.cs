@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using GovDelivery.Models;
-using GovDelivery.Models.Rest.Subscriber;
-using GovDelivery.Models.Rest.Topic;
-using GovDelivery.Models.Rest.Category;
-using GovDelivery.Library.Models.Rest.Topic;
 using System.Net.Http;
 using GovDelivery.Library.Models.Rest.Category;
 using GovDelivery.Library.Models.Rest.Subscription;
+using GovDelivery.Library.Models.Rest.Topic;
+using GovDelivery.Library.Models.Rest.Subscriber;
+using GovDelivery.Library.Models;
 
 namespace GovDelivery.Library.Http
 {
@@ -19,9 +17,9 @@ namespace GovDelivery.Library.Http
         Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel requestModel);
         Task<HttpResponseMessage> DeleteSubscriberAsync(string email, bool sendNotification);
 
-        // Subscriptions
-        Task<HttpResponseMessage> AddSubscriptionsAsync(AddSubscriptionsRequestModel requestModel);
-        Task<GovDeliveryResponseModel<RemoveSubscriptionsResponseModel>> RemoveSubscriptionsAsync(RemoveSubscriptionsRequestModel requestModel);
+        // Topic Subscriptions
+        Task<HttpResponseMessage> AddTopicSubscriptionsAsync(AddTopicSubscriptionsRequestModel requestModel);
+        Task<GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>> RemoveTopicSubscriptionsAsync(RemoveTopicSubscriptionsRequestModel requestModel);
         
 
         // Topic
@@ -31,6 +29,10 @@ namespace GovDelivery.Library.Http
         Task<HttpResponseMessage> DeleteTopicAsync(string topicCode);
         Task<GovDeliveryResponseModel<ListTopicsResponseModel>> ListTopicsAsync();
 
+        // Topic Categories:
+        Task<HttpResponseMessage> UpdateTopicCategoriesAsync(string topicCode, UpdateTopicCategoriesRequestModel requestModel);
+        Task<GovDeliveryResponseModel<ListTopicCategoriesResponseModel>> ListTopicCategoriesAsync(string topicCode);
+
         // Category
         Task<GovDeliveryResponseModel<CreateCategoryResponseModel>> CreateCategoryAsync(CreateCategoryRequestModel resquestModel);
         Task<GovDeliveryResponseModel<ReadCategoryResponseModel>> ReadCategoryAsync(string categoryCode);
@@ -39,6 +41,6 @@ namespace GovDelivery.Library.Http
         Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync(int topicId);
 
 
-        Task<GovDeliveryResponseModel<AddTopicToCategoryModel>> UpdateTopicCategoriesAsync(AddTopicToCategoryModel requestModel);
+        
     }
 }

@@ -1,5 +1,4 @@
 ﻿using GovDelivery.Library.Models.Rest.Misc;
-using GovDelivery.Models.Rest.Subscriber;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,7 @@ using System.Xml.Serialization;
 namespace GovDelivery.Library.Models.Rest.Subscription
 {
     [XmlRoot("subscriber")]
-    public class AddSubscriptionsRequestModel
+    public class AddTopicSubscriptionsRequestModel
     {
         [XmlElement("email")]
         public string Email { get; set; }

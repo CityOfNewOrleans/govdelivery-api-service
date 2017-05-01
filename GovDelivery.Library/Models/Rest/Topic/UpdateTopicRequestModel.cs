@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace GovDelivery.Models.Rest.Topic
+namespace GovDelivery.Library.Models.Rest.Topic
 {
     [XmlRoot("topic")]
     public class UpdateTopicRequestModel

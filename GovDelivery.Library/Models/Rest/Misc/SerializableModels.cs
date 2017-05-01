@@ -9,6 +9,9 @@ namespace GovDelivery.Library.Models.Rest.Misc
 {
     public abstract class Nillable
     {
+        /// <summary>
+        /// For serialization purposes. Always returns true.
+        /// </summary>
         [XmlAttribute("nil")]
         public bool Nil { get { return true; } set { } }
     }
@@ -16,6 +19,13 @@ namespace GovDelivery.Library.Models.Rest.Misc
     [Serializable()]
     public class NillableSerializableString : Nillable
     {
+        public NillableSerializableString() { }
+
+        public NillableSerializableString(string value)
+        {
+            Value = value;
+        }
+
         [XmlText()]
         public string Value { get; set; }
     }
@@ -23,6 +33,16 @@ namespace GovDelivery.Library.Models.Rest.Misc
     [Serializable()]
     public class NillableSerializableBool : Nillable
     {
+        public NillableSerializableBool() { }
+
+        public NillableSerializableBool(bool value)
+        {
+            Value = value;
+        }
+
+        /// <summary>
+        /// For serialization purposes. Always returns "boolean".
+        /// </summary>
         [XmlAttribute("type")]
         public string Type { get { return "boolean"; } set { } }
 
@@ -33,6 +53,16 @@ namespace GovDelivery.Library.Models.Rest.Misc
     [Serializable()]
     public class SerializableBool
     {
+        public SerializableBool() { }
+
+        public SerializableBool(bool value)
+        {
+            Value = value;
+        }
+
+        /// <summary>
+        /// For serialization purposes. Always returns "boolean".
+        /// </summary>
         [XmlAttribute("type")]
         public string Type { get { return "boolean"; } set { } }
 
@@ -43,6 +73,16 @@ namespace GovDelivery.Library.Models.Rest.Misc
     [Serializable()]
     public class NillableSerializableInt : Nillable
     {
+        public NillableSerializableInt() { }
+
+        public NillableSerializableInt(int value)
+        {
+            Value = value;
+        }
+
+        /// <summary>
+        /// For serialization purposes. Always returns "integer".
+        /// </summary>
         [XmlAttribute("type")]
         public string Type { get { return "integer"; } set { } }
 
@@ -57,6 +97,16 @@ namespace GovDelivery.Library.Models.Rest.Misc
     [Serializable()]
     public class SerializableInt
     {
+        public SerializableInt() { }
+
+        public SerializableInt(int value)
+        {
+            Value = value;
+        }
+
+        /// <summary>
+        /// For serialization purposes. Always returns "integer".
+        /// </summary>
         [XmlAttribute("type")]
         public string Type { get { return "integer"; } set { } }
 
@@ -68,7 +118,9 @@ namespace GovDelivery.Library.Models.Rest.Misc
     [Serializable()]
     public abstract class BaseSerializableArray<T>
     {
-        /// <remarks/>
+        /// <summary>
+        /// For serialization purposes. Always returns "array".
+        /// </summary>
         [XmlAttribute("type")]
         public string Type { get { return "array"; } set { } }
 

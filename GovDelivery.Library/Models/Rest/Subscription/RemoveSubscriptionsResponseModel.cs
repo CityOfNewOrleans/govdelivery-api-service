@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace GovDelivery.Library.Models.Rest.Subscription
 {
     [XmlRoot("subscriber")]
-    public class RemoveSubscriptionsResponseModel
+    public class RemoveTopicSubscriptionsResponseModel
     {
         [XmlElement("to-param")]
         public string ToParam { get; set; }

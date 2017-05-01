@@ -7,8 +7,8 @@ namespace GovDelivery.Library.Models.Rest.Category
     [XmlRoot("category")]
     public class UpdateCategoryRequestModel
     {
-        [XmlIgnore]
-        public Guid Id { get; set; }
+        [XmlElement("code")]
+        public string Code { get; set; }
 
         [XmlElement("allow-subscriptions")]
         public SerializableBool AllowUserInitiatedSubscriptions { get; set; }

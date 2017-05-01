@@ -206,7 +206,6 @@
     <Compile Include="Data\Csv\Mapping\ImportSubcriberModelMap.cs" />
     <Compile Include="Http\BaseGovDeliveryService.cs" />
     <Compile Include="Http\IGovDeliveryApiService.cs" />
-    <Compile Include="Interfaces\IXDocumentModelConverter.cs" />
     <Compile Include="Interfaces\ICsvImporter.cs" />
     <Compile Include="Interfaces\IImportSubscriberModel.cs" />
     <Compile Include="Models\Rest\Category\AddTopicToCategoryModel.cs" />
@@ -222,13 +221,15 @@
     <Compile Include="Models\Rest\Misc\SerializableModels.cs" />
     <Compile Include="Models\Rest\Subscriber\CreateSubscriberRequestModel.cs" />
     <Compile Include="Models\Csv\ImportSubscriberModel.cs" />
-    <Compile Include="Models\Rest\Subscriber\ReadSubscriberModel.cs" />
+    <Compile Include="Models\Rest\Subscriber\ReadSubscriberResponseModel.cs" />
     <Compile Include="Models\Rest\Subscriber\UpdateSubscriberModel.cs" />
+    <Compile Include="Models\Rest\Subscriber\UpdateSubscriberResponseModel.cs" />
     <Compile Include="Models\Rest\Subscription\RemoveSubscriptionsRequestModel.cs" />
     <Compile Include="Models\Rest\Subscription\AddSubscriptionsRequestModel.cs" />
     <Compile Include="Models\Rest\Subscription\TopicModel.cs" />
     <Compile Include="Models\Rest\Topic\CreateTopicRequestModel.cs" />
     <Compile Include="Models\Rest\Topic\CreateTopicResponseModel.cs" />
+    <Compile Include="Models\Rest\Topic\ListTopicCategoriesResponseModel.cs" />
     <Compile Include="Models\Rest\Topic\ListTopicsResponseModel.cs" />
     <Compile Include="Models\Rest\Topic\ReadTopicResponseModel.cs" />
     <Compile Include="Models\Rest\Subscription\RemoveSubscriptionsResponseModel.cs" />
