@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Data.Entities
+namespace GovDelivery.Library.Data.Entities
 {
     public class EmailSubscriber
     {
@@ -31,7 +31,6 @@ namespace GovDelivery.Data.Entities
         public BulletinFrequency BulletinFrequency { get; set; }
 
         public string Link { get; set; }
-
 
     }
 

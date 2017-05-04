@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Data.Entities
+namespace GovDelivery.Library.Data.Entities
 {
     public class Topic
     {
@@ -14,6 +14,8 @@ namespace GovDelivery.Data.Entities
 
         [Key]
         public string Code { get; set; }
+
+        public Category ParentCategory { get; set; }
 
         public string Name { get; set; }
 

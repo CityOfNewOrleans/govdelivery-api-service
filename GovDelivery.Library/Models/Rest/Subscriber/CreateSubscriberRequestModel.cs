@@ -1,5 +1,4 @@
-﻿using GovDelivery.Data.Entities;
-using GovDelivery.Library.Models.Rest.Misc;
+﻿using GovDelivery.Library.Models.Rest.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;

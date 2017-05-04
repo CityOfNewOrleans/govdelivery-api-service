@@ -5,11 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Data.Entities
+namespace GovDelivery.Library.Data.Entities
 {
     public class Category
     {
         public Guid Id { get; set; }
+
+        public virtual Category ParentCategory { get; set; }
+
+        public List<Category> Subcategories { get; set; }
+
+        public List<Topic> Topics { get; set; }
 
         public string Code { get; set; }
 
