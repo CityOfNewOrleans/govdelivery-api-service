@@ -4,6 +4,7 @@ using GovDelivery.Library.Models.Rest.Misc;
 using GovDelivery.Library.Models.Rest.Subscriber;
 using GovDelivery.Library.Models.Rest.Topic;
 using GovDelivery.Library.Tests.Mocks;
+using GovDelivery.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -138,6 +139,13 @@ namespace GovDelivery.Library.Tests
         public async void TestUpdateSubscriberAsync (UpdateSubscriberRequestModel requestModel)
         {
             var responseModel = await service.UpdateSubscriberAsync(requestModel);
+
+            Assert.NotNull(responseModel.Data);
+            Assert.Equal(requestModel.Email, responseModel.Data.ToParam);
+
+            var expectedSelfLink = $"/api/account/{ACCOUNT_CODE}/subscribers/{requestModel.Email}";
+
+            Assert.Equal(expectedSelfLink, responseModel.Data.SubscriberInfoLink.Href);
         }
 
         [Theory(DisplayName = "DeleteSubscriberAsync performs as expected.")]
