@@ -19,7 +19,7 @@ namespace GovDelivery.Library.Tests.Mocks
 {
     public class MockGovDeliveryApiService : BaseGovDeliveryService, IGovDeliveryApiService
     {
-        public MockGovDeliveryApiService(string baseUri, string accountCode) : base(baseUri, accountCode) {}
+        public MockGovDeliveryApiService(string baseUri, string accountCode) : base(baseUri, accountCode) { }
 
         // Subscriber
         public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel requestModel)
@@ -148,7 +148,7 @@ namespace GovDelivery.Library.Tests.Mocks
             var responseModel = new RemoveTopicSubscriptionsResponseModel
             {
                 ToParam = encodedEmail,
-                Link = new LinkModel { Rel = "self", Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}"},
+                Link = new LinkModel { Rel = "self", Href = $"/api/account/{accountCode}/subscribers/{encodedEmail}" },
                 SubscriberUri = $"/api/account/{accountCode}/subscribers/{encodedEmail}",
             };
 
@@ -198,7 +198,7 @@ namespace GovDelivery.Library.Tests.Mocks
                 ShortName = "Example",
                 PagewatchAutosend = new SerializableBool { Value = false },
                 PagewatchEnabled = new SerializableBool { Value = true },
-                PagewatchSuspended = new SerializableBool { Value = false } ,
+                PagewatchSuspended = new SerializableBool { Value = false },
                 WatchTaggedContent = new SerializableBool { Value = false },
             };
 
@@ -292,7 +292,7 @@ namespace GovDelivery.Library.Tests.Mocks
         public override async Task<GovDeliveryResponseModel<ListTopicCategoriesResponseModel>> ListTopicCategoriesAsync(string topicCode)
         {
             var categoryCodes = new List<string> { "01234", "56789" };
- 
+
             var responseModel = new ListTopicCategoriesResponseModel
             {
                 Items = categoryCodes
@@ -330,7 +330,8 @@ namespace GovDelivery.Library.Tests.Mocks
                 CategoryUri = $"/api/account/{accountCode}/categories/12345.xml",
             };
 
-            var httpResponse = new HttpResponseMessage {
+            var httpResponse = new HttpResponseMessage
+            {
                 StatusCode = HttpStatusCode.OK,
                 Content = GovDeliveryUtils.ModelToStringContent(responseModel)
             };
@@ -383,25 +384,27 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-        public override async Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode) => 
+        public override async Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode) =>
             await Task.Run(() => new HttpResponseMessage { StatusCode = HttpStatusCode.OK });
 
-       
-        public override async Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync(int topicId)
+
+        public override async Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync()
         {
             var responseModel = new ListCategoriesResponseModel
             {
-                new ReadCategoryResponseModel
-                {
-                    Code = "12345",
-                    AllowSubscriptions = new SerializableBool { Value = true },
-                    DefaultOpen = new SerializableBool { Value = false },
-                    Name = "Example Category 1",
-                    ShortName = "Example 1",
-                    Description = "I'm a category!",
-                    QuickSubscribePage = new QuickSubscribePage { PageCode = "A" },
-                    Link = new LinkModel { Rel = "Self", Href = $"/api/account/{accountCode}/categories/12345" },
-                },
+                Items = new List<ReadCategoryResponseModel> {
+                    new ReadCategoryResponseModel
+                    {
+                        Code = "12345",
+                        AllowSubscriptions = new SerializableBool { Value = true },
+                        DefaultOpen = new SerializableBool { Value = false },
+                        Name = "Example Category 1",
+                        ShortName = "Example 1",
+                        Description = "I'm a category!",
+                        QuickSubscribePage = new QuickSubscribePage { PageCode = "A" },
+                        Link = new LinkModel { Rel = "Self", Href = $"/api/account/{accountCode}/categories/12345" },
+                    },
+                }
             };
 
             var httpResponse = new HttpResponseMessage
@@ -418,6 +421,6 @@ namespace GovDelivery.Library.Tests.Mocks
 
         }
 
-        
+
     }
 }

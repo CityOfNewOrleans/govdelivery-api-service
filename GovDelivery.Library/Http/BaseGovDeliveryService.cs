@@ -50,7 +50,7 @@ namespace GovDelivery.Library.Http
         public abstract Task<GovDeliveryResponseModel<ReadCategoryResponseModel>> ReadCategoryAsync(string categoryCode);
         public abstract Task<GovDeliveryResponseModel<UpdateCategoryResponseModel>> UpdateCategoryAsync(UpdateCategoryRequestModel requestModel);
         public abstract Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode);
-        public abstract Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync(int topicId);
+        public abstract Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync();
 
     }
 }

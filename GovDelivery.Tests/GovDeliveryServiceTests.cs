@@ -124,6 +124,7 @@ namespace GovDelivery.Library.Tests
         {
             var responseModel = await service.ReadSubscriberAsync(subscriberEmail);
 
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
             Assert.Equal(subscriberEmail, responseModel.Data.Email);
 
             Assert.NotNull(responseModel.Data.CategoriesLink);
@@ -140,6 +141,7 @@ namespace GovDelivery.Library.Tests
         {
             var responseModel = await service.UpdateSubscriberAsync(requestModel);
 
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
             Assert.NotNull(responseModel.Data);
             Assert.Equal(requestModel.Email, responseModel.Data.ToParam);
 
@@ -153,6 +155,8 @@ namespace GovDelivery.Library.Tests
         public async void TestDeleteSubscriberAsync(string email, bool sendNotification)
         {
             var responseModel = await service.DeleteSubscriberAsync(email, sendNotification);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.StatusCode);
         }
 
         // Category:
@@ -160,61 +164,114 @@ namespace GovDelivery.Library.Tests
         public async void TestCreateCategoryAsync(CreateCategoryRequestModel requestModel)
         {
             var responseModel = await service.CreateCategoryAsync(requestModel);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+
+            Assert.True(!string.IsNullOrWhiteSpace(responseModel.Data.ToParam));
+            var categoryCode = responseModel.Data.ToParam;
+            var expectedCategoryUri = $"/api/account/{ACCOUNT_CODE}/categories/{categoryCode}.xml";
+            Assert.Equal(expectedCategoryUri, responseModel.Data.CategoryUri);
         }
 
         [Theory(DisplayName = "ReadCategoryAsync performs as expected.")]
         public async void TestReadCategoryAsync(string categoryCode)
         {
             var responseModel = await service.ReadCategoryAsync(categoryCode);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+
         }
 
         [Theory(DisplayName = "UpdateCategoryAsync performs as expected")]
         public async void TestUpdateCategoryAsync(UpdateCategoryRequestModel requestModel)
         {
             var responseModel = await service.UpdateCategoryAsync(requestModel);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+
+            var categoryCode = responseModel.Data.ToParam;
+            var expectedCategoryUri = $"/api/account/{ACCOUNT_CODE}/categories/{categoryCode}.xml";
         }
 
         [Theory(DisplayName = "DeleteCategoryAsync performs as expected.")]
         public async void TestDeleteCategoryAsync(string categoryCode)
         {
             var response = await service.DeleteCategoryAsync(categoryCode);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Theory(DisplayName = "ListCategoriesAsync performs as expected.")]
-        public async void TestListCategoriesAsync(int topicId)
+        public async void TestListCategoriesAsync()
         {
-            var responseModel = await service.ListCategoriesAsync(topicId);
+            var responseModel = await service.ListCategoriesAsync();
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+            Assert.NotNull(responseModel.Data.Items);
+
+            Assert.True(responseModel.Data.Items.Count > 0);
+
         }
 
         //Topic:
         [Theory(DisplayName = "CreateTopicAsync performs as expected.")]
         public async void TestCreateTopicAsync(CreateTopicRequestModel requestModel)
         {
-            var response = await service.CreateTopicAsync(requestModel);
+            var responseModel = await service.CreateTopicAsync(requestModel);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+
+            var topicCode = responseModel.Data.ToParam;
+            var expectedTopicUri = $"/api/account/{ACCOUNT_CODE}/topics/{topicCode}.xml";
+            Assert.Equal(expectedTopicUri, responseModel.Data.TopicUri);
         }
 
         [Theory(DisplayName = "ReadTopicAsync performs as expected.")]
         public async void TestReadTopicAsync(string topicCode)
         {
             var responseModel = await service.ReadTopicAsync(topicCode);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+
+            Assert.True(!string.IsNullOrEmpty(responseModel.Data.Code));
+            Assert.NotNull(responseModel.Data.DefaultPagewatchResults);
         }
 
         [Theory(DisplayName = "UpdateTopicAsync performs as expected.")]
         public async void TestUpdateTopicAsync(UpdateTopicRequestModel requestModel)
         {
             var responseModel = await service.UpdateTopicAsync(requestModel);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+
+            Assert.True(!string.IsNullOrEmpty(responseModel.Data.ToParam));
+            var expectedTopicUri = $"/api/account/{ACCOUNT_CODE}/topics/{responseModel.Data.ToParam}.xml";
+            Assert.Equal(expectedTopicUri, responseModel.Data.TopicUri);
         }
 
         [Theory(DisplayName = "DeleteTopicAsync performs as expected.")]
         public async void TestDeleteTopicAsync(string topicCode)
         {
             var response = await service.DeleteTopicAsync(topicCode);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Theory(DisplayName = "ListTopicsAsync performs as expected.")]
         public async void TestListTopicsAsync()
         {
             var responseModel = await service.ListTopicsAsync();
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+            Assert.NotNull(responseModel.Data.Items);
+            Assert.True(responseModel.Data.Items.Count > 0);
         }
 
 

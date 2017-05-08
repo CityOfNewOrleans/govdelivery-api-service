@@ -9,15 +9,10 @@ using System.Xml.Serialization;
 namespace GovDelivery.Library.Models.Rest.Category
 {
     [XmlRoot("categories")]
-    public class ListCategoriesResponseModel: List<ReadCategoryResponseModel>, IEnumerable<ReadCategoryResponseModel>
+    public class ListCategoriesResponseModel : BaseSerializableArray<ReadCategoryResponseModel>
     {
-        [XmlElement]
-        public SerializableCategoryArray Items { get; set; }
+        [XmlElement("category")]
+        public override List<ReadCategoryResponseModel> Items { get; set; }
 
-        public class SerializableCategoryArray : BaseSerializableArray<ReadCategoryResponseModel>
-        {
-            [XmlElement("category")]
-            public override List<ReadCategoryResponseModel> Items { get; set; }
-        }
     }
 }

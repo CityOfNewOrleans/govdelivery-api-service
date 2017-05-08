@@ -201,7 +201,7 @@ namespace GovDelivery.Library.Http
         public override async Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode) =>
             await client.DeleteAsync($"categories/{categoryCode}.xml");
 
-        public override async Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync(int topicId)
+        public override async Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync()
         {
             var res = await client.GetAsync("categories.xml");
 
