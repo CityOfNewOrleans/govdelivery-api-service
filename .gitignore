@@ -4,3 +4,4 @@
 /packages
 *.csproj.user
 *.nupkg
+connectionStrings.config
