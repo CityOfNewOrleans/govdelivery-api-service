@@ -11,7 +11,7 @@ namespace GovDelivery.Library.Data.Entities
     {
         public Guid Id { get; set; }
 
-        public virtual Category ParentCategory { get; set; }
+        public Category ParentCategory { get; set; }
 
         public List<Category> Subcategories { get; set; }
 
@@ -31,7 +31,6 @@ namespace GovDelivery.Library.Data.Entities
         [Required]
         public string ShortName { get; set; }
 
-        public Category Parent { get; set; }
 
         public string QuickSubscribePageCode { get; set; }
     }

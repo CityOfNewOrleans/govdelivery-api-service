@@ -15,7 +15,10 @@ namespace GovDelivery.Library.Data.Entities
         [Key]
         public string Code { get; set; }
 
+        public Guid ParentCategoryId { get; set; }
         public Category ParentCategory { get; set; }
+
+        public ICollection<EmailSubscriberTopic> EmailSubscriberTopics { get; set; }
 
         public string Name { get; set; }
 

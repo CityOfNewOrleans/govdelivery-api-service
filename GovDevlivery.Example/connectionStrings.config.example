@@ -1,3 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <connectionStrings>
+  <add name="GovDeliveryContext" connectionString="DataSource=(localdb)\mssqllocaldb;Database=GovDeliveryService;Integrated Security=True;"/>
 </connectionStrings>

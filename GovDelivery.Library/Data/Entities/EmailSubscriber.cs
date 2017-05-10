@@ -20,7 +20,9 @@ namespace GovDelivery.Library.Data.Entities
 
         public string CountryCode { get; set; }
 
-        public List<Topic> Topics { get; set; }
+        public ICollection<EmailSubscriberTopic> EmailSubscriberTopics { get; set; }
+
+        public ICollection<EmailSubscriberCategory> EmailSubscriberCategories { get; set; }
 
         public bool SendSubscriberUpdateNotifications { get; set; }
 

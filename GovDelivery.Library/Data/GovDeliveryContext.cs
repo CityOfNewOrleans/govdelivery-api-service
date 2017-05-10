@@ -19,7 +19,35 @@ namespace GovDelivery.Library.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Category>()
+                .HasOne(c => c.ParentCategory)
+                .WithMany(c => c.Subcategories);
+
+            modelBuilder.Entity<Topic>()
+                .HasOne(t => t.ParentCategory)
+                .WithMany(c => c.Topics);
+
+
+            ConfigureEmailSubscriberTopics(modelBuilder);
+
+
             base.OnModelCreating(modelBuilder);
+        }
+
+        protected static void ConfigureEmailSubscriberTopics(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EmailSubscriberTopic>()
+                .HasKey(e => new { e.EmailSubscriberId, e.TopicId });
+
+            modelBuilder.Entity<EmailSubscriberTopic>()
+                .HasOne(est => est.EmailSubscriber)
+                .WithMany(e => e.EmailSubscriberTopics)
+                .HasForeignKey(est => est.EmailSubscriberId);
+
+            modelBuilder.Entity<EmailSubscriberTopic>()
+                .HasOne(est => est.Topic)
+                .WithMany(t => t.EmailSubscriberTopics)
+                .HasForeignKey(est => est.TopicId);
         }
 
     }
