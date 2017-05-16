@@ -231,6 +231,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GovDelivery.Entity\GovDelivery.Entity.csproj">
+      <Project>{cec9edd4-9245-4342-9391-b30e58c54568}</Project>
+      <Name>GovDelivery.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GovDelivery.Library\GovDelivery.Library.csproj">
       <Project>{f9495722-7a3e-42c3-ab83-a286808fc4b0}</Project>
       <Name>GovDelivery.Library</Name>

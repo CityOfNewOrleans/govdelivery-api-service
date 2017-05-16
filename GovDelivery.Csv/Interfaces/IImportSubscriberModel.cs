@@ -1,11 +1,11 @@
-﻿using GovDelivery.Library.Models.Csv;
+﻿using GovDelivery.Csv.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Library.Interfaces
+namespace GovDelivery.Csv.Interfaces
 {
     public interface IImportSubscriberModel
     {

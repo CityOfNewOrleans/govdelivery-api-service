@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Library.Data.Entities
+namespace GovDelivery.Entity.Models
 {
-    public class EmailSubscriberCategory
+    public class EmailSubscriberTopic
     {
         public Guid EmailSubscriberId { get; set; }
         public EmailSubscriber EmailSubscriber { get; set; }
 
-        public Guid CategoryId { get; set; }
-        public Category Category { get; set; }
+        public Guid TopicId { get; set; }
+        public Topic Topic { get; set; }
     }
 }

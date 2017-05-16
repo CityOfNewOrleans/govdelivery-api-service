@@ -1,7 +1,7 @@
-﻿using GovDelivery.Library.Data.Entities;
+﻿using GovDelivery.Entity.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GovDelivery.Library.Data
+namespace GovDelivery.Entity
 {
     public class GovDeliveryContext : DbContext
     {

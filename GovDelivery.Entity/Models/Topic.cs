@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Library.Data.Entities
+namespace GovDelivery.Entity.Models
 {
     public class Topic
     {

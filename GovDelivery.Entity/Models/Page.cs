@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GovDelivery.Library.Data.Entities
+namespace GovDelivery.Entity.Models
 {
     public class Page
     {
