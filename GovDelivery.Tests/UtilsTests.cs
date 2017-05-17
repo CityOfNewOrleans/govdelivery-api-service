@@ -1,7 +1,4 @@
-﻿using GovDelivery.Library.Interfaces;
-using GovDelivery.Library.Models.Rest.Misc;
-using GovDelivery.Library.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -10,9 +7,11 @@ using System.Xml;
 using System.Xml.Serialization;
 using Xunit;
 using System.Xml.Linq;
-using static GovDelivery.Library.Tests.TestModel;
+using GovDelivery.Csv.Utils;
+using GovDelivery.Rest.Utils;
+using GovDelivery.Rest.Models.Misc;
 
-namespace GovDelivery.Library.Tests
+namespace GovDelivery.Tests
 {
     public class UtilsTests
     {
@@ -24,14 +23,14 @@ namespace GovDelivery.Library.Tests
         [InlineData("10/22/2015 03:49 PM CDT")]
         public void TimeZoneBecomesUtcOffset(string data)
         {
-            Assert.Equal(GovDeliveryUtils.ReplaceTimeZoneWithUtcOffset(data), "10/22/2015 03:49 PM -5");
+            Assert.Equal(TimeUtils.ReplaceTimeZoneWithUtcOffset(data), "10/22/2015 03:49 PM -5");
         }
 
         [Theory(DisplayName = "Fixed date string becomes DateTime With Expected Values")]
         [InlineData("10/22/2015 03:49 PM CDT")]
         public void FixedDateStringParsesToDateTime(string date)
         {
-            var dateParts = GovDeliveryUtils.ReplaceTimeZoneWithUtcOffset(date).Split(' ').ToList();
+            var dateParts = TimeUtils.ReplaceTimeZoneWithUtcOffset(date).Split(' ').ToList();
             var dateDay = dateParts.ElementAt(0);
             var dateTime = dateParts
                 .GetRange(1, dateParts.Count - 1)
@@ -40,16 +39,16 @@ namespace GovDelivery.Library.Tests
             Assert.Equal("10/22/2015", dateDay);
             Assert.Equal("03:49 PM -5", dateTime);
 
-            var parsedDay = DateTime.ParseExact(dateDay, GovDeliveryUtils.DATE_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
+            var parsedDay = DateTime.ParseExact(dateDay, TimeUtils.DATE_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
             Assert.Equal(parsedDay.Year, 2015);
             Assert.Equal(parsedDay.Month, 10);
             Assert.Equal(parsedDay.Day, 22);
 
-            var parsedTime = DateTime.ParseExact(dateTime, GovDeliveryUtils.TIME_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
+            var parsedTime = DateTime.ParseExact(dateTime, TimeUtils.TIME_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
             Assert.Equal(20, parsedTime.Hour);
             Assert.Equal(49, parsedTime.Minute);
 
-            var parsedDate = GovDeliveryUtils.DateStringToDateTimeUtc(date);
+            var parsedDate = TimeUtils.DateStringToDateTimeUtc(date);
             Assert.True(parsedDate.GetType() == typeof(DateTime));
         }
 
@@ -57,7 +56,7 @@ namespace GovDelivery.Library.Tests
         [MemberData(nameof(SerializeTestArgs))]
         public async void SerializeTest(string xmlString, TestModel testModel)
         {
-            var serializedModel = GovDeliveryUtils.ModelToStringContent(testModel);
+            var serializedModel = SerializationUtils.ModelToStringContent(testModel);
 
             var serializedModelString = await serializedModel.ReadAsStringAsync();
 
@@ -110,13 +109,13 @@ namespace GovDelivery.Library.Tests
 
                 new TestModel
                 {
-                    TestArray = new SerializableTestItemArray
+                    TestArray = new TestModel.SerializableTestItemArray
                     {
-                        Items = new List<TestItem>
+                        Items = new List<TestModel.TestItem>
                         {
-                            new TestItem { TestValue = "foo" },
-                            new TestItem { TestValue = "bar" },
-                            new TestItem { TestValue = "baz" },
+                            new TestModel.TestItem { TestValue = "foo" },
+                            new TestModel.TestItem { TestValue = "bar" },
+                            new TestModel.TestItem { TestValue = "baz" },
                         }
                     },
                     TestString = "Hello, world!",

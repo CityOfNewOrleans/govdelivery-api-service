@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovDelivery.Library.Data.Csv.TypeConversion
+namespace GovDelivery.Csv.TypeConversion
 {
     public class QuotedInt32Converter : Int32Converter
     {

@@ -1,7 +1,7 @@
 ﻿using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using GovDelivery.Library.Data.Csv.TypeConversion;
-using GovDelivery.Library.Models.Csv;
+using GovDelivery.Csv.Models;
+using GovDelivery.Csv.TypeConversion;
 
 namespace GovDelivery.Library.Data.Csv.Mapping
 {

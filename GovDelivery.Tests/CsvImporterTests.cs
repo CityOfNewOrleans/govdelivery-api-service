@@ -1,10 +1,10 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using GovDelivery.Data.Csv;
-using GovDelivery.Library.Data.Csv.TypeConversion;
-using GovDelivery.Library.Models.Csv;
-using GovDelivery.Library.Utils;
+using GovDelivery.Csv;
+using GovDelivery.Csv.Models;
+using GovDelivery.Csv.TypeConversion;
+using GovDelivery.Csv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,7 +13,8 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
-namespace GovDelivery.Library.Tests
+
+namespace GovDelivery.Tests
 {
     public class CsvImporterTests
     {
@@ -85,10 +86,10 @@ namespace GovDelivery.Library.Tests
 
         [Theory(DisplayName = "Strings representing valid CSV data should become a collection of ImportModels")]
         [InlineData(mockData)]
-        public void ValidCsvStringsConvertCorrectly(string data)
+        public async void ValidCsvStringsConvertCorrectly(string data)
         {
             var importer = new CsvImporter();
-            var subscribers = importer.ImportSubscribers(data);
+            var subscribers = await importer.ImportSubscribersAsync(data);
 
             Assert.Equal(4, subscribers.Count());
 
@@ -97,28 +98,28 @@ namespace GovDelivery.Library.Tests
             Assert.Equal(SubscriberType.Phone, first.Type);
             Assert.Equal(SubscriberOrigin.Direct, first.Origin);
             Assert.Equal(0, first.Subscriptions);
-            Assert.Equal(GovDeliveryUtils.DateStringToDateTimeUtc("10/22/2015 03:49 PM CDT"), first.LastModified);
+            Assert.Equal(TimeUtils.DateStringToDateTimeUtc("10/22/2015 03:49 PM CDT"), first.LastModified);
 
             var second = subscribers.ElementAt(1);
             Assert.Equal("email1@nola.gov", second.Contact);
             Assert.Equal(SubscriberType.Email, second.Type);
             Assert.Equal(SubscriberOrigin.Direct, second.Origin);
             Assert.Equal(5, second.Subscriptions);
-            Assert.Equal(GovDeliveryUtils.DateStringToDateTimeUtc("11/07/2016 11:35 AM CST"), second.LastModified);
+            Assert.Equal(TimeUtils.DateStringToDateTimeUtc("11/07/2016 11:35 AM CST"), second.LastModified);
 
             var third = subscribers.ElementAt(2);
             Assert.Equal("email2@gmail.com", third.Contact);
             Assert.Equal(SubscriberType.Email, third.Type);
             Assert.Equal(SubscriberOrigin.Direct, third.Origin);
             Assert.Equal(18, third.Subscriptions);
-            Assert.Equal(GovDeliveryUtils.DateStringToDateTimeUtc("11/30/2015 12:33 PM CST"), third.LastModified);
+            Assert.Equal(TimeUtils.DateStringToDateTimeUtc("11/30/2015 12:33 PM CST"), third.LastModified);
 
             var fourth = subscribers.ElementAt(3);
             Assert.Equal("email3@msn.com", fourth.Contact);
             Assert.Equal(SubscriberType.Email, fourth.Type);
             Assert.Equal(SubscriberOrigin.Upload, fourth.Origin);
             Assert.Equal(25, fourth.Subscriptions);
-            Assert.Equal(GovDeliveryUtils.DateStringToDateTimeUtc("06/30/2015 01:03 PM CDT"), fourth.LastModified);
+            Assert.Equal(TimeUtils.DateStringToDateTimeUtc("06/30/2015 01:03 PM CDT"), fourth.LastModified);
         }
     }
 }

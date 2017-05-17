@@ -1,16 +1,16 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using Util = GovDelivery.Library.Utils.GovDeliveryUtils;
+using GovDelivery.Csv.Utils;
 
-namespace GovDelivery.Library.Data.Csv.TypeConversion
+namespace GovDelivery.Csv.TypeConversion
 {
     public class DateStringConverter : DefaultTypeConverter
     {
-        public override object ConvertFromString(string text, ICsvReaderRow row, CsvPropertyMapData propertyMapdata)
+        public override object ConvertFromString(string text, ICsvReaderRow row, CsvPropertyMapData propertyMapData)
         {
             var trimmed = text.Trim(new char[] { ' ', '"', '\n' });
-            return Util.DateStringToDateTimeUtc(trimmed);
+            return TimeUtils.DateStringToDateTimeUtc(trimmed);
         }
     }
 }

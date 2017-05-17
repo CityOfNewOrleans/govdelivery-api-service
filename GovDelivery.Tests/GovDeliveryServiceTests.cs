@@ -1,10 +1,9 @@
-﻿using GovDelivery.Library.Http;
-using GovDelivery.Library.Models.Rest.Category;
-using GovDelivery.Library.Models.Rest.Misc;
-using GovDelivery.Library.Models.Rest.Subscriber;
-using GovDelivery.Library.Models.Rest.Topic;
-using GovDelivery.Library.Tests.Mocks;
-using GovDelivery.Library.Utils;
+﻿using GovDelivery.Library.Tests.Mocks;
+using GovDelivery.Rest;
+using GovDelivery.Rest.Models.Category;
+using GovDelivery.Rest.Models.Misc;
+using GovDelivery.Rest.Models.Subscriber;
+using GovDelivery.Rest.Models.Topic;
 using System;
 using System.Collections.Generic;
 using System.Linq;

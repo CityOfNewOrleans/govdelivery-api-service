@@ -1,10 +1,10 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using GovDelivery.Library.Models.Csv;
+using GovDelivery.Csv.Models;
 using System;
 
-namespace GovDelivery.Library.Data.Csv.TypeConversion
+namespace GovDelivery.Csv.TypeConversion
 {
     public class SubscriberOriginConverter : DefaultTypeConverter
     {

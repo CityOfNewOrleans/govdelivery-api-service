@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GovDelivery.Library.Http;
-using GovDelivery.Library.Models.Rest.Topic;
 using System.Net.Http;
-using GovDelivery.Library.Utils;
 using System.Net;
 using System.IO;
-using GovDelivery.Library.Models.Rest.Misc;
-using GovDelivery.Library.Models.Rest.Category;
-using GovDelivery.Library.Models.Rest.Subscription;
-using GovDelivery.Library.Models;
-using GovDelivery.Library.Models.Rest.Subscriber;
+using GovDelivery.Rest;
+using GovDelivery.Rest.Models;
+using GovDelivery.Rest.Models.Subscriber;
+using GovDelivery.Rest.Models.Misc;
+using GovDelivery.Rest.Utils;
+using GovDelivery.Rest.Models.Subscription;
+using GovDelivery.Rest.Models.Topic;
+using GovDelivery.Rest.Models.Category;
+using System.Xml.Serialization;
 
 namespace GovDelivery.Library.Tests.Mocks
 {
@@ -40,10 +41,10 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
-            var responseData = await GovDeliveryUtils.ResponseContentToModel<CreateSubscriberResponseModel>(httpResponse.Content);
+            var responseData = await SerializationUtils.ResponseContentToModel<CreateSubscriberResponseModel>(httpResponse.Content);
 
             return new GovDeliveryResponseModel<CreateSubscriberResponseModel>
             {
@@ -54,7 +55,7 @@ namespace GovDelivery.Library.Tests.Mocks
 
         public override async Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email)
         {
-            var encodedEmail = GovDeliveryUtils.Base64Encode(email);
+            var encodedEmail = SerializationUtils.Base64Encode(email);
 
             var responseModel = new ReadSubscriberResponseModel
             {
@@ -96,19 +97,19 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel),
+                Content = SerializationUtils.ModelToStringContent(responseModel),
             };
 
             return new GovDeliveryResponseModel<ReadSubscriberResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<ReadSubscriberResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<ReadSubscriberResponseModel>(httpResponse.Content)
             };
         }
 
         public override async Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel requestModel)
         {
-            var encodedEmail = GovDeliveryUtils.Base64Encode(requestModel.Email);
+            var encodedEmail = SerializationUtils.Base64Encode(requestModel.Email);
 
             var responseModel = new UpdateSubscriberResponseModel
             {
@@ -123,13 +124,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<UpdateSubscriberResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<UpdateSubscriberResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<UpdateSubscriberResponseModel>(httpResponse.Content)
             };
         }
 
@@ -143,7 +144,7 @@ namespace GovDelivery.Library.Tests.Mocks
 
         public override async Task<GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>> RemoveTopicSubscriptionsAsync(RemoveTopicSubscriptionsRequestModel requestModel)
         {
-            var encodedEmail = GovDeliveryUtils.Base64Encode(requestModel.Email);
+            var encodedEmail = SerializationUtils.Base64Encode(requestModel.Email);
 
             var responseModel = new RemoveTopicSubscriptionsResponseModel
             {
@@ -155,13 +156,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<RemoveTopicSubscriptionsResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<RemoveTopicSubscriptionsResponseModel>(httpResponse.Content)
             };
         }
 
@@ -179,13 +180,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<CreateTopicResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<CreateTopicResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<CreateTopicResponseModel>(httpResponse.Content)
             };
         }
 
@@ -205,13 +206,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<ReadTopicResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<ReadTopicResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<ReadTopicResponseModel>(httpResponse.Content)
             };
         }
 
@@ -226,13 +227,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<UpdateTopicResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<UpdateTopicResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<UpdateTopicResponseModel>(httpResponse.Content)
             };
         }
 
@@ -278,13 +279,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel),
+                Content = SerializationUtils.ModelToStringContent(responseModel),
             };
 
             return new GovDeliveryResponseModel<ListTopicsResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<ListTopicsResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<ListTopicsResponseModel>(httpResponse.Content)
             };
         }
 
@@ -307,13 +308,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<ListTopicCategoriesResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<ListTopicCategoriesResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<ListTopicCategoriesResponseModel>(httpResponse.Content)
             };
         }
 
@@ -333,13 +334,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<CreateCategoryResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<CreateCategoryResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<CreateCategoryResponseModel>(httpResponse.Content)
             };
         }
 
@@ -354,13 +355,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<ReadCategoryResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<ReadCategoryResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<ReadCategoryResponseModel>(httpResponse.Content)
             };
         }
 
@@ -374,13 +375,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<UpdateCategoryResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<UpdateCategoryResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<UpdateCategoryResponseModel>(httpResponse.Content)
             };
         }
 
@@ -410,13 +411,13 @@ namespace GovDelivery.Library.Tests.Mocks
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = GovDeliveryUtils.ModelToStringContent(responseModel)
+                Content = SerializationUtils.ModelToStringContent(responseModel)
             };
 
             return new GovDeliveryResponseModel<ListCategoriesResponseModel>
             {
                 HttpResponse = httpResponse,
-                Data = await GovDeliveryUtils.ResponseContentToModel<ListCategoriesResponseModel>(httpResponse.Content)
+                Data = await SerializationUtils.ResponseContentToModel<ListCategoriesResponseModel>(httpResponse.Content)
             };
 
         }

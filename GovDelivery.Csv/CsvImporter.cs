@@ -13,7 +13,7 @@ namespace GovDelivery.Csv
     public class CsvImporter : ICsvImporter
     {
 
-        protected async Task<string> GetCsvFileContentsAsync(string filePath)
+        public async Task<string> GetCsvFileContentsAsync(string filePath)
         {
             if (!filePath.ToLowerInvariant().EndsWith(".csv"))
                 throw new Exception("File must be .csv format");
