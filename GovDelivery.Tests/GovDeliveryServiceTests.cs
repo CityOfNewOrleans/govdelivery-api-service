@@ -4,6 +4,7 @@ using GovDelivery.Rest.Models.Category;
 using GovDelivery.Rest.Models.Misc;
 using GovDelivery.Rest.Models.Subscriber;
 using GovDelivery.Rest.Models.Topic;
+using GovDelivery.Rest.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +74,7 @@ namespace GovDelivery.Library.Tests
             {
                 new UpdateTopicRequestModel
                 {
-
+                    Code = "foobar"
                 }
             };
         }
@@ -140,11 +141,13 @@ namespace GovDelivery.Library.Tests
         {
             var responseModel = await service.UpdateSubscriberAsync(requestModel);
 
+            var encodedEmail = SerializationUtils.Base64Encode(requestModel.Email);
+
             Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
             Assert.NotNull(responseModel.Data);
-            Assert.Equal(requestModel.Email, responseModel.Data.ToParam);
+            Assert.Equal(encodedEmail, responseModel.Data.ToParam);
 
-            var expectedSelfLink = $"/api/account/{ACCOUNT_CODE}/subscribers/{requestModel.Email}";
+            var expectedSelfLink = $"/api/account/{ACCOUNT_CODE}/subscribers/{encodedEmail}";
 
             Assert.Equal(expectedSelfLink, responseModel.Data.SubscriberInfoLink.Href);
         }
@@ -160,6 +163,7 @@ namespace GovDelivery.Library.Tests
 
         // Category:
         [Theory(DisplayName = "CreateCategoryAsync performs as expected.")]
+        [MemberData(nameof(CreateCategoryData))]
         public async void TestCreateCategoryAsync(CreateCategoryRequestModel requestModel)
         {
             var responseModel = await service.CreateCategoryAsync(requestModel);
@@ -174,6 +178,7 @@ namespace GovDelivery.Library.Tests
         }
 
         [Theory(DisplayName = "ReadCategoryAsync performs as expected.")]
+        [InlineData("55555")]
         public async void TestReadCategoryAsync(string categoryCode)
         {
             var responseModel = await service.ReadCategoryAsync(categoryCode);
@@ -183,6 +188,7 @@ namespace GovDelivery.Library.Tests
         }
 
         [Theory(DisplayName = "UpdateCategoryAsync performs as expected")]
+        [MemberData(nameof(UpdateCategoryData))]
         public async void TestUpdateCategoryAsync(UpdateCategoryRequestModel requestModel)
         {
             var responseModel = await service.UpdateCategoryAsync(requestModel);
@@ -195,6 +201,7 @@ namespace GovDelivery.Library.Tests
         }
 
         [Theory(DisplayName = "DeleteCategoryAsync performs as expected.")]
+        [InlineData("foobar")]
         public async void TestDeleteCategoryAsync(string categoryCode)
         {
             var response = await service.DeleteCategoryAsync(categoryCode);
@@ -202,7 +209,7 @@ namespace GovDelivery.Library.Tests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        [Theory(DisplayName = "ListCategoriesAsync performs as expected.")]
+        [Fact(DisplayName = "ListCategoriesAsync performs as expected.")]
         public async void TestListCategoriesAsync()
         {
             var responseModel = await service.ListCategoriesAsync();
@@ -217,6 +224,7 @@ namespace GovDelivery.Library.Tests
 
         //Topic:
         [Theory(DisplayName = "CreateTopicAsync performs as expected.")]
+        [MemberData(nameof(CreateTopicData))]
         public async void TestCreateTopicAsync(CreateTopicRequestModel requestModel)
         {
             var responseModel = await service.CreateTopicAsync(requestModel);
@@ -230,6 +238,7 @@ namespace GovDelivery.Library.Tests
         }
 
         [Theory(DisplayName = "ReadTopicAsync performs as expected.")]
+        [InlineData("foobar")]
         public async void TestReadTopicAsync(string topicCode)
         {
             var responseModel = await service.ReadTopicAsync(topicCode);
@@ -242,6 +251,7 @@ namespace GovDelivery.Library.Tests
         }
 
         [Theory(DisplayName = "UpdateTopicAsync performs as expected.")]
+        [MemberData(nameof(UpdateTopicData))]
         public async void TestUpdateTopicAsync(UpdateTopicRequestModel requestModel)
         {
             var responseModel = await service.UpdateTopicAsync(requestModel);
@@ -255,6 +265,7 @@ namespace GovDelivery.Library.Tests
         }
 
         [Theory(DisplayName = "DeleteTopicAsync performs as expected.")]
+        [InlineData("foobar")]
         public async void TestDeleteTopicAsync(string topicCode)
         {
             var response = await service.DeleteTopicAsync(topicCode);
@@ -262,7 +273,7 @@ namespace GovDelivery.Library.Tests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        [Theory(DisplayName = "ListTopicsAsync performs as expected.")]
+        [Fact(DisplayName = "ListTopicsAsync performs as expected.")]
         public async void TestListTopicsAsync()
         {
             var responseModel = await service.ListTopicsAsync();

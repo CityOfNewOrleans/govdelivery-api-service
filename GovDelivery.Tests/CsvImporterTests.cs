@@ -84,12 +84,13 @@ namespace GovDelivery.Tests
             Assert.Equal(10, (int)converter.ConvertFromString(@"""10""", null, propertyMapData));
         }
 
-        [Theory(DisplayName = "Strings representing valid CSV data should become a collection of ImportModels")]
-        [InlineData(mockData)]
-        public async void ValidCsvStringsConvertCorrectly(string data)
+        [Theory(DisplayName = "Valid CSV data should become a collection of ImportModels")]
+        [InlineData(@"MockData\mockCsvImportData.csv")]
+        public async void ValidCsvStringsConvertCorrectly(string filePath)
         {
             var importer = new CsvImporter();
-            var subscribers = await importer.ImportSubscribersAsync(data);
+
+            var subscribers = await importer.ImportSubscribersAsync(filePath);
 
             Assert.Equal(4, subscribers.Count());
 

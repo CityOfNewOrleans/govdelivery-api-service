@@ -221,7 +221,7 @@ namespace GovDelivery.Library.Tests.Mocks
             var responseModel = new UpdateTopicResponseModel
             {
                 ToParam = requestModel.Code,
-                TopicUri = $"/api/accoount/{accountCode}/topics/{requestModel.Code}.xml"
+                TopicUri = $"/api/account/{accountCode}/topics/{requestModel.Code}.xml"
             };
 
             var httpResponse = new HttpResponseMessage

@@ -2,7 +2,7 @@ function Test-BuiltProject {
     param([Parameter(Mandatory)][Scriptblock]$callback)
     
     Write-Host " Building project...`r`n"
-    & MSBuild /verbosity:quiet
+    & dotnet build;
 
     if ($LastExitCode -eq 0) {
         Write-Host "`r`n Project build successful. Running tests now.. `r`n"
@@ -15,14 +15,14 @@ function Test-BuiltProject {
 
 function Test-Library {
     Test-BuiltProject {
-        & .\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe .\GovDelivery.Tests\bin\Debug\GovDelivery.Library.Tests.dll -verbose
+        & dotnet test .\GovDelivery.Tests\GovDelivery.Tests.csproj
     };
 }
 
-function Test-ConsoleApp {
-    Test-BuiltProject {
-        & .\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe .\GovDelivery.Tests\bin\Debug\GovDelivery.Example.Tests.dll -verbose
-    };
-}
+#function Test-ConsoleApp {
+#    Test-BuiltProject {
+#        & .\packages\xunit.runner.console.2.2.0\tools\xunit.console.exe .\GovDelivery.Tests\bin\Debug\GovDelivery.Example.Tests.dll -verbose
+#    };
+#}
 
 Export-ModuleMember -Function Test-Library, Test-ConsoleApp;

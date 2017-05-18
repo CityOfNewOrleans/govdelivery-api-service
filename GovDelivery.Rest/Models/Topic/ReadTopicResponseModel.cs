@@ -11,6 +11,15 @@ namespace GovDelivery.Rest.Models.Topic
     [XmlRoot("topic")]
     public class ReadTopicResponseModel
     {
+        public ReadTopicResponseModel()
+        {
+            Description = new NillableSerializableString();
+            RssFeedUrl = new NillableSerializableString();
+            RssFeedTitle = new NillableSerializableString();
+            RssFeedDescription = new NillableSerializableString();
+            DefaultPagewatchResults = new NillableSerializableInt();
+        }
+
         [XmlElement("code")]
         public string Code { get; set; }
 
@@ -63,7 +72,7 @@ namespace GovDelivery.Rest.Models.Topic
         public SerializablePagesArray Pages { get; set; }
 
         [XmlElement("categories")]
-        public IEnumerable<Category> Categories { get; set; }
+        public List<Category> Categories { get; set; }
 
         [XmlElement("visibility")]
         public TopicVisibility Visibility { get; set; }

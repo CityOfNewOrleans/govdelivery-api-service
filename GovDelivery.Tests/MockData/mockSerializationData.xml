@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<test-model xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <test-array type="array">
+    <test-item>
+      <test-value>foo</test-value>
+    </test-item>
+    <test-item>
+      <test-value>bar</test-value>
+    </test-item>
+    <test-item>
+      <test-value>baz</test-value>
+    </test-item>
+  </test-array>
+  <test-string>Hello, world!</test-string>
+  <test-int type="integer">42</test-int>
+  <test-bool type="boolean">true</test-bool>
+</test-model>
