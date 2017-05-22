@@ -14,9 +14,7 @@ function Test-BuiltProject {
 }
 
 function Test-Library {
-    Test-BuiltProject {
-        & dotnet test .\GovDelivery.Tests\GovDelivery.Tests.csproj
-    };
+    & dotnet test .\GovDelivery.Tests\GovDelivery.Tests.csproj;
 }
 
 #function Test-ConsoleApp {
