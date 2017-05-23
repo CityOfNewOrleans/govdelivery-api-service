@@ -13,6 +13,9 @@ namespace GovDelivery.ConsoleApp
         static void Main(string[] args)
         {
             var app = new CommandLineApplication();
+
+
+
         }
 
         public async void SaveSubscribers(string filePath, GovDeliveryContext ctx)

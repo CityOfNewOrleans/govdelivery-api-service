@@ -5,3 +5,4 @@
 *.csproj.user
 *.nupkg
 connectionStrings.config
+appSettings.json

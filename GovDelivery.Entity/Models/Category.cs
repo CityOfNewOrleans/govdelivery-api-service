@@ -15,7 +15,9 @@ namespace GovDelivery.Entity.Models
 
         public List<Category> Subcategories { get; set; }
 
-        public List<Topic> Topics { get; set; }
+        public ICollection<TopicCategory> TopicCategories { get; set; }
+
+        public ICollection<EmailSubscriberCategory> EmailSubscriberCategories { get; set; }
 
         public string Code { get; set; }
 

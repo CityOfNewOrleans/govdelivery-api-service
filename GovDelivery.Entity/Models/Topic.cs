@@ -12,13 +12,11 @@ namespace GovDelivery.Entity.Models
         [Key]
         public Guid Id { get; set; }
 
-        [Key]
         public string Code { get; set; }
 
-        public Guid ParentCategoryId { get; set; }
-        public Category ParentCategory { get; set; }
-
         public ICollection<EmailSubscriberTopic> EmailSubscriberTopics { get; set; }
+
+        public ICollection<TopicCategory> TopicCategories { get; set; }
 
         public string Name { get; set; }
 
