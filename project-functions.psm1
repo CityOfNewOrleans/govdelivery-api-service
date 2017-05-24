@@ -13,6 +13,10 @@ function Test-BuiltProject {
     }
 }
 
+function Publish-ConsoleApp {
+    & dotnet publish -c release -r win7-x64;
+}
+
 function Test-Library {
     & dotnet test .\GovDelivery.Tests\GovDelivery.Tests.csproj;
 }
@@ -23,4 +27,4 @@ function Test-Library {
 #    };
 #}
 
-Export-ModuleMember -Function Test-Library, Test-ConsoleApp;
+Export-ModuleMember -Function Test-Library, Publish-ConsoleApp, Test-ConsoleApp;
