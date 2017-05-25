@@ -8,12 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GovDelivery.Rest
 {
-    public class GovDeliveryApiService : BaseGovDeliveryService
+    public class GovDeliveryApiService : BaseGovDeliveryService, IDisposable
     {
         public const string STAGING_URI = "https://stage-api.govdelivery.com";
 
@@ -22,10 +23,14 @@ namespace GovDelivery.Rest
         private HttpClient client;
 
         // Subscriber
-        public GovDeliveryApiService (string baseUri, string accountCode): base (baseUri, accountCode)
+        public GovDeliveryApiService (string baseUri, string accountCode, string username, string password): base (baseUri, accountCode)
         {
+            var credentialBytes = Encoding.UTF8.GetBytes($"{username}:{password}");
+
             client = new HttpClient();
             client.BaseAddress = new Uri($"{baseUri}/api/account/{accountCode}");
+            client.DefaultRequestHeaders.Authorization = 
+                new AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentialBytes));
         }
 
         public override async Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel model)
@@ -208,6 +213,11 @@ namespace GovDelivery.Rest
                 HttpResponse = res,
                 Data = await SerializationUtils.ResponseContentToModel<ListCategoriesResponseModel>(res.Content)
             };
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
         }
     }
 }

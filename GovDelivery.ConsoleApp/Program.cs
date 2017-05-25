@@ -1,9 +1,13 @@
-﻿using GovDelivery.Csv;
+﻿using GovDelivery.ConsoleApp.Configuration;
+using GovDelivery.Csv;
 using GovDelivery.Csv.Models;
 using GovDelivery.Entity;
 using GovDelivery.Entity.Models;
+using GovDelivery.Rest;
 using Microsoft.Extensions.CommandLineUtils;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,8 +16,18 @@ namespace GovDelivery.ConsoleApp
     class Program
     {
         protected const string DEFAULT_HELP_OPTIONS = "-?|-h|--help";
+        protected static AppSettings AppSettings { get; set; }
 
         static void Main(string[] args)
+        {
+            using (var reader = File.OpenText("appSettings.json"))
+            {
+                var appSettingsText = reader.ReadToEnd();
+                AppSettings = JsonConvert.DeserializeObject<AppSettings>(appSettingsText);
+            }
+        }
+
+        public static void ConfigureCli(string[] args)
         {
             var app = new CommandLineApplication();
 
@@ -68,7 +82,12 @@ namespace GovDelivery.ConsoleApp
 
         public static void PullSubscriberData()
         {
-
+            var govDeliveryService = new GovDeliveryApiService(
+                GovDeliveryApiService.MAIN_URI, 
+                AppSettings.GovDelivery.AccountCode,
+                AppSettings.GovDelivery.Username,
+                AppSettings.GovDelivery.Password
+            );
         }
     }
 }

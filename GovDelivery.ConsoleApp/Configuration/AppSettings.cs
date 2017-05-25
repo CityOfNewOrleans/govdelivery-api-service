@@ -9,6 +9,17 @@ namespace GovDelivery.ConsoleApp.Configuration
     public class AppSettings
     {
         public ConnectionStrings ConnectionStrings { get; set; }
+
+        public GovDelivery GovDelivery { get; set; }
+    }
+
+    public class GovDelivery
+    {
+        public string AccountCode { get; set; }
+
+        public string Username { get; set; }
+
+        public string Password { get; set; }
     }
 
     public class ConnectionStrings

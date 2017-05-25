@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GovDelivery.Csv\GovDelivery.Csv.csproj" />
     <ProjectReference Include="..\GovDelivery.Entity\GovDelivery.Entity.csproj" />
+    <ProjectReference Include="..\GovDelivery.Rest\GovDelivery.Rest.csproj" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
