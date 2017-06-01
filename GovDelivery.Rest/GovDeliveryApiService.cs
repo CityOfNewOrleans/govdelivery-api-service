@@ -37,6 +37,8 @@ namespace GovDelivery.Rest
         {
             var res = await client.PostAsync("subscriptions.xml", SerializationUtils.ModelToStringContent(model));
 
+            InterceptHttpError(res);
+
             return new GovDeliveryResponseModel<UpdateSubscriberResponseModel>
             {
                 HttpResponse = res,
@@ -47,6 +49,9 @@ namespace GovDelivery.Rest
         public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel model)
         {
             var res = await client.PutAsync("subscriptions.xml", SerializationUtils.ModelToStringContent(model));
+
+            InterceptHttpError(res);
+
             return new GovDeliveryResponseModel<CreateSubscriberResponseModel>
             {
                 HttpResponse = res,
@@ -56,15 +61,14 @@ namespace GovDelivery.Rest
 
         public override async Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email)
         {
-
             var res = await client.GetAsync("subscriptions.xml");
 
-            var model = await SerializationUtils.ResponseContentToModel<ReadSubscriberResponseModel>(res.Content);
+            InterceptHttpError(res);
 
             return new GovDeliveryResponseModel<ReadSubscriberResponseModel>
             {
                 HttpResponse = res,
-                Data = model,
+                Data = await SerializationUtils.ResponseContentToModel<ReadSubscriberResponseModel>(res.Content),
             };
         }
 
@@ -98,6 +102,8 @@ namespace GovDelivery.Rest
                 Content = SerializationUtils.ModelToStringContent(requestModel)
             });
 
+            InterceptHttpError(res);
+
             return new GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>
             {
                 HttpResponse = res,
@@ -108,6 +114,8 @@ namespace GovDelivery.Rest
         public override async Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel model)
         {
             var res = await client.PostAsync("topics.xml", SerializationUtils.ModelToStringContent(model));
+
+            InterceptHttpError(res);
 
             return new GovDeliveryResponseModel<CreateTopicResponseModel>
             {
@@ -120,6 +128,8 @@ namespace GovDelivery.Rest
         {
             var res = await client.GetAsync($"topics/{topicCode}.xml");
 
+            InterceptHttpError(res);
+
             return new GovDeliveryResponseModel<ReadTopicResponseModel>
             {
                 HttpResponse = res,
@@ -130,6 +140,8 @@ namespace GovDelivery.Rest
         public override async Task<GovDeliveryResponseModel<UpdateTopicResponseModel>> UpdateTopicAsync(UpdateTopicRequestModel model)
         {
             var res = await client.PutAsync($"topics/{model.Code}.xml", SerializationUtils.ModelToStringContent(model));
+
+            InterceptHttpError(res);
 
             return new GovDeliveryResponseModel<UpdateTopicResponseModel>
             {
@@ -147,6 +159,8 @@ namespace GovDelivery.Rest
         {
             var res = await client.GetAsync("topics.xml");
 
+            InterceptHttpError(res);
+
             return new GovDeliveryResponseModel<ListTopicsResponseModel>
             {
                 HttpResponse = res,
@@ -157,6 +171,8 @@ namespace GovDelivery.Rest
         public override async Task<GovDeliveryResponseModel<ListTopicCategoriesResponseModel>> ListTopicCategoriesAsync(string topicCode)
         {
             var res = await client.GetAsync($"topics/{topicCode}/categories.xml");
+
+            InterceptHttpError(res);
 
             return new GovDeliveryResponseModel<ListTopicCategoriesResponseModel>
             {
@@ -172,6 +188,8 @@ namespace GovDelivery.Rest
         {
             var res = await client.PostAsync("categories.xml", SerializationUtils.ModelToStringContent(requestModel));
 
+            InterceptHttpError(res);
+
             return new GovDeliveryResponseModel<CreateCategoryResponseModel>
             {
                 HttpResponse = res,
@@ -183,6 +201,8 @@ namespace GovDelivery.Rest
         {
             var res = await client.GetAsync($"categories/{categoryCode}.xml");
 
+            InterceptHttpError(res);
+
             return new GovDeliveryResponseModel<ReadCategoryResponseModel>
             {
                 HttpResponse = res,
@@ -193,6 +213,8 @@ namespace GovDelivery.Rest
         public override async Task<GovDeliveryResponseModel<UpdateCategoryResponseModel>> UpdateCategoryAsync(UpdateCategoryRequestModel requestModel)
         {
             var res = await client.PutAsync($"categories/{requestModel.Code}.xml", SerializationUtils.ModelToStringContent(requestModel));
+
+            InterceptHttpError(res);
 
             return new GovDeliveryResponseModel<UpdateCategoryResponseModel>
             {
@@ -208,11 +230,20 @@ namespace GovDelivery.Rest
         {
             var res = await client.GetAsync("categories.xml");
 
+            InterceptHttpError(res);
+
             return new GovDeliveryResponseModel<ListCategoriesResponseModel>
             {
                 HttpResponse = res,
                 Data = await SerializationUtils.ResponseContentToModel<ListCategoriesResponseModel>(res.Content)
             };
+        }
+
+        private void InterceptHttpError (HttpResponseMessage res)
+        {
+            if (res.IsSuccessStatusCode) return;
+
+            throw new HttpRequestException($"\n\n{(int)res.StatusCode} {res.StatusCode} - {res.ReasonPhrase}\n");
         }
 
         public void Dispose()
