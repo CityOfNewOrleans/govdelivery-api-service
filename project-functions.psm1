@@ -14,7 +14,14 @@ function Test-BuiltProject {
 }
 
 function Publish-ConsoleApp {
-    & dotnet publish -c release -r win7-x64;
+    & dotnet publish .\GovDelivery.ConsoleApp\GovDelivery.ConsoleApp.csproj -c release -r win7-x64;
+}
+
+function Invoke-ConsoleApp {
+
+    #& dotnet run -p .\GovDelivery.ConsoleApp\GovDelivery.ConsoleApp.csproj -- $args;
+    & .\GovDelivery.ConsoleApp\bin\release\netcoreapp1.1\win7-x64\GovDelivery.ConsoleApp.exe $args;
+
 }
 
 function Test-Library {
@@ -27,4 +34,4 @@ function Test-Library {
 #    };
 #}
 
-Export-ModuleMember -Function Test-Library, Publish-ConsoleApp, Test-ConsoleApp;
+Export-ModuleMember -Function Test-Library, Publish-ConsoleApp, Invoke-ConsoleApp, Test-ConsoleApp;
