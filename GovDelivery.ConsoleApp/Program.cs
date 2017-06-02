@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace GovDelivery.ConsoleApp
@@ -20,16 +21,21 @@ namespace GovDelivery.ConsoleApp
 
         static void Main(string[] args)
         {
-            using (var reader = File.OpenText("appSettings.json"))
+            using (var reader = File.OpenText($@"{AppContext.BaseDirectory}\appSettings.json"))
             {
                 var appSettingsText = reader.ReadToEnd();
                 AppSettings = JsonConvert.DeserializeObject<AppSettings>(appSettingsText);
             }
+
+            ConfigureCli(args);
         }
 
         public static void ConfigureCli(string[] args)
         {
             var app = new CommandLineApplication();
+
+            app.HelpOption(DEFAULT_HELP_OPTIONS);
+            app.Description = "GovDelivery console app";
 
             app.Command("import", command => {
 
@@ -51,6 +57,67 @@ namespace GovDelivery.ConsoleApp
                     ImportSubscribers(filePathArgument.Value, new GovDeliveryContext());
 
                     Console.WriteLine("Successfully imported subscribers.");
+
+                    return 0;
+                });
+
+            });
+
+            app.Command("sync", command =>
+            {
+                command.Description = "Sync categories, topics, and subscriptions from the GovDelivery system to the locab db.";
+
+                command.HelpOption(DEFAULT_HELP_OPTIONS);
+
+                command.OnExecute(() => 
+                {
+                    Console.WriteLine("Beginning sync...");
+
+                    var service = new GovDeliveryApiService(
+                        GovDeliveryApiService.STAGING_URI, 
+                        AppSettings.GovDelivery.AccountCode,
+                        AppSettings.GovDelivery.Username,
+                        AppSettings.GovDelivery.Password
+                    );
+
+                    var ctx = new GovDeliveryContext();
+
+                    var topicsResult = service.ListTopicsAsync().Result;
+
+                    if (!topicsResult.HttpResponse.IsSuccessStatusCode)
+                    {
+                        Console.Error.WriteLine($@"Error getting Topics: {topicsResult.HttpResponse.StatusCode} - {topicsResult.HttpResponse.ReasonPhrase}");
+                    }
+
+                    var topicEntities = topicsResult.Data.Items
+                        .Select(i => new Topic {
+                            Id = Guid.NewGuid(),
+                            Code = i.Code,
+                            Description = i.Description.Value,
+                            Name = i.Name,
+                            ShortName = i.ShortName,
+                            WirelessEnabled = i.WirelessEnabled.Value
+                        });
+
+                    ctx.Add(topicEntities);
+                    ctx.SaveChanges();
+
+                    var categoriesResult = service.ListCategoriesAsync().Result;
+
+                    var categoryEntities = categoriesResult.Data.Items
+                        .Select(i => new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Code = i.Code,
+                            Description = i.Description,
+                            DefaultOpen = i.DefaultOpen.Value,
+                            AllowUserInitiatedSubscriptions = i.AllowSubscriptions.Value,
+                            Name = i.Name,
+                            ShortName = i.ShortName,
+                        });
+
+                    ctx.Add(categoryEntities);
+                    ctx.SaveChanges();
 
                     return 0;
                 });

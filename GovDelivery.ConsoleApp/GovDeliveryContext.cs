@@ -19,7 +19,7 @@ namespace GovDelivery.ConsoleApp
 
         public GovDeliveryContext () : base()
         {
-            using (var reader = File.OpenText("appSettings.json")) {
+            using (var reader = File.OpenText($@"{AppContext.BaseDirectory}\appSettings.json")) {
                 var settingsText = reader.ReadToEnd();
 
                 AppSettings = JsonConvert.DeserializeObject<AppSettings>(settingsText);

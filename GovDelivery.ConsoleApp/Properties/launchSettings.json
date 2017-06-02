@@ -1,7 +1,8 @@
 {
   "profiles": {
     "GovDelivery.ConsoleApp": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "sync"
     }
   }
 }
