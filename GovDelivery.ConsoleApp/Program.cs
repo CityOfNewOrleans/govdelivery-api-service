@@ -74,7 +74,7 @@ namespace GovDelivery.ConsoleApp
                     Console.WriteLine("Beginning sync...");
 
                     var service = new GovDeliveryApiService(
-                        GovDeliveryApiService.STAGING_URI, 
+                        AppSettings.GovDelivery.Server == GovDeliveryServer.Main ? GovDeliveryApiService.MAIN_URI : GovDeliveryApiService.STAGING_URI, 
                         AppSettings.GovDelivery.AccountCode,
                         AppSettings.GovDelivery.Username,
                         AppSettings.GovDelivery.Password
@@ -89,17 +89,20 @@ namespace GovDelivery.ConsoleApp
                         Console.Error.WriteLine($@"Error getting Topics: {topicsResult.HttpResponse.StatusCode} - {topicsResult.HttpResponse.ReasonPhrase}");
                     }
 
+                    Console.WriteLine($"Fetched {topicsResult.Data.Items.Count()} topics.");
+
                     var topicEntities = topicsResult.Data.Items
                         .Select(i => new Topic {
                             Id = Guid.NewGuid(),
                             Code = i.Code,
                             Description = i.Description.Value,
-                            Name = i.Name,
+                   Name = i.Name,
                             ShortName = i.ShortName,
                             WirelessEnabled = i.WirelessEnabled.Value
-                        });
+                        })
+                        .ToList();
 
-                    ctx.Add(topicEntities);
+                    ctx.AddRange(topicEntities);
                     ctx.SaveChanges();
 
                     var categoriesResult = service.ListCategoriesAsync().Result;

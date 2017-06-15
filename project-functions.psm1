@@ -34,4 +34,4 @@ function Test-Library {
 #    };
 #}
 
-Export-ModuleMember -Function Test-Library, Publish-ConsoleApp, Invoke-ConsoleApp, Test-ConsoleApp;
+Export-ModuleMember -Function Test-Library, Publish-ConsoleApp, Invoke-ConsoleApp, Test-ConsoleApp, Initialize-ConsoleAppDb;

@@ -28,7 +28,7 @@ namespace GovDelivery.Rest
             var credentialBytes = Encoding.UTF8.GetBytes($"{username}:{password}");
 
             client = new HttpClient();
-            client.BaseAddress = new Uri($"{baseUri}/api/account/{accountCode}");
+            client.BaseAddress = new Uri($"{baseUri}/api/account/{accountCode}/");
             client.DefaultRequestHeaders.Authorization = 
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentialBytes));
         }
@@ -157,7 +157,7 @@ namespace GovDelivery.Rest
 
         public override async Task<GovDeliveryResponseModel<ListTopicsResponseModel>> ListTopicsAsync()
         {
-            var res = await client.GetAsync("topics.xml");
+            var res = await client.GetAsync("topics");
 
             InterceptHttpError(res);
 
