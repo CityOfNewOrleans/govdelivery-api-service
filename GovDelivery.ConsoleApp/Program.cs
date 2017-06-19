@@ -89,38 +89,54 @@ namespace GovDelivery.ConsoleApp
                         Console.Error.WriteLine($@"Error getting Topics: {topicsResult.HttpResponse.StatusCode} - {topicsResult.HttpResponse.ReasonPhrase}");
                     }
 
-                    Console.WriteLine($"Fetched {topicsResult.Data.Items.Count()} topics.");
+                    var numTopics = topicsResult.Data.Items != null ? topicsResult.Data.Items.Count() : 0;
+                    Console.WriteLine($"Fetched {numTopics} topics.");
 
-                    var topicEntities = topicsResult.Data.Items
-                        .Select(i => new Topic {
-                            Id = Guid.NewGuid(),
-                            Code = i.Code,
-                            Description = i.Description.Value,
-                   Name = i.Name,
-                            ShortName = i.ShortName,
-                            WirelessEnabled = i.WirelessEnabled.Value
-                        })
-                        .ToList();
+                    if (numTopics > 0)
+                    {
+                        var topicEntities = topicsResult.Data.Items
+                            .Select(i => new Topic
+                            {
+                                Id = Guid.NewGuid(),
+                                Code = i.Code,
+                                Description = i.Description.Value,
+                                Name = i.Name,
+                                ShortName = i.ShortName,
+                                WirelessEnabled = i.WirelessEnabled.Value
+                            })
+                            .ToList();
 
-                    ctx.AddRange(topicEntities);
-                    ctx.SaveChanges();
+                        ctx.AddRange(topicEntities);
+                        ctx.SaveChanges();
+                    }
 
                     var categoriesResult = service.ListCategoriesAsync().Result;
 
-                    var categoryEntities = categoriesResult.Data.Items
-                        .Select(i => new Category
-                        {
-                            Id = Guid.NewGuid(),
-                            Code = i.Code,
-                            Description = i.Description,
-                            DefaultOpen = i.DefaultOpen.Value,
-                            AllowUserInitiatedSubscriptions = i.AllowSubscriptions.Value,
-                            Name = i.Name,
-                            ShortName = i.ShortName,
-                        });
+                    if (!categoriesResult.HttpResponse.IsSuccessStatusCode)
+                    {
+                        Console.Error.WriteLine($@"Error getting Categories: {categoriesResult.HttpResponse.StatusCode} - {categoriesResult.HttpResponse.ReasonPhrase}");
+                    }
 
-                    ctx.Add(categoryEntities);
-                    ctx.SaveChanges();
+                    var numCategories = categoriesResult.Data.Items != null ? categoriesResult.Data.Items.Count() : 0;
+                    Console.WriteLine($"Fetched {numCategories} categories");
+
+                    if (numCategories > 0)
+                    {
+                        var categoryEntities = categoriesResult.Data.Items
+                            .Select(i => new Category
+                            {
+                                Id = Guid.NewGuid(),
+                                Code = i.Code,
+                                Description = i.Description,
+                                DefaultOpen = i.DefaultOpen.Value,
+                                AllowUserInitiatedSubscriptions = i.AllowSubscriptions.Value,
+                                Name = i.Name,
+                                ShortName = i.ShortName,
+                            });
+
+                        ctx.Add(categoryEntities);
+                        ctx.SaveChanges();
+                    }
 
                     return 0;
                 });
