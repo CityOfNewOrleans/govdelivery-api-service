@@ -158,7 +158,7 @@ namespace GovDelivery.ConsoleApp
 
                     if (numCategories > 0)
                     {
-                        var categoryEntities = categoriesResult.Data.Items
+                        var remoteCategories = categoriesResult.Data.Items
                             .Select(i => new Category
                             {
                                 Id = Guid.NewGuid(),
@@ -168,10 +168,42 @@ namespace GovDelivery.ConsoleApp
                                 AllowUserInitiatedSubscriptions = i.AllowSubscriptions.Value,
                                 Name = i.Name,
                                 ShortName = i.ShortName,
-                            });
+                            }).ToList();
+
+                        var localCategories = ctx.Categories.ToList();
+
+                        // Add new categories:
+
+                        var newCategories = remoteCategories
+                            .Where(rc => !localCategories.Any(lc => lc.Code == rc.Code))
+                            .ToList();
+
+                        ctx.AddRange(newCategories);
+                        ctx.SaveChanges();
 
 
-                        ctx.Add(categoryEntities);
+                        // Update existing categories:
+
+                        var existingCategories = localCategories
+                            .Where(lc => remoteCategories.Any(rc => rc.Code == lc.Code))
+                            .ToList();
+
+                        foreach (var localCategory in existingCategories)
+                        {
+                            var remoteTopic = remoteCategories.First(rc => rc.Code == localCategory.Code);
+
+                            // update category info:
+                        }
+
+                        ctx.SaveChanges();
+
+                        // Delete categories not present remotely:
+
+                        var deletableCategories = localCategories
+                            .Where(lc => !remoteCategories.Any(rc => rc.Code == lc.Code))
+                            .ToList();
+
+                        ctx.RemoveRange(deletableCategories);
                         ctx.SaveChanges();
                     }
 
