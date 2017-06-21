@@ -94,7 +94,8 @@ namespace GovDelivery.ConsoleApp
 
                     if (numTopics > 0)
                     {
-                        var topicEntities = topicsResult.Data.Items
+
+                        var remoteTopics = topicsResult.Data.Items
                             .Select(i => new Topic
                             {
                                 Id = Guid.NewGuid(),
@@ -106,7 +107,42 @@ namespace GovDelivery.ConsoleApp
                             })
                             .ToList();
 
-                        ctx.AddRange(topicEntities);
+                        var localTopics = ctx.Topics.ToList();
+
+                        // Add new topics not present locally:
+
+                        var newTopics = remoteTopics
+                            .Where(rt => !localTopics.Any(lt => lt.Code == rt.Code))
+                            .ToList();
+
+                        ctx.AddRange(newTopics);
+                        ctx.SaveChanges();
+
+                        // Update topics present both remotely and locally:
+
+                        var existingTopics = localTopics
+                            .Where(lt => remoteTopics.Any(rt => rt.Code == lt.Code))
+                            .ToList();
+
+                        foreach (var localTopic in existingTopics)
+                        {
+                            var remoteTopic = remoteTopics.First(rt => rt.Code == localTopic.Code);
+
+                            localTopic.Name = remoteTopic.Name;
+                            localTopic.ShortName = remoteTopic.ShortName;
+                            localTopic.Description = remoteTopic.Description;
+
+                        }
+
+                        ctx.SaveChanges();
+
+                        // Delete all local topics not present remotely:
+
+                        var deletableTopics = localTopics
+                            .Where(lt => !remoteTopics.Any(rt => rt.Code == lt.Code))
+                            .ToList();
+
+                        ctx.RemoveRange(deletableTopics);
                         ctx.SaveChanges();
                     }
 
@@ -133,6 +169,7 @@ namespace GovDelivery.ConsoleApp
                                 Name = i.Name,
                                 ShortName = i.ShortName,
                             });
+
 
                         ctx.Add(categoryEntities);
                         ctx.SaveChanges();
