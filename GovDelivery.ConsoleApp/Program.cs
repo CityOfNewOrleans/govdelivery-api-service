@@ -7,6 +7,7 @@ using GovDelivery.Rest;
 using Microsoft.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -69,7 +70,7 @@ namespace GovDelivery.ConsoleApp
 
                 command.HelpOption(DEFAULT_HELP_OPTIONS);
 
-                command.OnExecute(() => 
+                command.OnExecute(async () => 
                 {
                     Console.WriteLine("Beginning sync...");
 
@@ -207,12 +208,45 @@ namespace GovDelivery.ConsoleApp
                         ctx.SaveChanges();
                     }
 
+                    var localSubscribers = ctx.Subscribers.ToList();
+
+                    var subscriberEnumerator = localSubscribers.GetEnumerator();
+
+                    foreach (var i in Enumerable.Range(0, 5)) { 
+                        var subscriberEntity = subscriberEnumerator.Current;
+                        subscriberEnumerator.MoveNext();
+                        
+                        var subUpdateResult = await service.ReadSubscriberAsync(subscriberEntity.Email);
+
+                    }
+
+
+                    // pull x subscribers and request their data
+                    // after each request comes back, save data, pick next eligible subscriber until none are left.
+
+
                     return 0;
                 });
 
             });
 
             app.Execute(args);
+        }
+
+        protected async static void UpdateSubscriberAsync(EmailSubscriber subscriber, IGovDeliveryApiService service, IGovDeliveryContext ctx)
+        {
+            var subscriberInfoTask = service.ReadSubscriberAsync(subscriber.Email);
+
+            var subscriberTopicsTask = service.ListSubscriberTopicsAsync(subscriber.Email);
+
+            var subscriberCategoriesTask = service.ListSubscriberCategoriesAsync(subscriber.Email);
+
+            await Task.WhenAll(new List<Task> { subscriberInfoTask, subscriberTopicsTask, subscriberCategoriesTask });
+
+            
+            // Update detailed subscriber info
+            // Get Topic subscriptions
+            // Get Category Subscriptions
         }
 
         public static void ImportSubscribers(string filePath, GovDeliveryContext ctx)
