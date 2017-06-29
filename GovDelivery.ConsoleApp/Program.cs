@@ -236,9 +236,7 @@ namespace GovDelivery.ConsoleApp
         protected async static void UpdateSubscriberAsync(EmailSubscriber subscriber, IGovDeliveryApiService service, IGovDeliveryContext ctx)
         {
             var subscriberInfoTask = service.ReadSubscriberAsync(subscriber.Email);
-
             var subscriberTopicsTask = service.ListSubscriberTopicsAsync(subscriber.Email);
-
             var subscriberCategoriesTask = service.ListSubscriberCategoriesAsync(subscriber.Email);
 
             await Task.WhenAll(new List<Task> { subscriberInfoTask, subscriberTopicsTask, subscriberCategoriesTask });
