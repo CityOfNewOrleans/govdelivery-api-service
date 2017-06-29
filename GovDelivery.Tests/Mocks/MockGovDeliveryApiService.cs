@@ -422,6 +422,14 @@ namespace GovDelivery.Library.Tests.Mocks
 
         }
 
-        
+        public override Task<GovDeliveryResponseModel<ListSubscriberTopicsResponseModel>> ListSubscriberTopicsAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>> ListSubscriberCategoriesAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
