@@ -85,7 +85,7 @@ namespace GovDelivery.Tests
         }
 
         [Theory(DisplayName = "Valid CSV data should become a collection of ImportModels")]
-        [InlineData(@"MockData\mockCsvImportData.csv")]
+        [InlineData(@"MockData/mockCsvImportData.csv")]
         public async void ValidCsvStringsConvertCorrectly(string filePath)
         {
             var importer = new CsvImporter();
