@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace GovDelivery.Rest.Models.Category
+namespace GovDelivery.Rest.Models.Subscription
 {
     [XmlRoot("categories")]
     public class ListSubscriberCategoriesResponseModel : BaseSerializableArray<SubscriberCategory>
