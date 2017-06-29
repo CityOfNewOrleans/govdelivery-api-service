@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,11 +17,20 @@ namespace GovDelivery.ConsoleApp.Configuration
 
     public class GovDelivery
     {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public GovDeliveryServer Server { get; set; }
+
         public string AccountCode { get; set; }
 
         public string Username { get; set; }
 
         public string Password { get; set; }
+    }
+
+    public enum GovDeliveryServer
+    {
+        Main,
+        Staging,
     }
 
     public class ConnectionStrings

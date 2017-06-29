@@ -120,5 +120,6 @@ namespace GovDelivery.Rest.Models.Misc
 
         [XmlIgnore]
         public abstract List<T> Items { get; set; }
+
     }
 }
