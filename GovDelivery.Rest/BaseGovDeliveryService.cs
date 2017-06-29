@@ -32,6 +32,7 @@ namespace GovDelivery.Rest
         // Topic Subscriptions
         public abstract Task<HttpResponseMessage> AddTopicSubscriptionsAsync(AddTopicSubscriptionsRequestModel requestModel);
         public abstract Task<GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>> RemoveTopicSubscriptionsAsync(RemoveTopicSubscriptionsRequestModel requestModel);
+        public abstract Task<GovDeliveryResponseModel<ListSubscriberTopicsResponseModel>> ListSubscriberTopicsAsync(string email);
 
         // Topic
         public abstract Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel requestModel);
@@ -43,6 +44,7 @@ namespace GovDelivery.Rest
         // Topic Categories:
         public abstract Task<GovDeliveryResponseModel<ListTopicCategoriesResponseModel>> ListTopicCategoriesAsync(string topicCode);
         public abstract Task<HttpResponseMessage> UpdateTopicCategoriesAsync(string topicCode, UpdateTopicCategoriesRequestModel requestModel);
+        public abstract Task<GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>> ListSubscriberCategoriesAsync(string email);
 
 
         // Category
@@ -51,6 +53,5 @@ namespace GovDelivery.Rest
         public abstract Task<GovDeliveryResponseModel<UpdateCategoryResponseModel>> UpdateCategoryAsync(UpdateCategoryRequestModel requestModel);
         public abstract Task<HttpResponseMessage> DeleteCategoryAsync(string categoryCode);
         public abstract Task<GovDeliveryResponseModel<ListCategoriesResponseModel>> ListCategoriesAsync();
-
     }
 }

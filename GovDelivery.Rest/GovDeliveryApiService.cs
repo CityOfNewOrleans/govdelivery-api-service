@@ -23,13 +23,13 @@ namespace GovDelivery.Rest
         private HttpClient client;
 
         // Subscriber
-        public GovDeliveryApiService (string baseUri, string accountCode, string username, string password): base (baseUri, accountCode)
+        public GovDeliveryApiService(string baseUri, string accountCode, string username, string password) : base(baseUri, accountCode)
         {
             var credentialBytes = Encoding.UTF8.GetBytes($"{username}:{password}");
 
             client = new HttpClient();
-            client.BaseAddress = new Uri($"{baseUri}/api/account/{accountCode}");
-            client.DefaultRequestHeaders.Authorization = 
+            client.BaseAddress = new Uri($"{baseUri}/api/account/{accountCode}/");
+            client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentialBytes));
         }
 
@@ -88,15 +88,16 @@ namespace GovDelivery.Rest
             return await client.DeleteAsync($"subscribers/{encodedSubscriberId}.xml");
         }
 
-        // Topic
-        public override async Task<HttpResponseMessage> AddTopicSubscriptionsAsync (AddTopicSubscriptionsRequestModel requestModel)
+        // Topic Subscriptions
+        public override async Task<HttpResponseMessage> AddTopicSubscriptionsAsync(AddTopicSubscriptionsRequestModel requestModel)
         {
             return await client.PostAsync("subscriptions.xml", SerializationUtils.ModelToStringContent(requestModel));
         }
 
         public override async Task<GovDeliveryResponseModel<RemoveTopicSubscriptionsResponseModel>> RemoveTopicSubscriptionsAsync(RemoveTopicSubscriptionsRequestModel requestModel)
         {
-            var res = await client.SendAsync(new HttpRequestMessage {
+            var res = await client.SendAsync(new HttpRequestMessage
+            {
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(client.BaseAddress, "subscriptions.xml"),
                 Content = SerializationUtils.ModelToStringContent(requestModel)
@@ -111,6 +112,20 @@ namespace GovDelivery.Rest
             };
         }
 
+        public override async Task<GovDeliveryResponseModel<ListSubscriberTopicsResponseModel>> ListSubscriberTopicsAsync(string email)
+        {
+            var res = await client.GetAsync($"subscribers/{SerializationUtils.Base64Encode(email)}/topics.xml");
+
+            InterceptHttpError(res);
+
+            return new GovDeliveryResponseModel<ListSubscriberTopicsResponseModel>
+            {
+                HttpResponse = res,
+                Data = await SerializationUtils.ResponseContentToModel<ListSubscriberTopicsResponseModel>(res.Content),
+            };
+        }
+
+        // Topics
         public override async Task<GovDeliveryResponseModel<CreateTopicResponseModel>> CreateTopicAsync(CreateTopicRequestModel model)
         {
             var res = await client.PostAsync("topics.xml", SerializationUtils.ModelToStringContent(model));
@@ -157,7 +172,7 @@ namespace GovDelivery.Rest
 
         public override async Task<GovDeliveryResponseModel<ListTopicsResponseModel>> ListTopicsAsync()
         {
-            var res = await client.GetAsync("topics.xml");
+            var res = await client.GetAsync("topics");
 
             InterceptHttpError(res);
 
@@ -235,11 +250,27 @@ namespace GovDelivery.Rest
             return new GovDeliveryResponseModel<ListCategoriesResponseModel>
             {
                 HttpResponse = res,
-                Data = await SerializationUtils.ResponseContentToModel<ListCategoriesResponseModel>(res.Content)
+                Data = await SerializationUtils.ResponseContentToModel<ListCategoriesResponseModel>(res.Content),
             };
         }
 
-        private void InterceptHttpError (HttpResponseMessage res)
+        // Categories
+
+        // Subscriber Categories
+        public override async Task<GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>> ListSubscriberCategoriesAsync(string email)
+        {
+            var res = await client.GetAsync($"subscribers/{SerializationUtils.Base64Encode(email)}/topics.xml");
+
+            InterceptHttpError(res);
+
+            return new GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>
+            {
+                HttpResponse = res,
+                Data = await SerializationUtils.ResponseContentToModel<ListSubscriberCategoriesResponseModel>(res.Content),
+            };
+        }
+
+        private void InterceptHttpError(HttpResponseMessage res)
         {
             if (res.IsSuccessStatusCode) return;
 
@@ -250,5 +281,8 @@ namespace GovDelivery.Rest
         {
             client.Dispose();
         }
+
+
     }
+       
 }

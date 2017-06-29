@@ -34,13 +34,16 @@ namespace GovDelivery.Rest.Utils
 
         }
 
-        public static async Task<T> ResponseContentToModel<T>(HttpContent hc, XmlSerializer serializer = null) 
+        public static async Task<T> ResponseContentToModel<T>(HttpContent hc, XmlSerializer serializer = null) where T : new()
         {
             if (serializer == null) serializer = new XmlSerializer(typeof(T));
 
             using (var stream = new MemoryStream())
             {
                 var contentString = await hc.ReadAsStringAsync();
+
+                // response is a collection and it is empty:
+                if (contentString.Contains("nil-classes")) return new T();
 
                 await hc.CopyToAsync(stream);
                 stream.Position = 0; // set stream to beginning, or deserialization will bomb.

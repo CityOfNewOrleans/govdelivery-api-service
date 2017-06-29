@@ -1,3 +1,5 @@
+$projectLocation = Get-Location;
+
 function Test-BuiltProject {
     param([Parameter(Mandatory)][Scriptblock]$callback)
     
@@ -14,18 +16,18 @@ function Test-BuiltProject {
 }
 
 function Publish-ConsoleApp {
-    & dotnet publish .\GovDelivery.ConsoleApp\GovDelivery.ConsoleApp.csproj -c release -r win7-x64;
+    & dotnet publish $projectLocation\GovDelivery.ConsoleApp\GovDelivery.ConsoleApp.csproj -c release -r win7-x64;
 }
 
 function Invoke-ConsoleApp {
 
     #& dotnet run -p .\GovDelivery.ConsoleApp\GovDelivery.ConsoleApp.csproj -- $args;
-    & .\GovDelivery.ConsoleApp\bin\release\netcoreapp1.1\win7-x64\GovDelivery.ConsoleApp.exe $args;
+    & $projectlocation\GovDelivery.ConsoleApp\bin\release\netcoreapp1.1\win7-x64\GovDelivery.ConsoleApp.exe $args;
 
 }
 
 function Test-Library {
-    & dotnet test .\GovDelivery.Tests\GovDelivery.Tests.csproj;
+    & dotnet test $projectLocation\GovDelivery.Tests\GovDelivery.Tests.csproj;
 }
 
 #function Test-ConsoleApp {
@@ -34,4 +36,4 @@ function Test-Library {
 #    };
 #}
 
-Export-ModuleMember -Function Test-Library, Publish-ConsoleApp, Invoke-ConsoleApp, Test-ConsoleApp;
+Export-ModuleMember -Function Test-Library, Publish-ConsoleApp, Invoke-ConsoleApp, Test-ConsoleApp, Initialize-ConsoleAppDb;

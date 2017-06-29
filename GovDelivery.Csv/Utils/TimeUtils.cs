@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,12 +16,26 @@ namespace GovDelivery.Csv.Utils
         public const string DATE_FORMAT = "MM/dd/yyyy";
         public const string TIME_FORMAT = "hh:mm tt z";
 
-        public static string ReplaceTimeZoneWithUtcOffset(string dateString)
+        protected static Dictionary<string, string> TimeZoneUtcOffsetLookup = new Dictionary<string, string>
         {
-            if (dateString.Contains("CST")) return dateString.Replace("CST", "-6");
-            if (dateString.Contains("CDT")) return dateString.Replace("CDT", "-5");
-            return dateString;
-        }
+            // Arranged east to west; daylight first, standard second:
+            { "EDT", "-4" },
+            { "EST", "-5" },
+            { "CDT", "-5" },
+            { "CST", "-6" },
+            { "MDT", "-6" },
+            { "MST", "-7" },
+            { "PDT", "-7" },
+            { "PST", "-8" },
+            { "AKDT", "-8" },
+            { "AKST", "-9" },
+            { "HADT", "-9" },
+            { "HAST", "-10" },
+        };
+
+        public static string ReplaceTimeZoneWithUtcOffset(string dateString) => 
+            TimeZoneUtcOffsetLookup.Aggregate(dateString, (ds, kvp) => ds.Replace(kvp.Key, kvp.Value));
+
 
         /// <summary>
         /// GovDelivery date strings are not valid ISO date strings. Thus, they must be corrected before they can be imported.
