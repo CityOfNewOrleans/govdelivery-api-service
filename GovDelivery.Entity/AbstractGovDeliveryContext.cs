@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GovDelivery.Entity
 {
-    public abstract class AbstractGovDeliveryContext : DbContext, GovDeliveryContext
+    public abstract class AbstractGovDeliveryContext : DbContext, IGovDeliveryContext
     {
         public AbstractGovDeliveryContext():base() { }
 
