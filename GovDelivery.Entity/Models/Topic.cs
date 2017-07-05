@@ -14,7 +14,7 @@ namespace GovDelivery.Entity.Models
 
         public string Code { get; set; }
 
-        public ICollection<EmailSubscriberTopic> EmailSubscriberTopics { get; set; }
+        public ICollection<TopicSubscription> EmailSubscriberTopics { get; set; }
 
         public ICollection<TopicCategory> TopicCategories { get; set; }
 

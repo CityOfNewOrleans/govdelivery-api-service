@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GovDelivery.Entity.Models
 {
-    public class EmailSubscriberTopic
+    public class TopicSubscription
     {
-        public Guid EmailSubscriberId { get; set; }
-        public EmailSubscriber EmailSubscriber { get; set; }
+        public Guid SubscriberId { get; set; }
+        public Subscriber Subscriber { get; set; }
 
         public Guid TopicId { get; set; }
         public Topic Topic { get; set; }

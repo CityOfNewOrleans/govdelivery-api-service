@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GovDelivery.Entity.Models
 {
-    public class EmailSubscriber
+    public class Subscriber
     {
         [Key]
         public Guid Id { get; set; }
@@ -20,9 +20,9 @@ namespace GovDelivery.Entity.Models
 
         public string CountryCode { get; set; }
 
-        public ICollection<EmailSubscriberTopic> EmailSubscriberTopics { get; set; }
+        public ICollection<TopicSubscription> TopicSubscriptions { get; set; }
 
-        public ICollection<EmailSubscriberCategory> EmailSubscriberCategories { get; set; }
+        public ICollection<CategorySubscription> CategorySubscriptions { get; set; }
 
         public bool SendSubscriberUpdateNotifications { get; set; }
 

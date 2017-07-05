@@ -1,22 +1,27 @@
-﻿using GovDelivery.Entity.Models;
+﻿using System;
+using GovDelivery.Entity.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GovDelivery.Entity
 {
-    public abstract class AbstractGovDeliveryContext : DbContext, IGovDeliveryContext
+    public abstract class AbstractGovDeliveryContext : DbContext, GovDeliveryContext
     {
         public AbstractGovDeliveryContext():base() { }
 
         public AbstractGovDeliveryContext(DbContextOptions dbOptions):base(dbOptions) { }
 
-        public DbSet<EmailSubscriber> Subscribers { get; set; }
+        public DbSet<Subscriber> Subscribers { get; set; }
 
         public DbSet<Topic> Topics { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Page> Pages { get; set; }
-        
+
+        public DbSet<CategorySubscription> CategorySubscriptions { get; set; }
+
+        public DbSet<TopicSubscription> TopicSubscriptions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>()
@@ -50,15 +55,15 @@ namespace GovDelivery.Entity
 
         protected static void ConfigureEmailSubscriberTopics(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EmailSubscriberTopic>()
-                .HasKey(e => new { e.EmailSubscriberId, e.TopicId });
+            modelBuilder.Entity<TopicSubscription>()
+                .HasKey(e => new { e.SubscriberId, e.TopicId });
 
-            modelBuilder.Entity<EmailSubscriberTopic>()
-                .HasOne(est => est.EmailSubscriber)
-                .WithMany(e => e.EmailSubscriberTopics)
-                .HasForeignKey(est => est.EmailSubscriberId);
+            modelBuilder.Entity<TopicSubscription>()
+                .HasOne(est => est.Subscriber)
+                .WithMany(e => e.TopicSubscriptions)
+                .HasForeignKey(est => est.SubscriberId);
 
-            modelBuilder.Entity<EmailSubscriberTopic>()
+            modelBuilder.Entity<TopicSubscription>()
                 .HasOne(est => est.Topic)
                 .WithMany(t => t.EmailSubscriberTopics)
                 .HasForeignKey(est => est.TopicId);
@@ -66,15 +71,15 @@ namespace GovDelivery.Entity
 
         protected static void ConfigureEmailSubscriberCategories(ModelBuilder modelBulder)
         {
-            modelBulder.Entity<EmailSubscriberCategory>()
-                .HasKey(esc => new { esc.EmailSubscriberId, esc.CategoryId });
+            modelBulder.Entity<CategorySubscription>()
+                .HasKey(esc => new { esc.SubscriberId, esc.CategoryId });
 
-            modelBulder.Entity<EmailSubscriberCategory>()
-                .HasOne(esc => esc.EmailSubscriber)
-                .WithMany(es => es.EmailSubscriberCategories)
-                .HasForeignKey(esc => esc.EmailSubscriberId);
+            modelBulder.Entity<CategorySubscription>()
+                .HasOne(esc => esc.Subscriber)
+                .WithMany(es => es.CategorySubscriptions)
+                .HasForeignKey(esc => esc.SubscriberId);
 
-            modelBulder.Entity<EmailSubscriberCategory>()
+            modelBulder.Entity<CategorySubscription>()
                 .HasOne(esc => esc.Category)
                 .WithMany(c => c.EmailSubscriberCategories)
                 .HasForeignKey(esc => esc.CategoryId);

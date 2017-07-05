@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GovDelivery.Csv\GovDelivery.Csv.csproj" />
     <ProjectReference Include="..\GovDelivery.Entity\GovDelivery.Entity.csproj" />
+    <ProjectReference Include="..\GovDelivery.Logic\GovDelivery.Logic.csproj" />
     <ProjectReference Include="..\GovDelivery.Rest\GovDelivery.Rest.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -83,147 +83,13 @@ namespace GovDelivery.ConsoleApp
 
                     var ctx = new GovDeliveryContext();
 
-                    var topicsResult = service.ListTopicsAsync().Result;
+                    
 
-                    if (!topicsResult.HttpResponse.IsSuccessStatusCode)
-                    {
-                        Console.Error.WriteLine($@"Error getting Topics: {topicsResult.HttpResponse.StatusCode} - {topicsResult.HttpResponse.ReasonPhrase}");
-                    }
+                    
 
-                    var numTopics = topicsResult.Data.Items != null ? topicsResult.Data.Items.Count() : 0;
-                    Console.WriteLine($"Fetched {numTopics} topics.");
+                    Console.WriteLine("Fetched and updated Topics and Categories, now updating subscribers and subscriptions...");
 
-                    if (numTopics > 0)
-                    {
-
-                        var remoteTopics = topicsResult.Data.Items
-                            .Select(i => new Topic
-                            {
-                                Id = Guid.NewGuid(),
-                                Code = i.Code,
-                                Description = i.Description.Value,
-                                Name = i.Name,
-                                ShortName = i.ShortName,
-                                WirelessEnabled = i.WirelessEnabled.Value
-                            })
-                            .ToList();
-
-                        var localTopics = ctx.Topics.ToList();
-
-                        // Add new topics not present locally:
-
-                        var newTopics = remoteTopics
-                            .Where(rt => !localTopics.Any(lt => lt.Code == rt.Code))
-                            .ToList();
-
-                        ctx.AddRange(newTopics);
-                        ctx.SaveChanges();
-
-                        // Update topics present both remotely and locally:
-
-                        var existingTopics = localTopics
-                            .Where(lt => remoteTopics.Any(rt => rt.Code == lt.Code))
-                            .ToList();
-
-                        foreach (var localTopic in existingTopics)
-                        {
-                            var remoteTopic = remoteTopics.First(rt => rt.Code == localTopic.Code);
-
-                            localTopic.Name = remoteTopic.Name;
-                            localTopic.ShortName = remoteTopic.ShortName;
-                            localTopic.Description = remoteTopic.Description;
-
-                        }
-
-                        ctx.SaveChanges();
-
-                        // Delete all local topics not present remotely:
-
-                        var deletableTopics = localTopics
-                            .Where(lt => !remoteTopics.Any(rt => rt.Code == lt.Code))
-                            .ToList();
-
-                        ctx.RemoveRange(deletableTopics);
-                        ctx.SaveChanges();
-                    }
-
-                    var categoriesResult = service.ListCategoriesAsync().Result;
-
-                    if (!categoriesResult.HttpResponse.IsSuccessStatusCode)
-                    {
-                        Console.Error.WriteLine($@"Error getting Categories: {categoriesResult.HttpResponse.StatusCode} - {categoriesResult.HttpResponse.ReasonPhrase}");
-                    }
-
-                    var numCategories = categoriesResult.Data.Items != null ? categoriesResult.Data.Items.Count() : 0;
-                    Console.WriteLine($"Fetched {numCategories} categories");
-
-                    if (numCategories > 0)
-                    {
-                        var remoteCategories = categoriesResult.Data.Items
-                            .Select(i => new Category
-                            {
-                                Id = Guid.NewGuid(),
-                                Code = i.Code,
-                                Description = i.Description,
-                                DefaultOpen = i.DefaultOpen.Value,
-                                AllowUserInitiatedSubscriptions = i.AllowSubscriptions.Value,
-                                Name = i.Name,
-                                ShortName = i.ShortName,
-                            }).ToList();
-
-                        var localCategories = ctx.Categories.ToList();
-
-                        // Add new categories:
-
-                        var newCategories = remoteCategories
-                            .Where(rc => !localCategories.Any(lc => lc.Code == rc.Code))
-                            .ToList();
-
-                        ctx.AddRange(newCategories);
-                        ctx.SaveChanges();
-
-
-                        // Update existing categories:
-
-                        var existingCategories = localCategories
-                            .Where(lc => remoteCategories.Any(rc => rc.Code == lc.Code))
-                            .ToList();
-
-                        foreach (var localCategory in existingCategories)
-                        {
-                            var remoteTopic = remoteCategories.First(rc => rc.Code == localCategory.Code);
-
-                            // update category info:
-                        }
-
-                        ctx.SaveChanges();
-
-                        // Delete categories not present remotely:
-
-                        var deletableCategories = localCategories
-                            .Where(lc => !remoteCategories.Any(rc => rc.Code == lc.Code))
-                            .ToList();
-
-                        ctx.RemoveRange(deletableCategories);
-                        ctx.SaveChanges();
-                    }
-
-                    var localSubscribers = ctx.Subscribers.ToList();
-
-                    var subscriberEnumerator = localSubscribers.GetEnumerator();
-
-                    foreach (var i in Enumerable.Range(0, 5)) { 
-                        var subscriberEntity = subscriberEnumerator.Current;
-                        subscriberEnumerator.MoveNext();
-                        
-                        var subUpdateResult = await service.ReadSubscriberAsync(subscriberEntity.Email);
-
-                    }
-
-
-                    // pull x subscribers and request their data
-                    // after each request comes back, save data, pick next eligible subscriber until none are left.
-
+                    
 
                     return 0;
                 });
@@ -233,20 +99,7 @@ namespace GovDelivery.ConsoleApp
             app.Execute(args);
         }
 
-        protected async static void UpdateSubscriberAsync(EmailSubscriber subscriber, IGovDeliveryApiService service, IGovDeliveryContext ctx)
-        {
-            var subscriberInfoTask = service.ReadSubscriberAsync(subscriber.Email);
-            var subscriberTopicsTask = service.ListSubscriberTopicsAsync(subscriber.Email);
-            var subscriberCategoriesTask = service.ListSubscriberCategoriesAsync(subscriber.Email);
-
-            await Task.WhenAll(new List<Task> { subscriberInfoTask, subscriberTopicsTask, subscriberCategoriesTask });
-
-            
-            // Update detailed subscriber info
-            // Get Topic subscriptions
-            // Get Category Subscriptions
-        }
-
+        
         public static void ImportSubscribers(string filePath, GovDeliveryContext ctx)
         {
             var importer = new CsvImporter();
@@ -255,7 +108,7 @@ namespace GovDelivery.ConsoleApp
 
             Console.WriteLine($"Found {subscribers.Count()} subscribers to import.");
 
-            var entities = subscribers.Select(s => new EmailSubscriber
+            var entities = subscribers.Select(s => new Subscriber
             {
                 Id = Guid.NewGuid(),
                 Email = s.Type == SubscriberType.Email ? s.Contact : null,

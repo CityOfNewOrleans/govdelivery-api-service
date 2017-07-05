@@ -2,7 +2,7 @@
   "profiles": {
     "GovDelivery.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "import \"C:\\Users\\spprice\\Downloads\\subscribers.csv\""
+      "commandLineArgs": "sync"
     }
   }
 }

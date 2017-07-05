@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GovDelivery.Entity\GovDelivery.Entity.csproj" />
+    <ProjectReference Include="..\GovDelivery.Rest\GovDelivery.Rest.csproj" />
+  </ItemGroup>
+
+</Project>
