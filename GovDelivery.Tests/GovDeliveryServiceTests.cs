@@ -172,7 +172,20 @@ namespace GovDelivery.Library.Tests
             Assert.NotNull(responseModel.Data);
             Assert.NotNull(responseModel.Data.Items);
             Assert.True(responseModel.Data.Items.Count > 0);
-            
+
+        }
+
+        //Subscriber Category:
+        [Theory(DisplayName = "ListSubscriberCategoriesAsync performs as expected.")]
+        [InlineData("exapmle@bar.com")]
+        public async void TestListSubscriberCategoriesAsync(string email) 
+        {
+            var responseModel = await service.ListSubscriberCategoriesAsync(email);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+            Assert.NotNull(responseModel.Data.Items);
+            Assert.True(responseModel.Data.Items.Count > 0);
         }
 
         // Category:
