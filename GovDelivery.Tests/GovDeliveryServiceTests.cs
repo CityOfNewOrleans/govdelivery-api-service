@@ -161,6 +161,20 @@ namespace GovDelivery.Library.Tests
             Assert.Equal(HttpStatusCode.OK, responseModel.StatusCode);
         }
 
+        //Subscriber Topics:
+        [Theory(DisplayName = "ListSubscriberTopicsAsync performs as expected.")]
+        [InlineData("example@foo.com")]
+        public async void TestListSubscriberTopicsAsync(string email)
+        {
+            var responseModel = await service.ListSubscriberTopicsAsync(email);
+
+            Assert.Equal(HttpStatusCode.OK, responseModel.HttpResponse.StatusCode);
+            Assert.NotNull(responseModel.Data);
+            Assert.NotNull(responseModel.Data.Items);
+            Assert.True(responseModel.Data.Items.Count > 0);
+            
+        }
+
         // Category:
         [Theory(DisplayName = "CreateCategoryAsync performs as expected.")]
         [MemberData(nameof(CreateCategoryData))]
