@@ -18,6 +18,6 @@ namespace GovDelivery.Entity
         int SaveChanges();
         void RemoveRange(IEnumerable<object> entities);
         void AddRange(params object[] entities);
-        EntityEntry Remove(object entity)
+        EntityEntry Remove(object entity);
     }
 }
