@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GovDelivery.Entity.Models
 {
-    public class TopicCategory
+    public class CategoryTopic
     {
         public Guid TopicId { get; set; }
 

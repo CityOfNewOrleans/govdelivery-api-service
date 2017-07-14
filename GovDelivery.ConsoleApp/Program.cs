@@ -3,6 +3,7 @@ using GovDelivery.Csv;
 using GovDelivery.Csv.Models;
 using GovDelivery.Entity;
 using GovDelivery.Entity.Models;
+using GovDelivery.Logic;
 using GovDelivery.Rest;
 using Microsoft.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
@@ -70,26 +71,10 @@ namespace GovDelivery.ConsoleApp
 
                 command.HelpOption(DEFAULT_HELP_OPTIONS);
 
-                command.OnExecute(async () => 
+                command.OnExecute(() => 
                 {
-                    Console.WriteLine("Beginning sync...");
 
-                    var service = new GovDeliveryApiService(
-                        AppSettings.GovDelivery.Server == GovDeliveryServer.Main ? GovDeliveryApiService.MAIN_URI : GovDeliveryApiService.STAGING_URI, 
-                        AppSettings.GovDelivery.AccountCode,
-                        AppSettings.GovDelivery.Username,
-                        AppSettings.GovDelivery.Password
-                    );
-
-                    var ctx = new GovDeliveryContext();
-
-                    
-
-                    
-
-                    Console.WriteLine("Fetched and updated Topics and Categories, now updating subscribers and subscriptions...");
-
-                    
+                    PerformFullSync().GetAwaiter().GetResult();
 
                     return 0;
                 });
@@ -120,14 +105,35 @@ namespace GovDelivery.ConsoleApp
             ctx.SaveChanges();
         }
 
-        public static void PullSubscriberData()
+        public static async Task PerformFullSync()
         {
-            var govDeliveryService = new GovDeliveryApiService(
-                GovDeliveryApiService.MAIN_URI, 
+            var baseUri = (AppSettings.GovDelivery.Server == GovDeliveryServer.Main)
+                ? GovDeliveryApiService.MAIN_URI
+                : GovDeliveryApiService.STAGING_URI;
+
+            var service = new GovDeliveryApiService(
+                baseUri, 
                 AppSettings.GovDelivery.AccountCode,
                 AppSettings.GovDelivery.Username,
                 AppSettings.GovDelivery.Password
             );
+
+            var ctx = new GovDeliveryContext();
+
+            Console.WriteLine("Beginning sync...");
+
+            Console.WriteLine("Syncing Topics...");
+            await BusinessTasks.SyncTopics(service, ctx);
+            Console.WriteLine("Topic sync Successful");
+
+            Console.WriteLine("Syncing Categories...");
+            await BusinessTasks.SyncCategories(service, ctx);
+            Console.WriteLine("Category sync successful...");
+
+            Console.WriteLine(" Syncing Subscribers and Subscriptions...");
+            await BusinessTasks.UpdateSubscribers(service, ctx);
+            Console.WriteLine("");
+
         }
     }
 }

@@ -45,7 +45,7 @@ namespace GovDelivery.Logic
                     .Where(rt => !localTopics.Any(lt => lt.Code == rt.Code))
                     .ToList();
 
-                ctx.AddRange(newTopics);
+                ctx.Topics.AddRange(newTopics);
                 ctx.SaveChanges();
 
                 // Update topics present both remotely and locally:
@@ -113,7 +113,7 @@ namespace GovDelivery.Logic
                     .Where(rc => !localCategories.Any(lc => lc.Code == rc.Code))
                     .ToList();
 
-                ctx.AddRange(newCategories);
+                ctx.Categories.AddRange(newCategories);
                 ctx.SaveChanges();
 
 
@@ -125,9 +125,25 @@ namespace GovDelivery.Logic
 
                 foreach (var localCategory in existingCategories)
                 {
-                    var remoteTopic = remoteCategories.First(rc => rc.Code == localCategory.Code);
+                    var remoteCategory = remoteCategories.First(rc => rc.Code == localCategory.Code);
 
                     // update category info:
+
+                    var fullCategoryResponse = await service.ReadCategoryAsync(remoteCategory.Code);
+
+                    var categoryInfo = fullCategoryResponse.Data;
+
+                    remoteCategory.AllowUserInitiatedSubscriptions = categoryInfo.AllowSubscriptions.Value;
+                    remoteCategory.DefaultOpen = categoryInfo.DefaultOpen.Value;
+                    remoteCategory.Description = categoryInfo.Description;
+                    remoteCategory.Name = categoryInfo.Name;
+                    remoteCategory.ShortName = categoryInfo.ShortName;
+
+                    var parentCategory = ctx.Categories.FirstOrDefault(c => c.Code == categoryInfo.Parent.CategoryCode);
+
+                    remoteCategory.ParentCategory = parentCategory;
+
+                    ctx.SaveChanges();
                 }
 
                 ctx.SaveChanges();
@@ -172,6 +188,8 @@ namespace GovDelivery.Logic
                     updateTasks.Add(UpdateSubscriberAsync(subscriber, service, ctx));
                 }
             }
+
+            Task.WhenAll(updateTasks).GetAwaiter().GetResult();
         }
 
         protected async static Task UpdateSubscriberAsync(Subscriber subscriber, IGovDeliveryApiService service, IGovDeliveryContext ctx)

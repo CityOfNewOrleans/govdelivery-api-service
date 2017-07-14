@@ -199,6 +199,8 @@ namespace GovDelivery.Rest
         public override async Task<HttpResponseMessage> UpdateTopicCategoriesAsync(string topicCode, UpdateTopicCategoriesRequestModel requestModel) =>
             await client.PutAsync($"topics/{topicCode}/categories.xml", SerializationUtils.ModelToStringContent(requestModel));
 
+        // Categories
+
         public override async Task<GovDeliveryResponseModel<CreateCategoryResponseModel>> CreateCategoryAsync(CreateCategoryRequestModel requestModel)
         {
             var res = await client.PostAsync("categories.xml", SerializationUtils.ModelToStringContent(requestModel));
@@ -253,8 +255,6 @@ namespace GovDelivery.Rest
                 Data = await SerializationUtils.ResponseContentToModel<ListCategoriesResponseModel>(res.Content),
             };
         }
-
-        // Categories
 
         // Subscriber Categories
         public override async Task<GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>> ListSubscriberCategoriesAsync(string email)

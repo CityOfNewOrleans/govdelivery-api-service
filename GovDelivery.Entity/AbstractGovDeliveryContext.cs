@@ -39,17 +39,17 @@ namespace GovDelivery.Entity
 
         protected static void ConfigureTopicCategories(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TopicCategory>()
+            modelBuilder.Entity<CategoryTopic>()
                 .HasKey(e => new { e.TopicId, e.CategoryId});
 
-            modelBuilder.Entity<TopicCategory>()
+            modelBuilder.Entity<CategoryTopic>()
                 .HasOne(tc => tc.Topic)
                 .WithMany(t => t.TopicCategories)
                 .HasForeignKey(tc => tc.TopicId);
 
-            modelBuilder.Entity<TopicCategory>()
+            modelBuilder.Entity<CategoryTopic>()
                 .HasOne(tc => tc.Category)
-                .WithMany(c => c.TopicCategories)
+                .WithMany(c => c.Topics)
                 .HasForeignKey(tc => tc.CategoryId);
         }
 
