@@ -454,9 +454,40 @@ namespace GovDelivery.Library.Tests.Mocks
             };
         }
 
-        public override Task<GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>> ListSubscriberCategoriesAsync(string email)
+        public async override Task<GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>> ListSubscriberCategoriesAsync(string email)
         {
-            throw new NotImplementedException();
+            var responseModel = new ListSubscriberCategoriesResponseModel{
+                Items = new List<SubscriberCategory>{
+                    new SubscriberCategory{
+                        CategoryCode = "EXAMPLE_CATEGORY_1",
+                        Link = new LinkModel{
+                            Rel = "self",
+                            Href = $"/api/account/{accountCode}/category/EXAMPLE_CATEGORY_1",
+                        }
+                    },
+                
+                    new SubscriberCategory{
+                        CategoryCode = "EXAMPLE_CATEGORY_2",
+                        Link = new LinkModel{
+                            Rel = "self",
+                            Href = $"/api/account/{accountCode}/category/EXAMPLE_CATEGORY_2",
+                        }
+                        
+                    },
+                }
+            };
+
+            var httpResponse = new HttpResponseMessage{
+                StatusCode = HttpStatusCode.OK,
+                Content = SerializationUtils.ModelToStringContent(responseModel),
+            };
+
+            return new GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>{
+                HttpResponse = httpResponse,
+                Data = await SerializationUtils.ResponseContentToModel<ListSubscriberCategoriesResponseModel>(httpResponse.Content),                
+                
+            };
+            
         }
     }
 }
