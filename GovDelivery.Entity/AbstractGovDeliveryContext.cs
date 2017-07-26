@@ -22,6 +22,8 @@ namespace GovDelivery.Entity
 
         public DbSet<TopicSubscription> TopicSubscriptions { get; set; }
 
+        public DbSet<CategoryTopic> CategoryTopics { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>()

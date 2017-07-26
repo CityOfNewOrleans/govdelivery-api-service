@@ -35,8 +35,11 @@ namespace GovDelivery.Rest.Models.Topic
         [XmlElement("send-by-email-enabled")]
         public SerializableBool SendByEmailEnabled { get; set; }
 
+        /// <summary>
+        /// Topic is availabled for SMS subscription/transmission.
+        /// </summary>
         [XmlElement("wireless-enabled")]
-        public SerializableBool SmsEnabled { get; set; }
+        public SerializableBool WirelessEnabled { get; set; }
 
         [XmlElement("rss-feed-url")]
         public NillableSerializableString RssFeedUrl { get; set; }

@@ -299,7 +299,7 @@ namespace GovDelivery.Library.Tests.Mocks
                 Items = categoryCodes
                 .Select(c => new TopicCategoryModel
                 {
-                    ToParam = c,
+                    Code = c,
                     CategoryUri = $"categories/{c}.xml"
                 })
                 .ToList()

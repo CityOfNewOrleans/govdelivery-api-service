@@ -58,13 +58,49 @@ namespace GovDelivery.Logic
                 {
                     var remoteTopic = remoteTopics.First(rt => rt.Code == localTopic.Code);
 
-                    localTopic.Name = remoteTopic.Name;
-                    localTopic.ShortName = remoteTopic.ShortName;
-                    localTopic.Description = remoteTopic.Description;
+                    var topicResult = await service.ReadTopicAsync(localTopic.Code);
+                    var topicInfo = topicResult.Data;
 
+                    var remoteTopicCategoriesResult = await service.ListTopicCategoriesAsync(localTopic.Code);
+                    var remoteTopicCategories = remoteTopicCategoriesResult.Data.Items;
+
+                    localTopic.Name = topicInfo.Name;
+                    localTopic.ShortName = topicInfo.ShortName;
+                    localTopic.Description = topicInfo.Description.Value;
+                    localTopic.DefaultPagewatchResults = topicInfo.DefaultPagewatchResults.Value;
+                    localTopic.PagewatchAutosend = topicInfo.PagewatchAutosend.Value;
+                    localTopic.PagewatchEnabled = topicInfo.PagewatchSuspended.Value;
+                    localTopic.PagewatchType = (PageWatchType)topicInfo.PagewatchType.Value;
+                    localTopic.SendByEmailEnabled = topicInfo.SendByEmailEnabled.Value;
+                    localTopic.WatchTaggedContent = topicInfo.WatchTaggedContent.Value;
+                    localTopic.WirelessEnabled = topicInfo.WirelessEnabled.Value;
+                    localTopic.Pages = topicInfo.Pages.Items
+                        .Select(p => new Page { Id = Guid.NewGuid(), Url = p.Url})
+                        .ToList();
+
+                    var localTopicCategories = localTopic.TopicCategories;
+
+                    // new topic categories
+                    var newTopicCategories = remoteTopicCategories
+                        .Where(rtc => !localTopicCategories.Any(ltc => ltc.Category.Code == rtc.Code))
+                        .Select(tcm => new CategoryTopic
+                        {
+                            TopicId = localTopic.Id,
+                            CategoryId = ctx.Categories.First(c => c.Code == tcm.Code).Id
+                        })
+                        .ToList();
+
+                    ctx.CategoryTopics.AddRange(newTopicCategories);
+
+                    var deleteableTopicCategories = localTopicCategories
+                        .Where(ltc => !remoteTopicCategories.Any(rtc => rtc.Code == ltc.Category.Code))
+                        .ToList();
+
+                    ctx.CategoryTopics.RemoveRange(deleteableTopicCategories);
+
+                    ctx.SaveChanges();
                 }
 
-                ctx.SaveChanges();
 
                 // Delete all local topics not present remotely:
 

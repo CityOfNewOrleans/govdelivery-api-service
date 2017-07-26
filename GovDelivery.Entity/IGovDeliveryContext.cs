@@ -13,6 +13,7 @@ namespace GovDelivery.Entity
         DbSet<Topic> Topics { get; set; }
         DbSet<CategorySubscription> CategorySubscriptions { get; set; }
         DbSet<TopicSubscription> TopicSubscriptions { get; set; }
+        DbSet<CategoryTopic> CategoryTopics { get; set; }
 
         EntityEntry Add(object entity);
         int SaveChanges();

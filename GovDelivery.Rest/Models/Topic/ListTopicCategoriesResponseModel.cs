@@ -18,7 +18,7 @@ namespace GovDelivery.Rest.Models.Topic
     public class TopicCategoryModel
     {
         [XmlElement("to-param")]
-        public string ToParam { get; set; }
+        public string Code { get; set; }
 
         [XmlElement("category-uri")]
         public string CategoryUri { get; set; }

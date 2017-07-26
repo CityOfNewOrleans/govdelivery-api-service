@@ -34,13 +34,13 @@ namespace GovDelivery.Entity.Models
 
         public string RssFeedDescription { get; set; }
 
-        public bool PageWatchEnabled { get; set; }
+        public bool PagewatchEnabled { get; set; }
 
-        public bool PageWatchSuspended { get; set; }
+        public bool PagewatchSuspended { get; set; }
 
-        public int DefaultPageWatchResults { get; set; }
+        public int DefaultPagewatchResults { get; set; }
 
-        public bool PageWatchAutosend { get; set; }
+        public bool PagewatchAutosend { get; set; }
 
         public PageWatchType? PagewatchType { get; set; }
 
