@@ -1,12 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework> 
+    <PackageId>CityOfNewOrleans.GovDelivery.Logic</PackageId>
+    <Version>0.1.2</Version>
+    <Copyright>2017</Copyright>
+    <RepositoryUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>granicus govdelivery</PackageTags>
+    <Description>Business tasks for synchronizing a local store of GovDelivery account data. Sub-project of CityOfNewOrleans.GovDeliveryApiService.</Description>
+    <Authors>Steve Price, Nick Teal</Authors>
+    <Company>City of New Orleans</Company>
+    <Product>GovDelivery Business Tasks</Product>
+    <PackageReleaseNotes />
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GovDelivery.Entity\GovDelivery.Entity.csproj" />
-    <ProjectReference Include="..\GovDelivery.Rest\GovDelivery.Rest.csproj" />
+    <PackageReference Include="CityOfNewOrleans.GovDelivery.Entity" Version="0.1.2" />
+    <PackageReference Include="CityOfNewOrleans.GovDelivery.Rest" Version="0.1.2" />
   </ItemGroup>
 
 </Project>

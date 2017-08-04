@@ -2,19 +2,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <OutputType>exe</OutputType>
-    <RuntimeIdentifiers>win7-x64</RuntimeIdentifiers>
+    <!--<RuntimeIdentifiers>win7-x64</RuntimeIdentifiers>-->
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CityOfNewOrleans.GovDeliveryApiService" Version="0.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Configuration" Version="2.0.5" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GovDelivery.Csv\GovDelivery.Csv.csproj" />
-    <ProjectReference Include="..\GovDelivery.Entity\GovDelivery.Entity.csproj" />
-    <ProjectReference Include="..\GovDelivery.Logic\GovDelivery.Logic.csproj" />
-    <ProjectReference Include="..\GovDelivery.Rest\GovDelivery.Rest.csproj" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
