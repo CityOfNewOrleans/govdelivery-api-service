@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework> 
+    <!-- <TargetFramework>netcoreapp1.1</TargetFramework>  -->
+    <TargetFramework>netstandard2.0</TargetFramework> 
     <PackageId>CityOfNewOrleans.GovDelivery.Csv</PackageId>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <Authors>Steve Price, Nick Teal</Authors>
     <Company>City of New Orleans</Company>
     <Product>CityOfNewOrleans GovDelivery Subscriber Csv Importer</Product>
