@@ -71,10 +71,9 @@ namespace GovDelivery.ConsoleApp
 
                 command.HelpOption(DEFAULT_HELP_OPTIONS);
 
-                command.OnExecute(() => 
+                command.OnExecute(async () => 
                 {
-
-                    PerformFullSync().GetAwaiter().GetResult();
+                    await PerformFullSync();
 
                     return 0;
                 });
@@ -83,7 +82,6 @@ namespace GovDelivery.ConsoleApp
 
             app.Execute(args);
         }
-
         
         public static void ImportSubscribers(string filePath, GovDeliveryContext ctx)
         {

@@ -10,7 +10,6 @@ namespace GovDelivery.Logic
 {
     public class BusinessTasks
     {
-
         public async static Task SyncTopics(IGovDeliveryApiService service, IGovDeliveryContext ctx) {
             var topicsResult = await service.ListTopicsAsync();
 
