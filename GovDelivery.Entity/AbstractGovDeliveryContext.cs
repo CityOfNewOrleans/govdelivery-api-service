@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using GovDelivery.Entity.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -87,5 +88,9 @@ namespace GovDelivery.Entity
                 .HasForeignKey(esc => esc.CategoryId);
         }
 
+        public Task<int> SaveChangesAsync()
+        {
+            return base.SaveChangesAsync();
+        }
     }
 }

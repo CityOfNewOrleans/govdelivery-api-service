@@ -214,9 +214,10 @@ namespace GovDelivery.Logic
             // after each request comes back, save data, pick next eligible subscriber until none are left.
             while (updateTasks.Count() > 0)
             {
-                var t = await Task.WhenAny(updateTasks);
+                
+                var t = await Task.WhenAny(updateTasks); // get latest finished task
+                updateTasks.Remove(t); // remove it from the queue
 
-                updateTasks.Remove(t);
                 if (subscriberEnumerator.MoveNext())
                 {
                     var subscriber = subscriberEnumerator.Current;
@@ -224,7 +225,7 @@ namespace GovDelivery.Logic
                 }
             }
 
-            Task.WhenAll(updateTasks).GetAwaiter().GetResult();
+            await Task.WhenAll(updateTasks);
         }
 
         protected async static Task UpdateSubscriberAsync(Subscriber subscriber, IGovDeliveryApiService service, IGovDeliveryContext ctx)
@@ -274,14 +275,15 @@ namespace GovDelivery.Logic
             foreach (var dSC in deleteableCategorySubscriptions)
             {
                 var categorySub = ctx.CategorySubscriptions.First(cs => cs.Category.Code == dSC.Code);
-                ctx.Remove(categorySub);
+                ctx.CategorySubscriptions.Remove(categorySub);
             }
 
-            ctx.SaveChanges();
+            await ctx.SaveChangesAsync();
 
             // New Topic subscriptions
             var subscriberTopics = subscriber
-                .TopicSubscriptions.Select(est => est.Topic)
+                .TopicSubscriptions
+                .Select(est => est.Topic)
                 .ToList();
 
             var subscriberTopicInfo = subscriberTopicsTask.Result.Data.Items;

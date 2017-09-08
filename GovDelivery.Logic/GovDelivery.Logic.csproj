@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- <TargetFramework>netcoreapp1.1</TargetFramework>  -->
     <TargetFramework>netstandard2.0</TargetFramework> 
     <PackageId>CityOfNewOrleans.GovDelivery.Logic</PackageId>
-    <Version>0.1.3</Version>
+    <Version>0.1.3.1</Version>
     <Copyright>2017</Copyright>
     <RepositoryUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</RepositoryUrl>
     <PackageProjectUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</PackageProjectUrl>
@@ -18,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CityOfNewOrleans.GovDelivery.Entity" Version="0.1.3" />
+    <PackageReference Include="CityOfNewOrleans.GovDelivery.Entity" Version="0.1.4.1" />
     <PackageReference Include="CityOfNewOrleans.GovDelivery.Rest" Version="0.1.3" />
   </ItemGroup>
 

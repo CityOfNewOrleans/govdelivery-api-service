@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using GovDelivery.Csv.Interfaces;
 
 namespace GovDelivery.ConsoleApp
 {
@@ -20,6 +21,9 @@ namespace GovDelivery.ConsoleApp
     {
         protected const string DEFAULT_HELP_OPTIONS = "-?|-h|--help";
         protected static AppSettings AppSettings { get; set; }
+        protected static IGovDeliveryApiService Service { get; set; }
+        protected static IGovDeliveryContext Context { get; set; }
+        protected static ICsvImporter Importer {get;set;}
 
         static void Main(string[] args)
         {
@@ -28,6 +32,21 @@ namespace GovDelivery.ConsoleApp
                 var appSettingsText = reader.ReadToEnd();
                 AppSettings = JsonConvert.DeserializeObject<AppSettings>(appSettingsText);
             }
+
+            var baseUri = (AppSettings.GovDelivery.Server == GovDeliveryServer.Main)
+                ? GovDeliveryApiService.MAIN_URI
+                : GovDeliveryApiService.STAGING_URI;
+
+            Service = new GovDeliveryApiService(
+                baseUri, 
+                AppSettings.GovDelivery.AccountCode,
+                AppSettings.GovDelivery.Username,
+                AppSettings.GovDelivery.Password
+            );
+
+            Context = new GovDeliveryContext();
+
+            Importer = new CsvImporter();
 
             ConfigureCli(args);
         }
@@ -40,54 +59,56 @@ namespace GovDelivery.ConsoleApp
             app.Description = "GovDelivery console app";
 
             app.Command("import", command => {
-
                 command.Description = "Import subscribers from a .csv file.";
                 command.HelpOption(DEFAULT_HELP_OPTIONS);
-
                 var filePathArgument = command.Argument("[filePath]", "The path of the .csv file to be imported.");
-
-                command.OnExecute(() =>
-                {
-                    if (string.IsNullOrWhiteSpace(filePathArgument.Value))
-                    {
-                        Console.WriteLine("Path to a .csv file must be provided.");
-                        return 1;
-                    }
-
-                    Console.WriteLine($"Attempting to import subscribers from {filePathArgument.Value}...");
-
-                    ImportSubscribers(filePathArgument.Value, new GovDeliveryContext());
-
-                    Console.WriteLine("Successfully imported subscribers.");
-
-                    return 0;
-                });
-
+                command.OnExecute(async () => await ImportSubscribers(filePathArgument.Value, Importer, Context));
             });
 
             app.Command("sync", command =>
             {
-                command.Description = "Sync categories, topics, and subscriptions from the GovDelivery system to the locab db.";
-
                 command.HelpOption(DEFAULT_HELP_OPTIONS);
 
-                command.OnExecute(async () => 
-                {
-                    await PerformFullSync();
-
-                    return 0;
+                command.Command("all", subCmd => {
+                    subCmd.Description = "Sync categories, topics, and subscriptions from the GovDelivery system to the locab db.";
+                    subCmd.HelpOption(DEFAULT_HELP_OPTIONS);
+                    subCmd.OnExecute(async () => await PerformFullSync(Service, Context));
                 });
 
+                command.Command("categories", subCmd => {
+                    subCmd.Description = "Sync categories from the GovDelivery system to the locab db.";
+                    subCmd.HelpOption(DEFAULT_HELP_OPTIONS);
+                    subCmd.OnExecute(async () => await SyncCategories(Service, Context));
+                });
+
+                command.Command("topics", subCmd => {
+                    subCmd.Description = "Sync Topics from the GovDelivery system to the locab db.";
+                    subCmd.HelpOption(DEFAULT_HELP_OPTIONS);
+                    subCmd.OnExecute(async () => await SyncTopics(Service, Context));
+                });
+
+                command.Command("subscribers", subCmd => {
+                    subCmd.Description = "Sync subscribers from the GovDelivery system to the locab db.";
+                    subCmd.HelpOption(DEFAULT_HELP_OPTIONS);
+                    subCmd.OnExecute(async () => await SyncSubscribers(Service, Context));
+                });                
+                
             });
 
             app.Execute(args);
         }
         
-        public static void ImportSubscribers(string filePath, GovDeliveryContext ctx)
+        public static async Task<int> ImportSubscribers(string filePath, ICsvImporter importer, IGovDeliveryContext ctx)
         {
-            var importer = new CsvImporter();
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                Console.WriteLine("Path to a .csv file must be provided.");
+                return 1;
+            }
 
-            var subscribers = importer.ImportSubscribersAsync(filePath).Result;
+            Console.WriteLine($"Attempting to import subscribers from {filePath}...");
+            
+            var subscribers = await importer.ImportSubscribersAsync(filePath);
 
             Console.WriteLine($"Found {subscribers.Count()} subscribers to import.");
 
@@ -99,39 +120,48 @@ namespace GovDelivery.ConsoleApp
             });
 
             ctx.AddRange(entities);
+            await ctx.SaveChangesAsync();
 
-            ctx.SaveChanges();
+            Console.WriteLine("Successfully imported subscribers.");
+
+            return 0;
         }
 
-        public static async Task PerformFullSync()
-        {
-            var baseUri = (AppSettings.GovDelivery.Server == GovDeliveryServer.Main)
-                ? GovDeliveryApiService.MAIN_URI
-                : GovDeliveryApiService.STAGING_URI;
-
-            var service = new GovDeliveryApiService(
-                baseUri, 
-                AppSettings.GovDelivery.AccountCode,
-                AppSettings.GovDelivery.Username,
-                AppSettings.GovDelivery.Password
-            );
-
-            var ctx = new GovDeliveryContext();
-
-            Console.WriteLine("Beginning sync...");
-
-            Console.WriteLine("Syncing Topics...");
-            await BusinessTasks.SyncTopics(service, ctx);
-            Console.WriteLine("Topic sync Successful");
-
+        public static async Task<int> SyncCategories(IGovDeliveryApiService service, IGovDeliveryContext ctx) {
             Console.WriteLine("Syncing Categories...");
             await BusinessTasks.SyncCategories(service, ctx);
-            Console.WriteLine("Category sync successful...");
+            Console.WriteLine("Category sync successful.");
 
+            return 0;
+        }
+
+        public static async Task<int> SyncTopics(IGovDeliveryApiService service, IGovDeliveryContext ctx) {
+            Console.WriteLine("Syncing Topics...");
+            await BusinessTasks.SyncTopics(service, ctx);
+            Console.WriteLine("Topic sync Successful.");
+
+            return 0;
+        }
+
+        public static async Task<int> SyncSubscribers (IGovDeliveryApiService service, IGovDeliveryContext ctx) {
             Console.WriteLine(" Syncing Subscribers and Subscriptions...");
             await BusinessTasks.UpdateSubscribers(service, ctx);
-            Console.WriteLine("");
+            Console.WriteLine("Subscriber sync successful.");
 
+            return 0;
+        }
+
+        public static async Task<int> PerformFullSync(IGovDeliveryApiService service, IGovDeliveryContext ctx)
+        {
+            Console.WriteLine("Beginning sync...");
+
+            await SyncTopics(service, ctx);
+            await SyncCategories(service, ctx);
+            await SyncSubscribers(service, ctx);
+
+            Console.WriteLine("Sync successful.");
+
+            return 0;
         }
     }
 }
