@@ -5,7 +5,7 @@ using GovDelivery.Csv.TypeConversion;
 
 namespace GovDelivery.Library.Data.Csv.Mapping
 {
-    public class ImportSubcriberModelMap : CsvClassMap<ImportSubscriberModel>
+    public class ImportSubcriberModelMap : ClassMap<ImportSubscriberModel>
     {
         public ImportSubcriberModelMap()
         {

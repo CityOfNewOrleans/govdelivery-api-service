@@ -12,7 +12,7 @@ namespace GovDelivery.Csv.TypeConversion
 {
     public class QuotedInt32Converter : Int32Converter
     {
-        public override object ConvertFromString(string text, ICsvReaderRow row, CsvPropertyMapData propertyMapData)
+        public override object ConvertFromString(string text, IReaderRow row, MemberMapData propertyMapData)
         {
             if (text == null) throw new Exception("No text passed in.");
 
