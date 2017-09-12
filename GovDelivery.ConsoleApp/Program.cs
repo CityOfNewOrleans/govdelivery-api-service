@@ -59,7 +59,7 @@ namespace GovDelivery.ConsoleApp
             app.Description = "GovDelivery console app";
 
             app.Command("import", command => {
-                command.Description = "Import subscribers from a .csv file.";
+                command.Description = "Import subscribers from a .csv file. (email subscribers only)";
                 command.HelpOption(DEFAULT_HELP_OPTIONS);
                 var filePathArgument = command.Argument("[filePath]", "The path of the .csv file to be imported.");
                 command.OnExecute(async () => await ImportSubscribers(filePathArgument.Value, Importer, Context));
@@ -98,6 +98,7 @@ namespace GovDelivery.ConsoleApp
             app.Execute(args);
         }
         
+        /// Only handles email subscribers.
         public static async Task<int> ImportSubscribers(string filePath, ICsvImporter importer, IGovDeliveryContext ctx)
         {
             if (string.IsNullOrWhiteSpace(filePath))
@@ -112,14 +113,16 @@ namespace GovDelivery.ConsoleApp
 
             Console.WriteLine($"Found {subscribers.Count()} subscribers to import.");
 
-            var entities = subscribers.Select(s => new Subscriber
-            {
-                Id = Guid.NewGuid(),
-                Email = s.Type == SubscriberType.Email ? s.Contact : null,
-                Phone = s.Type == SubscriberType.Phone ? s.Contact : null,
-            });
+            var importedSubscribers = subscribers
+                .Where(s => s.Type == SubscriberType.Email)
+                .Select(s => new Subscriber { Id = Guid.NewGuid(), Email = s.Contact });
 
-            ctx.AddRange(entities);
+            var localSubscribers = ctx.Subscribers.ToList();
+
+            var newSubscribers = importedSubscribers
+                .Where(s => !localSubscribers.Any(ls => ls.Email == s.Email));
+
+            ctx.Subscribers.AddRange(newSubscribers);
             await ctx.SaveChangesAsync();
 
             Console.WriteLine("Successfully imported subscribers.");
