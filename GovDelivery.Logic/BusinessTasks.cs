@@ -234,9 +234,9 @@ namespace GovDelivery.Logic
             var subscriberTopicsTask = service.ListSubscriberTopicsAsync(subscriber.Email);
             var subscriberCategoriesTask = service.ListSubscriberCategoriesAsync(subscriber.Email);
 
-            await Task.WhenAll(new List<Task> { subscriberInfoTask, subscriberTopicsTask, subscriberCategoriesTask });
+            await Task.WhenAll(subscriberInfoTask, subscriberTopicsTask, subscriberCategoriesTask);
 
-            var subscriberInfo = subscriberInfoTask.Result.Data;
+            var subscriberInfo = (await subscriberInfoTask).Data;
 
             // Update detailed subscriber info
             subscriber.BulletinFrequency = (BulletinFrequency)subscriberInfo.DigestFor.Value;
@@ -249,7 +249,7 @@ namespace GovDelivery.Logic
                 .CategorySubscriptions.Select(esc => esc.Category)
                 .ToList();
 
-            var subscriberCategoryInfo = subscriberCategoriesTask.Result.Data.Items;
+           var subscriberCategoryInfo = (await subscriberCategoriesTask).Data.Items;
 
             // existing category subscriptions - do nothing.
 
@@ -286,7 +286,7 @@ namespace GovDelivery.Logic
                 .Select(est => est.Topic)
                 .ToList();
 
-            var subscriberTopicInfo = subscriberTopicsTask.Result.Data.Items;
+            var subscriberTopicInfo = (await subscriberTopicsTask).Data.Items;
 
             var newTopicSubscriptions = subscriberTopicInfo
                 .Where(sti => !subscriberTopics.Any(st => st.Code == sti.TopicCode))

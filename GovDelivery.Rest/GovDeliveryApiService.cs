@@ -61,14 +61,18 @@ namespace GovDelivery.Rest
 
         public override async Task<GovDeliveryResponseModel<ReadSubscriberResponseModel>> ReadSubscriberAsync(string email)
         {
-            var res = await client.GetAsync("subscriptions.xml");
+            var encodedSubscriberId = SerializationUtils.Base64Encode(email);
+
+            var res = await client.GetAsync($"subscribers/{encodedSubscriberId}.xml");
 
             InterceptHttpError(res);
+
+            var responseData = await SerializationUtils.ResponseContentToModel<ReadSubscriberResponseModel>(res.Content);
 
             return new GovDeliveryResponseModel<ReadSubscriberResponseModel>
             {
                 HttpResponse = res,
-                Data = await SerializationUtils.ResponseContentToModel<ReadSubscriberResponseModel>(res.Content),
+                Data = responseData,
             };
         }
 
@@ -118,10 +122,12 @@ namespace GovDelivery.Rest
 
             InterceptHttpError(res);
 
+            var responseData = await SerializationUtils.ResponseContentToModel<ListSubscriberTopicsResponseModel>(res.Content);
+
             return new GovDeliveryResponseModel<ListSubscriberTopicsResponseModel>
             {
                 HttpResponse = res,
-                Data = await SerializationUtils.ResponseContentToModel<ListSubscriberTopicsResponseModel>(res.Content),
+                Data = responseData,
             };
         }
 
@@ -259,14 +265,16 @@ namespace GovDelivery.Rest
         // Subscriber Categories
         public override async Task<GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>> ListSubscriberCategoriesAsync(string email)
         {
-            var res = await client.GetAsync($"subscribers/{SerializationUtils.Base64Encode(email)}/topics.xml");
+            var res = await client.GetAsync($"subscribers/{SerializationUtils.Base64Encode(email)}/categories.xml");
 
             InterceptHttpError(res);
+
+            var responseData = await SerializationUtils.ResponseContentToModel<ListSubscriberCategoriesResponseModel>(res.Content);
 
             return new GovDeliveryResponseModel<ListSubscriberCategoriesResponseModel>
             {
                 HttpResponse = res,
-                Data = await SerializationUtils.ResponseContentToModel<ListSubscriberCategoriesResponseModel>(res.Content),
+                Data = responseData,
             };
         }
 
