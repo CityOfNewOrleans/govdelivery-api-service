@@ -1,6 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework> 
+    <PackageId>CityOfNewOrleans.GovDelivery.Csv</PackageId>
+    <Version>0.1.4</Version>
+    <Authors>Steve Price, Nick Teal</Authors>
+    <Company>City of New Orleans</Company>
+    <Product>CityOfNewOrleans GovDelivery Subscriber Csv Importer</Product>
+    <Description>Library for importing GovDelivery subscribers from a .csv file. Sub-project of CityOfNewOrleans.GovDeliveryApiService.</Description>
+    <PackageProjectUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</PackageProjectUrl>
+    <Copyright>2017</Copyright>
+    <PackageTags>granicus govdelivery csv</PackageTags>
+    <RepositoryUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="3.0.0-RC01" />

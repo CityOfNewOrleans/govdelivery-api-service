@@ -33,6 +33,12 @@ namespace GovDelivery.Entity.Models
 
         public string Link { get; set; }
 
+        public Subscriber()
+        {
+            TopicSubscriptions = new List<TopicSubscription>();
+            CategorySubscriptions = new List<CategorySubscription>();
+        }
+
     }
 
     public enum BulletinFrequency

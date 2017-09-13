@@ -1,6 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>CityOfNewOrleans.GovDelivery.Entity</PackageId>
+    <Version>0.1.4.2</Version>
+    <Authors>Steve Price, Nick Teal</Authors>
+    <Company>City of New Orleans</Company>
+    <Product>GovDelivery Entity Framework Library</Product>
+    <Description>A library mirroring GovDelivery's data structure implemented in EF Core. Useful for collating intensive changesets to be dispatched to GovDelivery. Sub-project of CityOfNewOrleans.GovDeliveryApiService.</Description>
+    <Copyright>2017</Copyright>
+    <PackageProjectUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>granicus govdelivery efcore</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />

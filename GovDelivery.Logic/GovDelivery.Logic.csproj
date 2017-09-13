@@ -7,6 +7,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>CityOfNewOrleans.GovDelivery.Logic</PackageId>
+    <Version>0.1.4</Version>
+    <Copyright>2017</Copyright>
+    <RepositoryUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>granicus govdelivery</PackageTags>
+    <Description>Business tasks for synchronizing a local store of GovDelivery account data. Sub-project of CityOfNewOrleans.GovDeliveryApiService.</Description>
+    <Authors>Steve Price, Nick Teal</Authors>
+    <Company>City of New Orleans</Company>
+    <Product>GovDelivery Business Tasks</Product>
   </PropertyGroup>
 
 </Project>

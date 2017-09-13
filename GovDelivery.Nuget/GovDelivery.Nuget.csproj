@@ -2,6 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework> 
+    <PackageId>CityOfNewOrleans.GovDeliveryApiService</PackageId>
+    <Version>0.1.4</Version>
+    <Authors>Steve Price, Nick Teal</Authors>
+    <Company>City of New Orleans</Company>
+    <Product>Granicus GovDelivery REST API Service</Product>
+    <PackageProjectUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CityOfNewOrleans/govdelivery-api-service</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>2017</Copyright>
+    <PackageTags>granicus govdelivery rest dotnetcore</PackageTags>
+    <Description>A .NET Library for interacting with GovDelivery's Communications Cloud API v1.1.</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GovDelivery.Entity\GovDelivery.Entity.csproj" />
+    <ProjectReference Include="..\GovDelivery.Rest\GovDelivery.Rest.csproj" />
+    <ProjectReference Include="..\GovDelivery.Csv\GovDelivery.Csv.csproj" />
+    <ProjectReference Include="..\GovDelivery.Logic\GovDelivery.Logic.csproj" />
+  </ItemGroup>
 
 </Project>

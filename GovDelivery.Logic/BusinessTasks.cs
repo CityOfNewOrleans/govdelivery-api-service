@@ -242,14 +242,18 @@ namespace GovDelivery.Logic
             subscriber.BulletinFrequency = (BulletinFrequency)subscriberInfo.DigestFor.Value;
             subscriber.GovDeliveryId = subscriberInfo.Id.Value;
             subscriber.Phone = subscriberInfo.Phone;
-            subscriber.SendSubscriberUpdateNotifications = subscriberInfo.SendSubscriberUpdateNotifications.Value;
+
+            if (subscriberInfo.SendSubscriberUpdateNotifications != null)
+                subscriber.SendSubscriberUpdateNotifications = subscriberInfo.SendSubscriberUpdateNotifications.Value;
+
+            ctx.SaveChanges();
 
             // Update Category Subscriptions
             var subscriberCategories = subscriber
                 .CategorySubscriptions.Select(esc => esc.Category)
                 .ToList();
 
-           var subscriberCategoryInfo = (await subscriberCategoriesTask).Data.Items;
+            var subscriberCategoryInfo = (await subscriberCategoriesTask).Data.Items;
 
             // existing category subscriptions - do nothing.
 
@@ -278,7 +282,7 @@ namespace GovDelivery.Logic
                 ctx.CategorySubscriptions.Remove(categorySub);
             }
 
-            await ctx.SaveChangesAsync();
+            ctx.SaveChanges();
 
             // New Topic subscriptions
             var subscriberTopics = subscriber
