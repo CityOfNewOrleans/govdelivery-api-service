@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using GovDelivery.Csv.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace GovDelivery.ConsoleApp
 {
@@ -22,7 +23,7 @@ namespace GovDelivery.ConsoleApp
         protected const string DEFAULT_HELP_OPTIONS = "-?|-h|--help";
         protected static AppSettings AppSettings { get; set; }
         protected static IGovDeliveryApiService Service { get; set; }
-        protected static IGovDeliveryContext Context { get; set; }
+        protected static GovDeliveryContextFactory ContextFactory { get; set; }
         protected static ICsvImporter Importer {get;set;}
 
         static void Main(string[] args)
@@ -44,7 +45,9 @@ namespace GovDelivery.ConsoleApp
                 AppSettings.GovDelivery.Password
             );
 
-            Context = new GovDeliveryContext();
+            var builderOptions = new DbContextOptionsBuilder()
+                .UseSqlServer(AppSettings.ConnectionStrings.GovDelivery);
+            ContextFactory = new GovDeliveryContextFactory(builderOptions);
 
             Importer = new CsvImporter();
 
@@ -62,7 +65,7 @@ namespace GovDelivery.ConsoleApp
                 command.Description = "Import subscribers from a .csv file. (email subscribers only)";
                 command.HelpOption(DEFAULT_HELP_OPTIONS);
                 var filePathArgument = command.Argument("[filePath]", "The path of the .csv file to be imported.");
-                command.OnExecute(async () => await ImportSubscribers(filePathArgument.Value, Importer, Context));
+                command.OnExecute(async () => await ImportSubscribers(filePathArgument.Value, Importer, ContextFactory));
             });
 
             app.Command("sync", command =>
@@ -72,25 +75,25 @@ namespace GovDelivery.ConsoleApp
                 command.Command("all", subCmd => {
                     subCmd.Description = "Sync categories, topics, and subscriptions from the GovDelivery system to the locab db.";
                     subCmd.HelpOption(DEFAULT_HELP_OPTIONS);
-                    subCmd.OnExecute(async () => await PerformFullSync(Service, Context));
+                    subCmd.OnExecute(async () => await PerformFullSync(Service, ContextFactory));
                 });
 
                 command.Command("categories", subCmd => {
                     subCmd.Description = "Sync categories from the GovDelivery system to the locab db.";
                     subCmd.HelpOption(DEFAULT_HELP_OPTIONS);
-                    subCmd.OnExecute(async () => await SyncCategories(Service, Context));
+                    subCmd.OnExecute(async () => await SyncCategories(Service, ContextFactory));
                 });
 
                 command.Command("topics", subCmd => {
                     subCmd.Description = "Sync Topics from the GovDelivery system to the locab db.";
                     subCmd.HelpOption(DEFAULT_HELP_OPTIONS);
-                    subCmd.OnExecute(async () => await SyncTopics(Service, Context));
+                    subCmd.OnExecute(async () => await SyncTopics(Service, ContextFactory));
                 });
 
                 command.Command("subscribers", subCmd => {
                     subCmd.Description = "Sync subscribers from the GovDelivery system to the locab db.";
                     subCmd.HelpOption(DEFAULT_HELP_OPTIONS);
-                    subCmd.OnExecute(async () => await SyncSubscribers(Service, Context));
+                    subCmd.OnExecute(async () => await SyncSubscribers(Service, ContextFactory));
                 });                
                 
             });
@@ -99,8 +102,11 @@ namespace GovDelivery.ConsoleApp
         }
         
         /// Only handles email subscribers.
-        public static async Task<int> ImportSubscribers(string filePath, ICsvImporter importer, IGovDeliveryContext ctx)
+        public static async Task<int> ImportSubscribers(string filePath, ICsvImporter importer, GovDeliveryContextFactory factory)
         {
+
+            var ctx = factory.CreateDbContext();
+
             if (string.IsNullOrWhiteSpace(filePath))
             {
                 Console.WriteLine("Path to a .csv file must be provided.");
@@ -130,37 +136,37 @@ namespace GovDelivery.ConsoleApp
             return 0;
         }
 
-        public static async Task<int> SyncCategories(IGovDeliveryApiService service, IGovDeliveryContext ctx) {
+        public static async Task<int> SyncCategories(IGovDeliveryApiService service, GovDeliveryContextFactory factory) {
             Console.WriteLine("Syncing Categories...");
-            await BusinessTasks.SyncCategories(service, ctx);
+            await BusinessTasks.SyncCategories(service, factory.CreateDbContext());
             Console.WriteLine("Category sync successful.");
 
             return 0;
         }
 
-        public static async Task<int> SyncTopics(IGovDeliveryApiService service, IGovDeliveryContext ctx) {
+        public static async Task<int> SyncTopics(IGovDeliveryApiService service, GovDeliveryContextFactory factory) {
             Console.WriteLine("Syncing Topics...");
-            await BusinessTasks.SyncTopics(service, ctx);
+            await BusinessTasks.SyncTopics(service, factory.CreateDbContext());
             Console.WriteLine("Topic sync Successful.");
 
             return 0;
         }
 
-        public static async Task<int> SyncSubscribers (IGovDeliveryApiService service, IGovDeliveryContext ctx) {
+        public static async Task<int> SyncSubscribers (IGovDeliveryApiService service, GovDeliveryContextFactory factory) {
             Console.WriteLine(" Syncing Subscribers and Subscriptions...");
-            await BusinessTasks.UpdateSubscribers(service, ctx);
+            await BusinessTasks.UpdateSubscribers(service, factory);
             Console.WriteLine("Subscriber sync successful.");
 
             return 0;
         }
 
-        public static async Task<int> PerformFullSync(IGovDeliveryApiService service, IGovDeliveryContext ctx)
+        public static async Task<int> PerformFullSync(IGovDeliveryApiService service, GovDeliveryContextFactory factory)
         {
             Console.WriteLine("Beginning sync...");
 
-            await SyncTopics(service, ctx);
-            await SyncCategories(service, ctx);
-            await SyncSubscribers(service, ctx);
+            await SyncTopics(service, factory);
+            await SyncCategories(service, factory);
+            await SyncSubscribers(service, factory);
 
             Console.WriteLine("Sync successful.");
 

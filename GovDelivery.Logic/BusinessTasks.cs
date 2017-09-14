@@ -1,6 +1,7 @@
 ﻿using GovDelivery.Entity;
 using GovDelivery.Entity.Models;
 using GovDelivery.Rest;
+using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +75,7 @@ namespace GovDelivery.Logic
                     localTopic.WatchTaggedContent = topicInfo.WatchTaggedContent.Value;
                     localTopic.WirelessEnabled = topicInfo.WirelessEnabled.Value;
                     localTopic.Pages = topicInfo.Pages.Items
-                        .Select(p => new Page { Id = Guid.NewGuid(), Url = p.Url})
+                        .Select(p => new Page { Id = Guid.NewGuid(), Url = p.Url })
                         .ToList();
 
                     var localTopicCategories = localTopic.TopicCategories;
@@ -194,8 +195,11 @@ namespace GovDelivery.Logic
             }
         }
 
-        public async static Task UpdateSubscribers(IGovDeliveryApiService service, IGovDeliveryContext ctx)
+        public async static Task UpdateSubscribers<T>(IGovDeliveryApiService service, IDesignTimeDbContextFactory<T> factory)
+            where T: AbstractGovDeliveryContext
         {
+            var ctx = factory.CreateDbContext(new string[] { "" });
+
             var localSubscribers = ctx.Subscribers.ToList();
 
             var subscriberEnumerator = localSubscribers.GetEnumerator();
@@ -204,8 +208,8 @@ namespace GovDelivery.Logic
             var updateTasks = Enumerable.Range(0, 5)
                 .Select(n =>
                 {
-                    var subscriberEntity = subscriberEnumerator.Current;
                     subscriberEnumerator.MoveNext();
+                    var subscriberEntity = subscriberEnumerator.Current;
 
                     return UpdateSubscriberAsync(subscriberEntity, service, ctx);
                 })
@@ -214,7 +218,7 @@ namespace GovDelivery.Logic
             // after each request comes back, save data, pick next eligible subscriber until none are left.
             while (updateTasks.Count() > 0)
             {
-                
+
                 var t = await Task.WhenAny(updateTasks); // get latest finished task
                 updateTasks.Remove(t); // remove it from the queue
 
@@ -230,6 +234,9 @@ namespace GovDelivery.Logic
 
         protected async static Task UpdateSubscriberAsync(Subscriber subscriber, IGovDeliveryApiService service, IGovDeliveryContext ctx)
         {
+            if (subscriber == null || service == null || ctx == null)
+                return;
+
             var subscriberInfoTask = service.ReadSubscriberAsync(subscriber.Email);
             var subscriberTopicsTask = service.ListSubscriberTopicsAsync(subscriber.Email);
             var subscriberCategoriesTask = service.ListSubscriberCategoriesAsync(subscriber.Email);
@@ -263,7 +270,7 @@ namespace GovDelivery.Logic
             foreach (var nCS in newCategorySubscriptions)
             {
                 var cat = ctx.Categories.First(c => c.Code == nCS.CategoryCode);
-                ctx.Add(new CategorySubscription
+                ctx.CategorySubscriptions.Add(new CategorySubscription
                 {
                     CategoryId = cat.Id,
                     Category = cat,
@@ -299,7 +306,7 @@ namespace GovDelivery.Logic
             foreach (var nTS in newTopicSubscriptions)
             {
                 var topic = ctx.Topics.First(t => t.Code == nTS.TopicCode);
-                ctx.Add(new TopicSubscription
+                ctx.TopicSubscriptions.Add(new TopicSubscription
                 {
                     Subscriber = subscriber,
                     SubscriberId = subscriber.Id,
@@ -316,7 +323,7 @@ namespace GovDelivery.Logic
             foreach (var dts in deleteableTopicSubscriptions)
             {
                 var topicSub = ctx.TopicSubscriptions.First(ts => ts.TopicId == dts.Id);
-                ctx.Remove(topicSub);
+                ctx.TopicSubscriptions.Remove(topicSub);
             }
 
             ctx.SaveChanges();

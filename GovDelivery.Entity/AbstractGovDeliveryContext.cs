@@ -7,9 +7,9 @@ namespace GovDelivery.Entity
 {
     public abstract class AbstractGovDeliveryContext : DbContext, IGovDeliveryContext
     {
-        public AbstractGovDeliveryContext():base() { }
+        public AbstractGovDeliveryContext() : base() { }
 
-        public AbstractGovDeliveryContext(DbContextOptions dbOptions):base(dbOptions) { }
+        public AbstractGovDeliveryContext(DbContextOptions dbOptions) : base(dbOptions) { }
 
         public DbSet<Subscriber> Subscribers { get; set; }
 
