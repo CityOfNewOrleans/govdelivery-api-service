@@ -31,7 +31,7 @@ namespace GovDelivery.Tests
         public void ContactsFieldConvertsCorrectly()
         {
             var converter = new QuotedStringConverter();
-            var propertyMapData = new CsvPropertyMapData(null)
+            var propertyMapData = new MemberMapData(null)
             {
                 TypeConverterOptions = new TypeConverterOptions()
             };
@@ -73,7 +73,7 @@ namespace GovDelivery.Tests
         public void SubscriberFieldConvertsCorrectly()
         {
             var converter = new QuotedInt32Converter();
-            var propertyMapData = new CsvPropertyMapData(null)
+            var propertyMapData = new MemberMapData(null)
             {
                 TypeConverterOptions = new TypeConverterOptions
                 {

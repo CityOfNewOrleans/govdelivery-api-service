@@ -12,7 +12,7 @@ namespace GovDelivery.Csv.TypeConversion
     public class QuotedStringConverter : StringConverter
     {
 
-        public override object ConvertFromString(string text, ICsvReaderRow row, CsvPropertyMapData propertyMapData)
+        public override object ConvertFromString(string text, IReaderRow row, MemberMapData propertyMapData)
         {
             var dequotedText = text.Trim(new char[] {' ', '"'});
 

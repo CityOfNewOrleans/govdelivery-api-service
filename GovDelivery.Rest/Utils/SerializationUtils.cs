@@ -48,7 +48,9 @@ namespace GovDelivery.Rest.Utils
                 await hc.CopyToAsync(stream);
                 stream.Position = 0; // set stream to beginning, or deserialization will bomb.
 
-                return (T)serializer.Deserialize(stream);
+                var model = (T)serializer.Deserialize(stream);
+
+                return model;
             }
         }
     }

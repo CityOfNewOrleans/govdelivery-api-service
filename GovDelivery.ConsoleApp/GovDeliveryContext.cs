@@ -26,6 +26,8 @@ namespace GovDelivery.ConsoleApp
             }
         }
 
+        public GovDeliveryContext(DbContextOptions options) : base(options) { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(AppSettings.ConnectionStrings.GovDelivery);

@@ -8,7 +8,7 @@ namespace GovDelivery.Csv.TypeConversion
 {
     public class SubscriberOriginConverter : DefaultTypeConverter
     {
-        public override object ConvertFromString(string text, ICsvReaderRow row, CsvPropertyMapData propertyMapData)
+        public override object ConvertFromString(string text, IReaderRow row, MemberMapData propertyMapData)
         {
             switch (text.Trim().ToLowerInvariant())
             {
