@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GovDelivery.Entity
 {
-    public abstract class AbstractGovDeliveryContextFactory<T> : IDesignTimeDbContextFactory<T>
+    public abstract class AbstractGovDeliveryContextFactory<T> : IDesignTimeDbContextFactory<T>, IGovDeliveryContextFactory<T>
         where T : AbstractGovDeliveryContext, IGovDeliveryContext, new()
     {
         protected DbContextOptionsBuilder optionsBuilder { get; set; }
@@ -26,5 +26,6 @@ namespace GovDelivery.Entity
         public T CreateDbContext() => CreateDbContext(new string[] { "" });
 
         public T CreateDbContext(string[] args) => (T)Activator.CreateInstance(typeof(T), optionsBuilder.Options);
+
     }
 }

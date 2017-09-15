@@ -195,10 +195,10 @@ namespace GovDelivery.Logic
             }
         }
 
-        public async static Task UpdateSubscribers<T>(IGovDeliveryApiService service, IDesignTimeDbContextFactory<T> factory)
+        public async static Task UpdateSubscribers<T>(IGovDeliveryApiService service, IGovDeliveryContextFactory<T> factory)
             where T: AbstractGovDeliveryContext
         {
-            var ctx = factory.CreateDbContext(new string[] { "" });
+            var ctx = factory.CreateDbContext();
 
             var localSubscribers = ctx.Subscribers.ToList();
 
@@ -211,7 +211,7 @@ namespace GovDelivery.Logic
                     subscriberEnumerator.MoveNext();
                     var subscriberEntity = subscriberEnumerator.Current;
 
-                    return UpdateSubscriberAsync(subscriberEntity, service, ctx);
+                    return UpdateSubscriberAsync(subscriberEntity.Id, service, factory);
                 })
                 .ToList();
 
@@ -225,15 +225,19 @@ namespace GovDelivery.Logic
                 if (subscriberEnumerator.MoveNext())
                 {
                     var subscriber = subscriberEnumerator.Current;
-                    updateTasks.Add(UpdateSubscriberAsync(subscriber, service, ctx));
+                    updateTasks.Add(UpdateSubscriberAsync(subscriber.Id, service, factory));
                 }
             }
 
             await Task.WhenAll(updateTasks);
         }
 
-        protected async static Task UpdateSubscriberAsync(Subscriber subscriber, IGovDeliveryApiService service, IGovDeliveryContext ctx)
+        protected async static Task UpdateSubscriberAsync<T>(Guid subscriberId, IGovDeliveryApiService service, IGovDeliveryContextFactory<T> factory)
+            where T: AbstractGovDeliveryContext
         {
+            var ctx = factory.CreateDbContext();
+            var subscriber = ctx.Subscribers.First(s => s.Id == subscriberId);
+
             if (subscriber == null || service == null || ctx == null)
                 return;
 
