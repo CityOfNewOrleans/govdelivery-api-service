@@ -195,12 +195,14 @@ namespace GovDelivery.Logic
             }
         }
 
-        public async static Task UpdateSubscribers<T>(IGovDeliveryApiService service, IGovDeliveryContextFactory<T> factory)
+        public async static Task UpdateSubscribers<T>(IGovDeliveryApiService service, IGovDeliveryContextFactory<T> factory, Action<string> LoggingDelegate = null)
             where T: AbstractGovDeliveryContext
         {
             var ctx = factory.CreateDbContext();
 
             var localSubscribers = ctx.Subscribers.ToList();
+
+            LoggingDelegate?.Invoke($"Found {localSubscribers.Count} subscribers to update...");
 
             var subscriberEnumerator = localSubscribers.GetEnumerator();
 
@@ -215,19 +217,26 @@ namespace GovDelivery.Logic
                 })
                 .ToList();
 
+            var taskCounter = 0;
             // after each request comes back, save data, pick next eligible subscriber until none are left.
             while (updateTasks.Count() > 0)
             {
+                if (taskCounter % 10 == 0) LoggingDelegate?.Invoke($"Updated {taskCounter} subscribers of {localSubscribers.Count}..." );
 
                 var t = await Task.WhenAny(updateTasks); // get latest finished task
+
                 updateTasks.Remove(t); // remove it from the queue
+
 
                 if (subscriberEnumerator.MoveNext())
                 {
                     var subscriber = subscriberEnumerator.Current;
                     updateTasks.Add(UpdateSubscriberAsync(subscriber.Id, service, factory));
                 }
+                taskCounter++;
             }
+
+            LoggingDelegate?.Invoke("Subscriber update complete;");
 
             await Task.WhenAll(updateTasks);
         }
@@ -257,7 +266,7 @@ namespace GovDelivery.Logic
             if (subscriberInfo.SendSubscriberUpdateNotifications != null)
                 subscriber.SendSubscriberUpdateNotifications = subscriberInfo.SendSubscriberUpdateNotifications.Value;
 
-            ctx.SaveChanges();
+            await ctx.SaveChangesAsync();
 
             // Update Category Subscriptions
             var subscriberCategories = subscriber
@@ -293,7 +302,7 @@ namespace GovDelivery.Logic
                 ctx.CategorySubscriptions.Remove(categorySub);
             }
 
-            ctx.SaveChanges();
+            await ctx.SaveChangesAsync();
 
             // New Topic subscriptions
             var subscriberTopics = subscriber

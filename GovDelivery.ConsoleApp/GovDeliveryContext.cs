@@ -30,7 +30,8 @@ namespace GovDelivery.ConsoleApp
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(AppSettings.ConnectionStrings.GovDelivery);
+            if (AppSettings != null)
+                optionsBuilder.UseSqlServer(AppSettings.ConnectionStrings.GovDelivery);
         }
     }
 }

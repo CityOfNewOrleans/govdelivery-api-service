@@ -154,7 +154,7 @@ namespace GovDelivery.ConsoleApp
 
         public static async Task<int> SyncSubscribers (IGovDeliveryApiService service, GovDeliveryContextFactory factory) {
             Console.WriteLine(" Syncing Subscribers and Subscriptions...");
-            await BusinessTasks.UpdateSubscribers(service, factory);
+            await BusinessTasks.UpdateSubscribers(service, factory, (msg) => Console.WriteLine(msg));
             Console.WriteLine("Subscriber sync successful.");
 
             return 0;
