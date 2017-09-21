@@ -13,10 +13,7 @@ namespace GovDelivery.Entity
     {
         protected DbContextOptionsBuilder optionsBuilder { get; set; }
 
-        public AbstractGovDeliveryContextFactory()
-        {
-            throw new NotImplementedException("Override me in concrete implentation!");
-        }
+        public AbstractGovDeliveryContextFactory() {}
 
         public AbstractGovDeliveryContextFactory(DbContextOptionsBuilder optionsBuilder)
         {

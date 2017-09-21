@@ -195,14 +195,18 @@ namespace GovDelivery.Logic
             }
         }
 
-        public async static Task UpdateSubscribers<T>(IGovDeliveryApiService service, IGovDeliveryContextFactory<T> factory, Action<string> LoggingDelegate = null)
+        public async static Task UpdateSubscribers<T>(
+            IGovDeliveryApiService service, 
+            IGovDeliveryContextFactory<T> factory, 
+            Action<string> loggingDelegate = null
+        )
             where T: AbstractGovDeliveryContext
         {
             var ctx = factory.CreateDbContext();
 
             var localSubscribers = ctx.Subscribers.ToList();
 
-            LoggingDelegate?.Invoke($"Found {localSubscribers.Count} subscribers to update...");
+            loggingDelegate?.Invoke($"Found {localSubscribers.Count} subscribers to update...");
 
             var subscriberEnumerator = localSubscribers.GetEnumerator();
 
@@ -221,7 +225,7 @@ namespace GovDelivery.Logic
             // after each request comes back, save data, pick next eligible subscriber until none are left.
             while (updateTasks.Count() > 0)
             {
-                if (taskCounter % 10 == 0) LoggingDelegate?.Invoke($"Updated {taskCounter} subscribers of {localSubscribers.Count}..." );
+                if (taskCounter % 10 == 0) loggingDelegate?.Invoke($"Updated {taskCounter} subscribers of {localSubscribers.Count}..." );
 
                 var t = await Task.WhenAny(updateTasks); // get latest finished task
 
@@ -236,13 +240,18 @@ namespace GovDelivery.Logic
                 taskCounter++;
             }
 
-            LoggingDelegate?.Invoke("Subscriber update complete;");
+            loggingDelegate?.Invoke("Subscriber update complete;");
 
             await Task.WhenAll(updateTasks);
         }
 
-        protected async static Task UpdateSubscriberAsync<T>(Guid subscriberId, IGovDeliveryApiService service, IGovDeliveryContextFactory<T> factory)
-            where T: AbstractGovDeliveryContext
+        protected async static Task UpdateSubscriberAsync<T>(
+            Guid subscriberId,
+            IGovDeliveryApiService service,
+            IGovDeliveryContextFactory<T> factory,
+            Action<string> loggingDelegte = null
+        )
+            where T : AbstractGovDeliveryContext
         {
             var ctx = factory.CreateDbContext();
             var subscriber = ctx.Subscribers.First(s => s.Id == subscriberId);
@@ -266,7 +275,8 @@ namespace GovDelivery.Logic
             if (subscriberInfo.SendSubscriberUpdateNotifications != null)
                 subscriber.SendSubscriberUpdateNotifications = subscriberInfo.SendSubscriberUpdateNotifications.Value;
 
-            await ctx.SaveChangesAsync();
+            try { await ctx.SaveChangesAsync(); }
+            catch (Exception e) { LogExceptionRecursive(e, loggingDelegte); }
 
             // Update Category Subscriptions
             var subscriberCategories = subscriber
@@ -328,6 +338,15 @@ namespace GovDelivery.Logic
                 });
             }
 
+            try
+            {
+                await ctx.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                LogExceptionRecursive(e, loggingDelegte);
+            }
+
             // deleteable topic subscriptions
             var deleteableTopicSubscriptions = subscriberTopics
                 .Where(st => !subscriberTopicInfo.Any(sti => sti.TopicCode == st.Code))
@@ -339,7 +358,21 @@ namespace GovDelivery.Logic
                 ctx.TopicSubscriptions.Remove(topicSub);
             }
 
-            ctx.SaveChanges();
+            try
+            {
+                await ctx.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                LogExceptionRecursive(e, loggingDelegte);
+            }
+        }
+
+        protected static void LogExceptionRecursive(Exception e, Action<string> loggingDelegate)
+        {
+            loggingDelegate?.Invoke(e.Message);
+
+            if (e.InnerException != null) LogExceptionRecursive(e, loggingDelegate);
         }
 
     }
