@@ -35,7 +35,7 @@ namespace GovDelivery.Rest
 
         public override async Task<GovDeliveryResponseModel<UpdateSubscriberResponseModel>> UpdateSubscriberAsync(UpdateSubscriberRequestModel model)
         {
-            var res = await client.PostAsync("subscriptions.xml", SerializationUtils.ModelToStringContent(model));
+            var res = await client.PutAsync("subscriptions.xml", SerializationUtils.ModelToStringContent(model));
 
             InterceptHttpError(res);
 
@@ -48,7 +48,7 @@ namespace GovDelivery.Rest
 
         public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel model)
         {
-            var res = await client.PutAsync("subscriptions.xml", SerializationUtils.ModelToStringContent(model));
+            var res = await client.PostAsync("subscriptions.xml", SerializationUtils.ModelToStringContent(model));
 
             InterceptHttpError(res);
 

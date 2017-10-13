@@ -8,21 +8,14 @@ namespace GovDelivery.Entity
     public abstract class AbstractGovDeliveryContext : DbContext, IGovDeliveryContext
     {
         public AbstractGovDeliveryContext() : base() { }
-
         public AbstractGovDeliveryContext(DbContextOptions dbOptions) : base(dbOptions) { }
 
         public DbSet<Subscriber> Subscribers { get; set; }
-
         public DbSet<Topic> Topics { get; set; }
-
         public DbSet<Category> Categories { get; set; }
-
         public DbSet<Page> Pages { get; set; }
-
         public DbSet<CategorySubscription> CategorySubscriptions { get; set; }
-
         public DbSet<TopicSubscription> TopicSubscriptions { get; set; }
-
         public DbSet<CategoryTopic> CategoryTopics { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

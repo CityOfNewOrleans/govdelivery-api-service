@@ -231,7 +231,6 @@ namespace GovDelivery.Logic
 
                 updateTasks.Remove(t); // remove it from the queue
 
-
                 if (subscriberEnumerator.MoveNext())
                 {
                     var subscriber = subscriberEnumerator.Current;
