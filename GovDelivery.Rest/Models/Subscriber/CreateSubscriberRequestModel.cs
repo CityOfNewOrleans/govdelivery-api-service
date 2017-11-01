@@ -24,7 +24,7 @@ namespace GovDelivery.Rest.Models.Subscriber
         public SerializableBool SendSubscriberUpdateNotifications { get; set; }
 
         [XmlElement("digest-for")]
-        public SendBulletins SendBulletins { get; set; }
+        public SerializableInt SendBulletins { get; set; }
 
     }
 

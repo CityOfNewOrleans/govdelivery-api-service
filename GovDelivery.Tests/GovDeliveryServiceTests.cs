@@ -36,7 +36,7 @@ namespace GovDelivery.Library.Tests
                 new CreateSubscriberRequestModel
                 {
                     Email = "example@nola.gov",
-                    SendBulletins = SendBulletins.Daily,
+                    SendBulletins = new SerializableInt((int)SendBulletins.Daily),
                     SendSubscriberUpdateNotifications = new SerializableBool(true),
                 }
             };
@@ -48,7 +48,7 @@ namespace GovDelivery.Library.Tests
                 new UpdateSubscriberRequestModel
                 {
                     Email = "example@nola.gov",
-                    SendBulletins = SendBulletins.Weekly,
+                    SendBulletins = new SerializableInt((int)SendBulletins.Weekly),
                     SendNotifications = new SerializableBool(true)
                 }
             };

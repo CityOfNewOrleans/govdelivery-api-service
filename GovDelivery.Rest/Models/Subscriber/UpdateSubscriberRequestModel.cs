@@ -32,7 +32,7 @@ namespace GovDelivery.Rest.Models.Subscriber
         /// Determine the frequency for how often the subscriber receives bulletins.
         /// </summary>
         [XmlElement("digest-for")]
-        public SendBulletins SendBulletins { get; set; }
+        public SerializableInt SendBulletins { get; set; }
     }
 
 }
