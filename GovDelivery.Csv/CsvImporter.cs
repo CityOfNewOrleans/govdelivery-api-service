@@ -13,7 +13,7 @@ namespace GovDelivery.Csv
     public class CsvImporter : ICsvImporter
     {
 
-        public async Task<IEnumerable<IImportSubscriberModel>> ImportSubscriberAsync(Stream fileStream) =>
+        public async Task<IEnumerable<IImportSubscriberModel>> ImportSubscribersAsync(Stream fileStream) =>
             ParseFileContents(await ReadStreamContentsAsync(fileStream));
 
         public async Task<IEnumerable<IImportSubscriberModel>> ImportSubscribersAsync(string filePath) =>

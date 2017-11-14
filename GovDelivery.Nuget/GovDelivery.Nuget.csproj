@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework> 
     <PackageId>CityOfNewOrleans.GovDeliveryApiService</PackageId>
-    <Version>1.0.3.1</Version>
+    <Version>1.0.4.1</Version>
     <Authors>Steve Price, Nick Teal</Authors>
     <Company>City of New Orleans</Company>
     <Product>Granicus GovDelivery REST API Service</Product>
