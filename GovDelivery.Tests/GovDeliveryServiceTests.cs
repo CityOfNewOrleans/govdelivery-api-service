@@ -24,7 +24,7 @@ namespace GovDelivery.Library.Tests
 
         public GovDeliveryServiceTests()
         {
-            service = new MockGovDeliveryApiService("foo.com", ACCOUNT_CODE);
+            service = new MockGovDeliveryApiService(GovDeliveryServer.Staging, ACCOUNT_CODE);
         }
 
         #region MemberData

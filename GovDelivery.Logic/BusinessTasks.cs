@@ -11,16 +11,20 @@ namespace GovDelivery.Logic
 {
     public class BusinessTasks
     {
-        public async static Task SyncTopics(IGovDeliveryApiService service, IGovDeliveryContext ctx) {
+        public async static Task SyncTopics(
+            IGovDeliveryApiService service, 
+            IGovDeliveryContext ctx, 
+            Action<string> loggingDelegate = null
+        ) {
             var topicsResult = await service.ListTopicsAsync();
 
             if (!topicsResult.HttpResponse.IsSuccessStatusCode)
             {
-                Console.Error.WriteLine($@"Error getting Topics: {topicsResult.HttpResponse.StatusCode} - {topicsResult.HttpResponse.ReasonPhrase}");
+                loggingDelegate?.Invoke($@"Error getting Topics: {topicsResult.HttpResponse.StatusCode} - {topicsResult.HttpResponse.ReasonPhrase}");
             }
 
             var numTopics = topicsResult.Data.Items != null ? topicsResult.Data.Items.Count : 0;
-            Console.WriteLine($"Fetched {numTopics} topics.");
+            loggingDelegate?.Invoke($"Fetched {numTopics} topics.");
 
             if (numTopics > 0)
             {
@@ -115,17 +119,21 @@ namespace GovDelivery.Logic
 
         }
 
-        public async static Task SyncCategories(IGovDeliveryApiService service, IGovDeliveryContext ctx) {
+        public async static Task SyncCategories(
+            IGovDeliveryApiService service, 
+            IGovDeliveryContext ctx, 
+            Action<string> loggingDelegate = null
+        ) {
 
             var categoriesResult = await service.ListCategoriesAsync();
 
             if (!categoriesResult.HttpResponse.IsSuccessStatusCode)
             {
-                Console.Error.WriteLine($@"Error getting Categories: {categoriesResult.HttpResponse.StatusCode} - {categoriesResult.HttpResponse.ReasonPhrase}");
+                loggingDelegate?.Invoke($@"Error getting Categories: {categoriesResult.HttpResponse.StatusCode} - {categoriesResult.HttpResponse.ReasonPhrase}");
             }
 
             var numCategories = categoriesResult.Data.Items != null ? categoriesResult.Data.Items.Count() : 0;
-            Console.WriteLine($"Fetched {numCategories} categories");
+            loggingDelegate?.Invoke($"Fetched {numCategories} categories");
 
             if (numCategories > 0)
             {

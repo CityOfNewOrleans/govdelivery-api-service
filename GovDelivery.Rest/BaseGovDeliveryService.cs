@@ -12,14 +12,25 @@ using GovDelivery.Rest.Models.Category;
 
 namespace GovDelivery.Rest
 {
+
+    public enum GovDeliveryServer {
+        Staging,
+        Main,
+    }
+
     public abstract class BaseGovDeliveryService : IGovDeliveryApiService
     {
+
+        protected const string STAGING_URI = "https://stage-api.govdelivery.com";
+        protected const string MAIN_URI = "https://api.govdelivery.com";                        
+
         protected string baseUri { get; set; }
         protected string accountCode { get; set; }
 
-        public BaseGovDeliveryService(string baseUri, string accountCode)
+
+        public BaseGovDeliveryService(GovDeliveryServer server, string accountCode)
         {
-            this.baseUri = baseUri;
+            this.baseUri = (server == GovDeliveryServer.Main) ? MAIN_URI : STAGING_URI;
             this.accountCode = accountCode;
         }
 

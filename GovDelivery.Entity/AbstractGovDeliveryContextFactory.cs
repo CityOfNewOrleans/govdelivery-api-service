@@ -13,7 +13,9 @@ namespace GovDelivery.Entity
     {
         protected DbContextOptionsBuilder optionsBuilder { get; set; }
 
-        public AbstractGovDeliveryContextFactory() {}
+        public AbstractGovDeliveryContextFactory() {
+            optionsBuilder = new DbContextOptionsBuilder();
+        }
 
         public AbstractGovDeliveryContextFactory(DbContextOptionsBuilder optionsBuilder)
         {

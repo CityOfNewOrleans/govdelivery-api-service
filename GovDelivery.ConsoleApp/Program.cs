@@ -34,12 +34,8 @@ namespace GovDelivery.ConsoleApp
                 AppSettings = JsonConvert.DeserializeObject<AppSettings>(appSettingsText);
             }
 
-            var baseUri = (AppSettings.GovDelivery.Server == GovDeliveryServer.Main)
-                ? GovDeliveryApiService.MAIN_URI
-                : GovDeliveryApiService.STAGING_URI;
-
             Service = new GovDeliveryApiService(
-                baseUri, 
+                AppSettings.GovDelivery.Server, 
                 AppSettings.GovDelivery.AccountCode,
                 AppSettings.GovDelivery.Username,
                 AppSettings.GovDelivery.Password

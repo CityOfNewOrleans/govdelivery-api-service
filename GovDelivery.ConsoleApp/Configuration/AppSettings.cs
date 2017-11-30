@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GovDelivery.Rest;
 
 namespace GovDelivery.ConsoleApp.Configuration
 {
@@ -25,12 +26,6 @@ namespace GovDelivery.ConsoleApp.Configuration
         public string Username { get; set; }
 
         public string Password { get; set; }
-    }
-
-    public enum GovDeliveryServer
-    {
-        Main,
-        Staging,
     }
 
     public class ConnectionStrings

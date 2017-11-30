@@ -16,14 +16,10 @@ namespace GovDelivery.Rest
 {
     public class GovDeliveryApiService : BaseGovDeliveryService, IDisposable
     {
-        public const string STAGING_URI = "https://stage-api.govdelivery.com";
-
-        public const string MAIN_URI = "https://api.govdelivery.com";
-
         private HttpClient client;
 
         // Subscriber
-        public GovDeliveryApiService(string baseUri, string accountCode, string username, string password) : base(baseUri, accountCode)
+        public GovDeliveryApiService(GovDeliveryServer server, string accountCode, string username, string password) : base(server, accountCode)
         {
             var credentialBytes = Encoding.UTF8.GetBytes($"{username}:{password}");
 

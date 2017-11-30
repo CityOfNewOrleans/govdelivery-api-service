@@ -20,7 +20,7 @@ namespace GovDelivery.Library.Tests.Mocks
 {
     public class MockGovDeliveryApiService : BaseGovDeliveryService, IGovDeliveryApiService
     {
-        public MockGovDeliveryApiService(string baseUri, string accountCode) : base(baseUri, accountCode) { }
+        public MockGovDeliveryApiService(GovDeliveryServer server, string accountCode) : base(server, accountCode) { }
 
         // Subscriber
         public override async Task<GovDeliveryResponseModel<CreateSubscriberResponseModel>> CreateSubscriberAsync(CreateSubscriberRequestModel requestModel)
