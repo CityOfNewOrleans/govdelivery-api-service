@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework> 
     <PackageId>CityOfNewOrleans.GovDelivery.Csv</PackageId>
-    <Version>1.1</Version>
+    <Version>1.1.1</Version>
     <Authors>Steve Price, Nick Teal</Authors>
     <Company>City of New Orleans</Company>
     <Product>CityOfNewOrleans GovDelivery Subscriber Csv Importer</Product>
@@ -14,7 +14,7 @@
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="3.0.0-RC01" />
+    <PackageReference Include="CsvHelper" Version="6.1.0" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
 </Project>

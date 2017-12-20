@@ -62,7 +62,7 @@ namespace GovDelivery.Tests
             }
         }
 
-        public static IEnumerable<object> SerializeTestArgs()
+        public static IEnumerable<object[]> SerializeTestArgs()
         {
             yield return new object[] {
                 @"MockData/mockSerializationData.xml",

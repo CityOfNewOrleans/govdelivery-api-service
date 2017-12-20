@@ -34,10 +34,10 @@ namespace GovDelivery.Logic
                     {
                         Id = Guid.NewGuid(),
                         Code = i.Code,
-                        Description = i.Description.Value,
+                        Description = i.Description?.Value,
                         Name = i.Name,
                         ShortName = i.ShortName,
-                        WirelessEnabled = i.WirelessEnabled.Value
+                        WirelessEnabled = (i.WirelessEnabled != null) ? i.WirelessEnabled.Value : false,
                     })
                     .ToList();
 
@@ -49,8 +49,10 @@ namespace GovDelivery.Logic
                     .Where(rt => !localTopics.Any(lt => lt.Code == rt.Code))
                     .ToList();
 
-                ctx.Topics.AddRange(newTopics);
-                ctx.SaveChanges();
+                if (newTopics.Count > 0) {
+                    ctx.Topics.AddRange(newTopics);
+                    ctx.SaveChanges();
+                }
 
                 // Update topics present both remotely and locally:
 

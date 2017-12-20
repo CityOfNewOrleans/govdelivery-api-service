@@ -23,7 +23,7 @@ namespace GovDelivery.Tests
         [InlineData("10/22/2015 03:49 PM CDT")]
         public void TimeZoneBecomesUtcOffset(string data)
         {
-            Assert.Equal(TimeUtils.ReplaceTimeZoneWithUtcOffset(data), "10/22/2015 03:49 PM -5");
+            Assert.Equal("10/22/2015 03:49 PM -5", TimeUtils.ReplaceTimeZoneWithUtcOffset(data));
         }
 
         [Theory(DisplayName = "Fixed date string becomes DateTime With Expected Values")]
@@ -40,9 +40,9 @@ namespace GovDelivery.Tests
             Assert.Equal("03:49 PM -5", dateTime);
 
             var parsedDay = DateTime.ParseExact(dateDay, TimeUtils.DATE_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
-            Assert.Equal(parsedDay.Year, 2015);
-            Assert.Equal(parsedDay.Month, 10);
-            Assert.Equal(parsedDay.Day, 22);
+            Assert.Equal(2015, parsedDay.Year);
+            Assert.Equal(10, parsedDay.Month);
+            Assert.Equal(22, parsedDay.Day);
 
             var parsedTime = DateTime.ParseExact(dateTime, TimeUtils.TIME_FORMAT, CultureInfo.CurrentCulture).ToUniversalTime();
             Assert.Equal(20, parsedTime.Hour);
