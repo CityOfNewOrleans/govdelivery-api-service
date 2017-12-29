@@ -72,17 +72,18 @@ namespace GovDelivery.Logic
 
                     localTopic.Name = topicInfo.Name;
                     localTopic.ShortName = topicInfo.ShortName;
-                    localTopic.Description = topicInfo.Description.Value;
-                    localTopic.DefaultPagewatchResults = topicInfo.DefaultPagewatchResults.Value;
-                    localTopic.PagewatchAutosend = topicInfo.PagewatchAutosend.Value;
-                    localTopic.PagewatchEnabled = topicInfo.PagewatchSuspended.Value;
-                    localTopic.PagewatchType = (PageWatchType)topicInfo.PagewatchType.Value;
-                    localTopic.SendByEmailEnabled = topicInfo.SendByEmailEnabled.Value;
-                    localTopic.WatchTaggedContent = topicInfo.WatchTaggedContent.Value;
-                    localTopic.WirelessEnabled = topicInfo.WirelessEnabled.Value;
-                    localTopic.Pages = topicInfo.Pages.Items
+                    localTopic.Description = topicInfo.Description?.Value;
+                    localTopic.DefaultPagewatchResults = topicInfo.DefaultPagewatchResults?.Value ?? 0;
+                    localTopic.PagewatchAutosend = topicInfo.PagewatchAutosend?.Value ?? false;
+                    localTopic.PagewatchEnabled = topicInfo.PagewatchSuspended?.Value ?? false;
+                    localTopic.PagewatchType = (PageWatchType?)topicInfo.PagewatchType?.Value ?? null;
+                    localTopic.SendByEmailEnabled = topicInfo.SendByEmailEnabled?.Value ?? false;
+                    localTopic.WatchTaggedContent = topicInfo.WatchTaggedContent?.Value ?? false;
+                    localTopic.WirelessEnabled = topicInfo.WirelessEnabled?.Value ?? false;
+                    localTopic.Pages = topicInfo.Pages?.Items?
                         .Select(p => new Page { Id = Guid.NewGuid(), Url = p.Url })
-                        .ToList();
+                        .ToList()
+                        ?? new List<Page>();
 
                     var localTopicCategories = localTopic.TopicCategories;
 
@@ -104,7 +105,7 @@ namespace GovDelivery.Logic
 
                     ctx.CategoryTopics.RemoveRange(deleteableTopicCategories);
 
-                    ctx.SaveChanges();
+                    await ctx.SaveChangesAsync();
                 }
 
 
@@ -145,8 +146,8 @@ namespace GovDelivery.Logic
                         Id = Guid.NewGuid(),
                         Code = i.Code,
                         Description = i.Description,
-                        DefaultOpen = i.DefaultOpen.Value,
-                        AllowUserInitiatedSubscriptions = i.AllowSubscriptions.Value,
+                        DefaultOpen = i.DefaultOpen?.Value ?? false,
+                        AllowUserInitiatedSubscriptions = i.AllowSubscriptions?.Value ?? false,
                         Name = i.Name,
                         ShortName = i.ShortName,
                     }).ToList();
