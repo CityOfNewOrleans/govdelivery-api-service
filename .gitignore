@@ -6,3 +6,5 @@
 *.nupkg
 connectionStrings.config
 appSettings.json
+.nugetApiKey
+.symbolSourceApiKey

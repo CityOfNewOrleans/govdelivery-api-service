@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovDelivery.ConsoleApp", "GovDelivery.ConsoleApp\GovDelivery.ConsoleApp.csproj", "{2BB9A9EE-CE22-4EF6-B0C6-A4F9E452CC13}"
 EndProject
@@ -15,6 +15,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovDelivery.Rest", "GovDelivery.Rest\GovDelivery.Rest.csproj", "{D9B087AB-CCCF-4496-BBD3-7DD1006EE640}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovDelivery.Tests", "GovDelivery.Tests\GovDelivery.Tests.csproj", "{44C3F3C9-57E4-4D9B-A1F0-23DBE69209CE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7880D436-A479-48BF-9FBA-8BF765FD55B9}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		.nugetApiKey = .nugetApiKey
+		.symbolSourceApiKey = .symbolSourceApiKey
+		project-functions.psm1 = project-functions.psm1
+		ReadMe.md = ReadMe.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
