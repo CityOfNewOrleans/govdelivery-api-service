@@ -186,9 +186,11 @@ namespace GovDelivery.Logic
                     remoteCategory.Name = categoryInfo.Name;
                     remoteCategory.ShortName = categoryInfo.ShortName;
 
-                    var parentCategory = ctx.Categories.FirstOrDefault(c => c.Code == categoryInfo.Parent.CategoryCode);
-
-                    remoteCategory.ParentCategory = parentCategory;
+                    var parentCategoryCode = categoryInfo?.Parent?.CategoryCode; 
+                    if (parentCategoryCode != null) {
+                        var parentCategory = ctx.Categories.FirstOrDefault(c => c.Code == parentCategoryCode);
+                        remoteCategory.ParentCategory = parentCategory;
+                    }
 
                     ctx.SaveChanges();
                 }
