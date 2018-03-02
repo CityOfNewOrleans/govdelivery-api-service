@@ -132,25 +132,28 @@ namespace GovDelivery.ConsoleApp
             return 0;
         }
 
-        public static async Task<int> SyncCategories(IGovDeliveryApiService service, GovDeliveryContextFactory factory) {
+        public static async Task<int> SyncCategories(IGovDeliveryApiService service, GovDeliveryContextFactory factory)
+        {
             Console.WriteLine("Syncing Categories...");
-            await BusinessTasks.SyncCategories(service, factory.CreateDbContext());
+            await BusinessTasks.SyncCategories(service, factory.CreateDbContext(), s => Console.WriteLine(s));
             Console.WriteLine("Category sync successful.");
 
             return 0;
         }
 
-        public static async Task<int> SyncTopics(IGovDeliveryApiService service, GovDeliveryContextFactory factory) {
+        public static async Task<int> SyncTopics(IGovDeliveryApiService service, GovDeliveryContextFactory factory)
+        {
             Console.WriteLine("Syncing Topics...");
-            await BusinessTasks.SyncTopics(service, factory.CreateDbContext());
+            await BusinessTasks.SyncTopics(service, factory.CreateDbContext(), s => Console.WriteLine(s));
             Console.WriteLine("Topic sync Successful.");
 
             return 0;
         }
 
-        public static async Task<int> SyncSubscribers (IGovDeliveryApiService service, GovDeliveryContextFactory factory) {
+        public static async Task<int> SyncSubscribers (IGovDeliveryApiService service, GovDeliveryContextFactory factory)
+        {
             Console.WriteLine(" Syncing Subscribers and Subscriptions...");
-            await BusinessTasks.UpdateSubscribers(service, factory, (msg) => Console.WriteLine(msg));
+            await BusinessTasks.UpdateSubscribersAsync(service, factory, s => Console.WriteLine(s));
             Console.WriteLine("Subscriber sync successful.");
 
             return 0;

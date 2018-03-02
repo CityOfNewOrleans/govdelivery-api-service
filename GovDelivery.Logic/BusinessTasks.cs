@@ -208,7 +208,7 @@ namespace GovDelivery.Logic
             }
         }
 
-        public async static Task UpdateSubscribers<T>(
+        public async static Task UpdateSubscribersAsync<T>(
             IGovDeliveryApiService service, 
             IGovDeliveryContextFactory<T> factory, 
             Action<string> loggingDelegate = null
@@ -224,13 +224,13 @@ namespace GovDelivery.Logic
             var subscriberEnumerator = localSubscribers.GetEnumerator();
 
             // pull x subscribers and request their data
-            var updateTasks = Enumerable.Range(0, 5)
+            var updateTasks = Enumerable.Range(0, 10)
                 .Select(n =>
                 {
                     subscriberEnumerator.MoveNext();
                     var subscriberEntity = subscriberEnumerator.Current;
 
-                    return UpdateSubscriberAsync(subscriberEntity.Id, service, factory);
+                    return UpdateSingleSubscriberAsync(subscriberEntity.Id, service, factory, loggingDelegate);
                 })
                 .ToList();
 
@@ -238,7 +238,8 @@ namespace GovDelivery.Logic
             // after each request comes back, save data, pick next eligible subscriber until none are left.
             while (updateTasks.Count() > 0)
             {
-                if (taskCounter % 10 == 0) loggingDelegate?.Invoke($"Updated {taskCounter} subscribers of {localSubscribers.Count}..." );
+                if (taskCounter % 100 == 0)
+                    loggingDelegate?.Invoke($"Updated {taskCounter} subscribers of {localSubscribers.Count}...");
 
                 var t = await Task.WhenAny(updateTasks); // get latest finished task
 
@@ -247,21 +248,19 @@ namespace GovDelivery.Logic
                 if (subscriberEnumerator.MoveNext())
                 {
                     var subscriber = subscriberEnumerator.Current;
-                    updateTasks.Add(UpdateSubscriberAsync(subscriber.Id, service, factory));
+                    updateTasks.Add(UpdateSingleSubscriberAsync(subscriber.Id, service, factory, loggingDelegate));
                 }
                 taskCounter++;
             }
 
-            loggingDelegate?.Invoke("Subscriber update complete;");
-
             await Task.WhenAll(updateTasks);
         }
 
-        protected async static Task UpdateSubscriberAsync<T>(
+        protected async static Task UpdateSingleSubscriberAsync<T>(
             Guid subscriberId,
             IGovDeliveryApiService service,
             IGovDeliveryContextFactory<T> factory,
-            Action<string> loggingDelegte = null
+            Action<string> loggingDelegte
         )
             where T : AbstractGovDeliveryContext
         {
@@ -288,11 +287,13 @@ namespace GovDelivery.Logic
                 subscriber.SendSubscriberUpdateNotifications = subscriberInfo.SendSubscriberUpdateNotifications.Value;
 
             try { await ctx.SaveChangesAsync(); }
-            catch (Exception e) { LogExceptionRecursive(e, loggingDelegte); }
+            catch (Exception e) { loggingDelegte?.Invoke($@"{e.Message} {e.TargetSite}"); }
 
             // Update Category Subscriptions
-            var subscriberCategories = subscriber
-                .CategorySubscriptions.Select(esc => esc.Category)
+
+            var subscriberCategories = ctx.CategorySubscriptions
+                .Where(sc => sc.SubscriberId == subscriber.Id)
+                .Select(sc => sc.Category)
                 .ToList();
 
             var subscriberCategoryInfo = (await subscriberCategoriesTask).Data.Items;
@@ -326,10 +327,11 @@ namespace GovDelivery.Logic
 
             await ctx.SaveChangesAsync();
 
-            // New Topic subscriptions
-            var subscriberTopics = subscriber
-                .TopicSubscriptions
-                .Select(est => est.Topic)
+            // Find new Topic subscriptions
+
+            var subscriberTopics = ctx.TopicSubscriptions
+                .Where(ts => ts.SubscriberId == subscriber.Id)
+                .Select(ts => ts.Topic)
                 .ToList();
 
             var subscriberTopicInfo = (await subscriberTopicsTask).Data.Items;
@@ -356,7 +358,7 @@ namespace GovDelivery.Logic
             }
             catch (Exception e)
             {
-                LogExceptionRecursive(e, loggingDelegte);
+                loggingDelegte?.Invoke($@"{e.Message} {e.TargetSite}");
             }
 
             // deleteable topic subscriptions
@@ -376,16 +378,8 @@ namespace GovDelivery.Logic
             }
             catch (Exception e)
             {
-                LogExceptionRecursive(e, loggingDelegte);
+                loggingDelegte?.Invoke($@"{e.Message} {e.TargetSite}");
             }
         }
-
-        protected static void LogExceptionRecursive(Exception e, Action<string> loggingDelegate)
-        {
-            loggingDelegate?.Invoke(e.Message);
-
-            if (e.InnerException != null) LogExceptionRecursive(e, loggingDelegate);
-        }
-
     }
 }
