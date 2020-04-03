@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework> 
     <PackageId>CityOfNewOrleans.GovDeliveryApiService</PackageId>
-    <Version>1.1.3.3</Version>
+    <Version>1.1.4</Version>
     <Authors>Steve Price, Nick Teal</Authors>
     <Company>City of New Orleans</Company>
     <Product>Granicus GovDelivery REST API Service</Product>
@@ -13,6 +13,7 @@
     <Copyright>2017</Copyright>
     <PackageTags>granicus govdelivery rest dotnetcore</PackageTags>
     <Description>A .NET Library for interacting with GovDelivery's Communications Cloud API v1.1.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

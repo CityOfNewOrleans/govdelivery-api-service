@@ -84,7 +84,7 @@ function Publish-NugetRelease {
     
     $keys = Find-NugetApiKeys;
 
-    if ($keys -eq $null) 
+    if ($null -eq $keys) 
     {
         Write-Host "Nuget and/or MyGet Symbol nuget keys not found."
         return;
